@@ -1,0 +1,19 @@
+# depslib dependency file v1.0
+1415026355 source:c:\users\bibpersoneel\desktop\joachim\github\csv2marc\csv2marc\main.cpp
+	<fstream>
+	<iostream>
+	<string>
+	<MarcRecord.h>
+
+1415026575 c:\users\bibpersoneel\desktop\joachim\github\csv2marc\csv2marc\include\marcrecord.h
+	<iostream>
+	<string>
+	<MarcRecordException.h>
+
+1415026825 source:c:\users\bibpersoneel\desktop\joachim\github\csv2marc\csv2marc\src\marcrecord.cpp
+	"MarcRecord.h"
+
+1415026801 c:\users\bibpersoneel\desktop\joachim\github\csv2marc\csv2marc\include\marcrecordexception.h
+	<exception>
+	<string>
+
