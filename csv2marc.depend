@@ -17,3 +17,37 @@
 	<exception>
 	<string>
 
+1415120353 source:f:\users\jg\documents\github\csv2marc\main.cpp
+	<fstream>
+	<iostream>
+	<string>
+	<MarcRecord.h>
+
+1415137458 f:\users\jg\documents\github\csv2marc\include\marcrecord.h
+	<iostream>
+	<string>
+	<sstream>
+	<fstream>
+	<iostream>
+	<vector>
+	<map>
+	<set>
+	<MarcRecordException.h>
+	<MarcField.h>
+
+1415097244 f:\users\jg\documents\github\csv2marc\include\marcrecordexception.h
+	<exception>
+	<string>
+
+1415130227 source:f:\users\jg\documents\github\csv2marc\src\marcrecord.cpp
+	"MarcRecord.h"
+
+1415097244 source:f:\users\jg\documents\github\csv2marc\src\marcrecordexception.cpp
+	"MarcRecordException.h"
+
+1415139418 f:\users\jg\documents\github\csv2marc\include\marcfield.h
+	<string>
+
+1415138529 source:f:\users\jg\documents\github\csv2marc\src\marcfield.cpp
+	"MarcField.h"
+

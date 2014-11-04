@@ -15,18 +15,15 @@ if ( argc != 3 ) /* 2 arguments: filename to process and resulting filename  */
         return -1;
     }
 
-    // Open the input file
+    // Open the input file and check if successful
     ifstream csvfile(argv[1]);
-
-    // check if success
     if ( !csvfile.is_open() ) {
         cout << "Could not open input csv file" << endl;
         return -1;
     }
 
-    //open the output file
+    //open the output file and check if successful
     ofstream marcfile(argv[2]);
-
     if ( !marcfile.is_open() ) {
         cout << "Could not open output csv file" << endl;
         return -1;
@@ -50,6 +47,10 @@ if ( argc != 3 ) /* 2 arguments: filename to process and resulting filename  */
 
         try
         {
+            if (!thisrecord->hasfieldmap())
+            {
+                thisrecord->loadfieldmap("fieldmap.txt");
+            }
             thisrecord->buildup();      // build up
         }
         catch (exception& e)
