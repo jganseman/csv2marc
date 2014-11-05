@@ -1,12 +1,54 @@
 # This file defines the field mapping between CSV columns and MARC fields.
-# Use the hash to comment. Fields do not need to appear ordered in this file.
-# Start your column count with 0.
+# Any line not beginning with 2 integers is regarded as comment. 
+# Fields do not need to appear ordered in this file.
 #
 # Currently, tailored towards Brussels conservatory library
 #
-0 100
-1 140
-2 863
-3 383
-# another comment
-4
+50	024	
+51	028	
+38	041	
+37	048	
+10	100	
+9	240	
+7	245	
+11	250	
+12	250	
+26	254	
+15	260	
+16	260	
+17	260	
+18	260	
+19	260	
+20	260	
+21	260	
+27	300	
+29	490	
+31	490	
+32	490	
+34	490	
+35	490	
+36	490	
+22	264	
+23	264	
+24	264	
+1	005	
+39	384	
+40	383	
+5	852	
+48	541	
+43	031	
+6	506	
+2	583	
+3	590	
+4	090	
+8	700	
+14	254	
+25	033	
+41	045	
+44	505	
+45	520	
+46	500	
+47	534	
+49	500	
+52	650	
+53	501	
