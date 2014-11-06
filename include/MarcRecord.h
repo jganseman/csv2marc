@@ -14,7 +14,8 @@
 
 using namespace std;
 
-//typedef std::pair<int, int> mapelement;
+typedef std::pair<int, char> t_marcfield;
+typedef std::pair<int, t_marcfield> t_fieldmapelement;
 
 class MarcRecord
 {
@@ -22,7 +23,7 @@ class MarcRecord
         MarcRecord();
         MarcRecord(std::string const& in);
         virtual ~MarcRecord();
-        std::string const& print() const;
+        std::string const print() const;
         void buildup();
         void loadfieldmap(std::string const& filename);
         bool const& hasfieldmap() const;
@@ -30,11 +31,12 @@ class MarcRecord
     private:
         friend std::ostream& operator<< (std::ostream& os, const MarcRecord& m);    // print object
         friend std::ostream& operator<< (std::ostream& os, const MarcRecord* m);    // print pointer to object
-        std::string csvline;
-        std::vector<std::string> csvfields;
 
-        static std::map<int, int> fieldmap;         // share this for all records!
-        static bool fieldmaploaded;
+        std::string csvline;                     // a full line (1 record) of the csv file
+        std::vector<std::string> csvfields;         // the same csv line parsed in a series of strings that correspond to the fields
+
+        static std::map<int, t_marcfield > fieldmap;         // mapping of csv columns to marc fields (int-char pairs), shared for all records!
+        static bool fieldmaploaded;                          // indicate whether a fieldmap is loaded
 
         std::set<MarcField> marcfields;         // One records contains several fields
 };

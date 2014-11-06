@@ -2,11 +2,18 @@
 #define MARCFIELD_H
 
 #include <string>
+#include <iostream>
+#include <sstream>
+#include <map>
+
+using namespace std;
+
+typedef std::pair<char, std::string> t_subfield;
 
 class MarcField
 {
     public:
-        MarcField(int nr, char defchar=' ');
+        MarcField(int nr, char defchar='\\');
         virtual ~MarcField();
         int Getfieldnr() { return fieldnr; }
         void Setfieldnr(int val) { fieldnr = val; }
@@ -20,13 +27,17 @@ class MarcField
         inline bool operator== (const MarcField& rhs) const { return fieldnr == rhs.fieldnr; }
         inline bool operator== (int key) const { return fieldnr == key; }      // enable usage of find algorithm with integers
 
-        void update(int csvcol, std::string data);
+        std::string const print() const;
+
+        void update(char marcsubfield, std::string data);
 
     protected:
     private:
         int fieldnr;
         char indicator1;
         char indicator2;
+
+        std::map<char, std::string> subfields;
 };
 
 #endif // MARCFIELD_H

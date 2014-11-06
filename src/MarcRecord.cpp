@@ -2,7 +2,7 @@
 
 
 // define the static members of this class
-std::map<int, int> MarcRecord::fieldmap;
+std::map<int, t_marcfield> MarcRecord::fieldmap;
 bool MarcRecord::fieldmaploaded = false;
 
 
@@ -24,10 +24,23 @@ MarcRecord::~MarcRecord()
 }
 
 //print function
-std::string const& MarcRecord::print() const
+std::string const MarcRecord::print() const
 {
-    return csvline;
+    //return csvline;
+    std::ostringstream output;
+
+    // print all fields
+    for(std::set<MarcField>::iterator it = marcfields.begin(); it!=marcfields.end(); ++it)
+    {
+        output << (*it).print();
+    }
+
+    // put a newline after each record
+    output << endl;
+
+    return output.str();
 }
+
 
 bool const& MarcRecord::hasfieldmap() const
 {
@@ -60,27 +73,28 @@ void MarcRecord::buildup()
 
     // for every field, create the corresponding Marc field
 
-    for(std::vector<std::string>::iterator csvit = csvfields.begin(); csvit != csvfields.end(); ++csvit)
+    for(std::vector<std::string>::iterator csvit = csvfields.begin(); csvit != csvfields.end(); ++csvit)        // iterate over all fields
     {
         int csvcol = std::distance(csvfields.begin(), csvit);
-        int marcnr = fieldmap[csvcol];
+        int marcnr = fieldmap[csvcol].first;
+        char marcsubfield = fieldmap[csvcol].second;
 
         // if field already exists but some subfield needs adding, then find it
 
         std::set<MarcField>::iterator fieldit = marcfields.find(marcnr);
 
-        if (fieldit != marcfields.end())
+        if (fieldit != marcfields.end())        // a field with this number already exists in this record. update.
         {
-            // Get field out , update, put back in. Set elements cannot be modified directly (would risk to undo sorting)
-            MarcField oldfield = *fieldit;
-            oldfield.update(csvcol, (*csvit));
-            marcfields.erase(fieldit);
-            marcfields.insert(oldfield);
+            // Get field out , update, put back in. Set elements cannot be modified directly (map is kept sorted, would risk to undo sorting)
+            MarcField oldfield = *fieldit;              // get the field out (this makes a copy)
+            oldfield.update(marcsubfield, (*csvit));          // update with new data
+            marcfields.erase(fieldit);                  // erase in map
+            marcfields.insert(oldfield);                // and re-add
         }
-        else
+        else                     // a field with this number does not exist yet in this record. create and update.
         {
-            MarcField newfield(marcnr);
-            newfield.update(csvcol, (*csvit));
+            MarcField newfield(marcnr);                 // TODO = MarcFactory.getNewField(marcnr), which should have overloaded nrs.
+            newfield.update(marcsubfield, (*csvit));
             marcfields.insert(newfield);
         }
 
@@ -107,13 +121,15 @@ void MarcRecord::loadfieldmap(std::string const& filename)
         {
             std::istringstream iss(line);
             int a, b;
-            if (!(iss >> a >> b)) // comment line or empty line
+            char c;
+            if (!(iss >> a >> b >> c)) // comment line or empty line
             {
                 continue;
             }
             else // process pair (a,b)
             {
-                fieldmap.insert(std::pair<int, int>(a, b));
+
+                fieldmap.insert( t_fieldmapelement(a, t_marcfield(b,c)));
             }
         }
 
