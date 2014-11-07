@@ -5,6 +5,7 @@
 #include <iostream>
 #include <sstream>
 #include <map>
+#include <iomanip>
 
 using namespace std;
 
@@ -30,6 +31,7 @@ class MarcField
         std::string const print() const;
 
         void update(char marcsubfield, std::string data);
+        bool isempty() const;
 
     protected:
     private:
@@ -38,6 +40,23 @@ class MarcField
         char indicator2;
 
         std::map<char, std::string> subfields;
+
+};
+
+
+// MarcFieldPtr Comparator Functor. Define this as parameter in template definition
+struct MarcFieldPtrComparator
+{
+  bool operator()(MarcField* f, MarcField* s) const
+  {
+    return f->Getfieldnr() < s->Getfieldnr();
+  }
+
+    bool operator()(MarcField* f, int key) const
+  {
+    return f->Getfieldnr() < key;
+  }
+
 };
 
 #endif // MARCFIELD_H

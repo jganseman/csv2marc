@@ -16,13 +16,14 @@ std::string const MarcField::print() const
 {
     // print one entire field. First the numbers, then the indicators
     std::ostringstream output;
-    output << '=' << fieldnr << '\t' << indicator1 << indicator2;
+    output << '=' << std::setfill ('0') << std::setw (3) << fieldnr << '\t' << indicator1 << indicator2;
 
     //add all subfields.subfield indicator is dollar sign
 
     for ( std::map<char, std::string>::const_iterator it = subfields.begin(); it != subfields.end(); ++it)
     {
-        output << "$" << (*it).first << (*it).second;
+        if (!((*it).second.empty() || (*it).second == "" ))
+            output << "$" << (*it).first << (*it).second;
     }
 
     output << endl;
@@ -43,3 +44,14 @@ void MarcField::update(char marcsubfield, std::string data)
     }
 
 }
+
+bool MarcField::isempty() const
+{
+    for ( std::map<char, std::string>::const_iterator it = subfields.begin(); it != subfields.end(); ++it)
+    {
+        if (!((*it).second.empty() || (*it).second == "" ))
+            return false;
+    }
+    return true;
+}
+

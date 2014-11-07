@@ -17,6 +17,9 @@ using namespace std;
 typedef std::pair<int, char> t_marcfield;
 typedef std::pair<int, t_marcfield> t_fieldmapelement;
 
+typedef std::set<MarcField*, MarcFieldPtrComparator> t_fieldset;
+typedef t_fieldset::const_iterator t_fieldsetIterator;
+
 class MarcRecord
 {
     public:
@@ -38,7 +41,7 @@ class MarcRecord
         static std::map<int, t_marcfield > fieldmap;         // mapping of csv columns to marc fields (int-char pairs), shared for all records!
         static bool fieldmaploaded;                          // indicate whether a fieldmap is loaded
 
-        std::set<MarcField> marcfields;         // One records contains several fields
+        t_fieldset marcfields;         // One records contains several fields
 };
 
 

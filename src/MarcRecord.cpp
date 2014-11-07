@@ -20,7 +20,11 @@ MarcRecord::MarcRecord(std::string const& in)
 
 MarcRecord::~MarcRecord()
 {
-    //dtor
+    //delete the list of fields
+    for(t_fieldsetIterator it = marcfields.begin(); it!=marcfields.end(); ++it)
+    {
+        delete *it;
+    }
 }
 
 //print function
@@ -30,9 +34,10 @@ std::string const MarcRecord::print() const
     std::ostringstream output;
 
     // print all fields
-    for(std::set<MarcField>::iterator it = marcfields.begin(); it!=marcfields.end(); ++it)
+    for(t_fieldsetIterator it = marcfields.begin(); it!=marcfields.end(); ++it)
     {
-        output << (*it).print();
+        if (!(*it)->isempty())
+            output << (*it)->print();
     }
 
     // put a newline after each record
@@ -66,7 +71,7 @@ void MarcRecord::buildup()
     // parse csvline. Its fields are tab-separated, each field needs separate processing
     std::stringstream csvlinestream(csvline);
     std::string segment;
-    while(std::getline(csvlinestream, segment, '_'))
+    while(std::getline(csvlinestream, segment, '\t'))
     {
         csvfields.push_back(segment);
     }
@@ -79,22 +84,28 @@ void MarcRecord::buildup()
         int marcnr = fieldmap[csvcol].first;
         char marcsubfield = fieldmap[csvcol].second;
 
-        // if field already exists but some subfield needs adding, then find it
+        //if this field was not present in the mapping, therefore marcsubfield == null, skip field
+        if (marcsubfield == '\0')
+            continue;
 
-        std::set<MarcField>::iterator fieldit = marcfields.find(marcnr);
+        // if field already exists but some subfield needs adding, then find it
+        // Now it constructs a dummy object for the search. TODO: with unique_ptr in C++11 this can be remedied
+        MarcField* dummy = new MarcField(marcnr);
+        t_fieldsetIterator fieldit = marcfields.find(dummy);
+        delete dummy;
 
         if (fieldit != marcfields.end())        // a field with this number already exists in this record. update.
         {
             // Get field out , update, put back in. Set elements cannot be modified directly (map is kept sorted, would risk to undo sorting)
-            MarcField oldfield = *fieldit;              // get the field out (this makes a copy)
-            oldfield.update(marcsubfield, (*csvit));          // update with new data
+            MarcField* oldfield = *fieldit;              // get the field out (this makes a copy)
+            oldfield->update(marcsubfield, (*csvit));          // update with new data
             marcfields.erase(fieldit);                  // erase in map
             marcfields.insert(oldfield);                // and re-add
         }
         else                     // a field with this number does not exist yet in this record. create and update.
         {
-            MarcField newfield(marcnr);                 // TODO = MarcFactory.getNewField(marcnr), which should have overloaded nrs.
-            newfield.update(marcsubfield, (*csvit));
+            MarcField* newfield = new MarcField(marcnr); // FieldFactory::getNewField(marcnr);
+            newfield->update(marcsubfield, (*csvit));
             marcfields.insert(newfield);
         }
 
