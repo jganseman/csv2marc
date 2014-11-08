@@ -110,6 +110,12 @@ void MarcRecord::buildup()
         }
 
     }
+
+    // at the end, add some fixed fields
+    MarcField* newfield = new MarcField(3);
+    newfield->update('a', "BBc");       // does not matter in which subfield this is put, it's a control field
+    marcfields.insert(newfield);
+
 }
 
 

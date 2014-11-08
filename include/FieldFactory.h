@@ -2,6 +2,8 @@
 #define FIELDFACTORY_H
 
 #include <MarcField.h>
+#include <FieldLDR.h>
+#include <Field008.h>
 
 class FieldFactory
 {

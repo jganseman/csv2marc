@@ -1,5 +1,5 @@
 # This file defines the field mapping between CSV columns and MARC fields.
-# Any line not beginning with 2 integers and a char is regarded as comment. 
+# Any line not beginning with 2 integers and a char is regarded as comment.
 # Fields do not need to appear ordered in this file.
 #
 # Currently, tailored towards Brussels conservatory library
@@ -54,3 +54,7 @@
 53	501	a
 #adding first column as field zero
 0	000	z
+#local library id number should be in MARC field 1
+4   001 z
+#date of creation of record should be put in 008
+0   008 z

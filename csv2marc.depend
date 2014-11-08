@@ -23,7 +23,7 @@
 	<string>
 	<MarcRecord.h>
 
-1415294297 f:\users\jg\documents\github\csv2marc\include\marcrecord.h
+1415444119 f:\users\jg\documents\github\csv2marc\include\marcrecord.h
 	<iostream>
 	<string>
 	<sstream>
@@ -39,19 +39,20 @@
 	<exception>
 	<string>
 
-1415294411 source:f:\users\jg\documents\github\csv2marc\src\marcrecord.cpp
+1415457192 source:f:\users\jg\documents\github\csv2marc\src\marcrecord.cpp
 	"MarcRecord.h"
 
 1415097244 source:f:\users\jg\documents\github\csv2marc\src\marcrecordexception.cpp
 	"MarcRecordException.h"
 
-1415294266 f:\users\jg\documents\github\csv2marc\include\marcfield.h
+1415446690 f:\users\jg\documents\github\csv2marc\include\marcfield.h
 	<string>
 	<iostream>
 	<sstream>
 	<map>
+	<iomanip>
 
-1415311535 source:f:\users\jg\documents\github\csv2marc\src\marcfield.cpp
+1415461147 source:f:\users\jg\documents\github\csv2marc\src\marcfield.cpp
 	"MarcField.h"
 
 1415026904 source:c:\users\bibpersoneel\desktop\joachim\github\csv2marc\src\marcrecordexception.cpp
@@ -96,4 +97,27 @@
 	"FieldFactory.h"
 
 1415371147 c:\users\bibpersoneel\desktop\joachim\github\csv2marc\include\fieldfactory.h
+
+1415458430 source:f:\users\jg\documents\github\csv2marc\src\fieldfactory.cpp
+	"FieldFactory.h"
+
+1415461107 f:\users\jg\documents\github\csv2marc\include\fieldfactory.h
+	<MarcField.h>
+	<FieldLDR.h>
+	<Field008.h>
+
+1415455558 source:f:\users\jg\documents\github\csv2marc\src\fieldldr.cpp
+	"FieldLDR.h"
+
+1415455757 f:\users\jg\documents\github\csv2marc\include\fieldldr.h
+	<MarcField.h>
+	<cstring>
+
+1415461054 source:f:\users\jg\documents\github\csv2marc\src\field008.cpp
+	"Field008.h"
+
+1415461618 f:\users\jg\documents\github\csv2marc\include\field008.h
+	<MarcField.h>
+	<cstring>
+	<cstdlib>
 
