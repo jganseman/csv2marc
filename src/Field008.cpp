@@ -72,6 +72,11 @@ void Field008::update(char marcsubfield, std::string data)
     u - Continuing resource status unknown
     | - No attempt to code
     */
+    if (data.length() == 4 && atoi(data.c_str()))           //suppose a 4-digit number is a publication date
+    {
+        fixedstring[6] = 's';
+        for (int i=0; i<4; ++i) {fixedstring[i] = data[i];}
+    }
 
     /* fixed[15-17] : place of publication, as a country code
     */

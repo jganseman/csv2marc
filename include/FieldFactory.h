@@ -3,7 +3,11 @@
 
 #include <MarcField.h>
 #include <FieldLDR.h>
+#include <Field005.h>
 #include <Field008.h>
+#include <Field020.h>
+#include <Field022.h>
+#include <Field024.h>
 
 class FieldFactory
 {

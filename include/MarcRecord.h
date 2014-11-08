@@ -9,7 +9,9 @@
 #include <vector>
 #include <map>
 #include <set>
+
 #include <MarcRecordException.h>
+#include <FieldFactory.h>
 #include <MarcField.h>
 
 using namespace std;

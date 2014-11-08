@@ -36,12 +36,24 @@
 			<Add option="-fexceptions" />
 		</Compiler>
 		<Unit filename="fieldmap.txt" />
+		<Unit filename="include/Field005.h" />
+		<Unit filename="include/Field008.h" />
+		<Unit filename="include/Field020.h" />
+		<Unit filename="include/Field022.h" />
+		<Unit filename="include/Field024.h" />
 		<Unit filename="include/FieldFactory.h" />
+		<Unit filename="include/FieldLDR.h" />
 		<Unit filename="include/MarcField.h" />
 		<Unit filename="include/MarcRecord.h" />
 		<Unit filename="include/MarcRecordException.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="src/Field005.cpp" />
+		<Unit filename="src/Field008.cpp" />
+		<Unit filename="src/Field020.cpp" />
+		<Unit filename="src/Field022.cpp" />
+		<Unit filename="src/Field024.cpp" />
 		<Unit filename="src/FieldFactory.cpp" />
+		<Unit filename="src/FieldLDR.cpp" />
 		<Unit filename="src/MarcField.cpp" />
 		<Unit filename="src/MarcRecord.cpp" />
 		<Unit filename="src/MarcRecordException.cpp" />

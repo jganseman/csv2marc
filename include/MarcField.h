@@ -29,7 +29,6 @@ class MarcField
         inline bool operator== (int key) const { return fieldnr == key; }      // enable usage of find algorithm with integers
 
         virtual std::string const print() const;
-
         virtual void update(char marcsubfield, std::string data);
         virtual bool isempty() const;
 

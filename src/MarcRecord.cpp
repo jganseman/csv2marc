@@ -104,7 +104,7 @@ void MarcRecord::buildup()
         }
         else                     // a field with this number does not exist yet in this record. create and update.
         {
-            MarcField* newfield = new MarcField(marcnr); // FieldFactory::getNewField(marcnr);
+            MarcField* newfield = FieldFactory::getFactory()->getMarcField(marcnr);
             newfield->update(marcsubfield, (*csvit));
             marcfields.insert(newfield);
         }

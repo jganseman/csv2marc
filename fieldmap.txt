@@ -58,3 +58,6 @@
 4   001 z
 #date of creation of record should be put in 008
 0   008 z
+#isbn should be put in field 020. Same data can also contain ISSN
+50  020 a
+50  022 a
