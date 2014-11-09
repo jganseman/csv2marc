@@ -41,6 +41,9 @@
 		<Unit filename="include/Field020.h" />
 		<Unit filename="include/Field022.h" />
 		<Unit filename="include/Field024.h" />
+		<Unit filename="include/Field028.h" />
+		<Unit filename="include/Field041.h" />
+		<Unit filename="include/Field100.h" />
 		<Unit filename="include/FieldFactory.h" />
 		<Unit filename="include/FieldLDR.h" />
 		<Unit filename="include/MarcField.h" />
@@ -52,6 +55,9 @@
 		<Unit filename="src/Field020.cpp" />
 		<Unit filename="src/Field022.cpp" />
 		<Unit filename="src/Field024.cpp" />
+		<Unit filename="src/Field028.cpp" />
+		<Unit filename="src/Field041.cpp" />
+		<Unit filename="src/Field100.cpp" />
 		<Unit filename="src/FieldFactory.cpp" />
 		<Unit filename="src/FieldLDR.cpp" />
 		<Unit filename="src/MarcField.cpp" />

@@ -34,6 +34,7 @@ MarcField* FieldFactory::getMarcField(int marcnr)
         case 20 : return new Field020(marcnr);
         case 22 : return new Field022(marcnr);
         case 24 : return new Field024(marcnr);
+        case 41 : return new Field041(marcnr);
         default: return new MarcField(marcnr);
     }
 }

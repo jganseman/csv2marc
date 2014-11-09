@@ -6,6 +6,10 @@
 #include<cstring>
 #include<cstdlib>
 
+#include <string>
+#include <algorithm>
+#include <vector>
+
 class Field008 : public MarcField
 {
     public:

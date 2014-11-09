@@ -116,6 +116,16 @@ void MarcRecord::buildup()
     newfield->update('a', "BBc");       // does not matter in which subfield this is put, it's a control field
     marcfields.insert(newfield);
 
+    newfield = new MarcField(38);    // rightful owner of this record
+    newfield->update('a', "BBc");
+    marcfields.insert(newfield);
+
+    newfield = new MarcField(40);    // creator of this record. Also has "Language of record" field. Set by default on Dutch
+    newfield->update('a', "BBc");
+    newfield->update('b', "dut");
+    newfield->update('c', "BBc");
+    marcfields.insert(newfield);
+
 }
 
 

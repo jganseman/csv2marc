@@ -13,6 +13,9 @@ Field024::~Field024()
 
 void Field024::update(char marcsubfield, std::string data)
 {
+    if (data.empty() || data == "")
+        return;
+
     // first make all uppercase for ease of parsing
     std::transform(data.begin(), data.end(), data.begin(), ::toupper);
 
@@ -60,5 +63,5 @@ void Field024::update(char marcsubfield, std::string data)
     //TODO: some records have multiple ISMN nrs. These should appear on several different 024 fields, and not as several subfields a!
     // For now: this program is only made to have repeat subfields, no repeat entire fields. Try to find a solution with MarcEdit?
 
-    // TODO: DISCARDS RISM nrs now -> FIND OUT WHERE TO STORE THOSE IN MARC RECORDS!
+    // TODO: DISCARDS RISM nrs now -> FIND OUT WHERE TO STORE THOSE IN MARC RECORDS! (510 ???)
 }

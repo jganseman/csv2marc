@@ -13,6 +13,9 @@ Field020::~Field020()
 
 void Field020::update(char marcsubfield, std::string data)
 {
+    if (data.empty() || data == "")
+        return;
+
     // first make all uppercase for ease of parsing
     std::transform(data.begin(), data.end(), data.begin(), ::toupper);
 

@@ -25,6 +25,9 @@ std::string const Field005::print() const
 
 void Field005::update(char marcsubfield, std::string data)
 {
+    if (data.empty() || data == "")
+        return;
+
     // assert string is a date
     if (!atol(data.c_str()))
         throw MarcRecordException("Error Updating Field 005: string is not a valid date : " + data);

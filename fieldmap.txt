@@ -41,10 +41,11 @@
 2	583	a
 3	590	a
 4	090	a
-8	700	a
+8	720	a
 14	254	a
-25	033	a
-41	045	a
+#25	#033	#a      # Only formatted dates here, of audio recordings or broadcasts. In Unparsed form: field 518?
+25	045	a
+# column 25 is date of composition (-> MARC field 45), column 41 date of publication (MARC field 008)
 44	505	a
 45	520	a
 46	500	a
@@ -61,3 +62,7 @@
 #isbn should be put in field 020. Same data can also contain ISSN
 50  020 a
 50  022 a
+#publication year goes in 008 . TODO: parse ranges and uncertain dates. Composition year moved to 045
+41  008 z
+# standardized author: first one in 100, rest in 700. Put nonstandardized author names in 720 for the time being
+10  700 a

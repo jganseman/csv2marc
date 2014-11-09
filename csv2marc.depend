@@ -40,7 +40,7 @@
 	<exception>
 	<string>
 
-1415469048 source:f:\users\jg\documents\github\csv2marc\src\marcrecord.cpp
+1415559521 source:f:\users\jg\documents\github\csv2marc\src\marcrecord.cpp
 	"MarcRecord.h"
 
 1415097244 source:f:\users\jg\documents\github\csv2marc\src\marcrecordexception.cpp
@@ -99,10 +99,10 @@
 
 1415371147 c:\users\bibpersoneel\desktop\joachim\github\csv2marc\include\fieldfactory.h
 
-1415470032 source:f:\users\jg\documents\github\csv2marc\src\fieldfactory.cpp
+1415565635 source:f:\users\jg\documents\github\csv2marc\src\fieldfactory.cpp
 	"FieldFactory.h"
 
-1415472785 f:\users\jg\documents\github\csv2marc\include\fieldfactory.h
+1415567031 f:\users\jg\documents\github\csv2marc\include\fieldfactory.h
 	<MarcField.h>
 	<FieldLDR.h>
 	<Field005.h>
@@ -110,6 +110,8 @@
 	<Field020.h>
 	<Field022.h>
 	<Field024.h>
+	<Field041.h>
+	<Field100.h>
 
 1415455558 source:f:\users\jg\documents\github\csv2marc\src\fieldldr.cpp
 	"FieldLDR.h"
@@ -118,15 +120,18 @@
 	<MarcField.h>
 	<cstring>
 
-1415464180 source:f:\users\jg\documents\github\csv2marc\src\field008.cpp
+1415565560 source:f:\users\jg\documents\github\csv2marc\src\field008.cpp
 	"Field008.h"
 
-1415461618 f:\users\jg\documents\github\csv2marc\include\field008.h
+1415565578 f:\users\jg\documents\github\csv2marc\include\field008.h
 	<MarcField.h>
 	<cstring>
 	<cstdlib>
+	<string>
+	<algorithm>
+	<vector>
 
-1415465881 source:f:\users\jg\documents\github\csv2marc\src\field005.cpp
+1415564574 source:f:\users\jg\documents\github\csv2marc\src\field005.cpp
 	"Field005.h"
 
 1415465802 f:\users\jg\documents\github\csv2marc\include\field005.h
@@ -136,7 +141,7 @@
 	<cstdlib>
 	<cstring>
 
-1415470725 source:f:\users\jg\documents\github\csv2marc\src\field020.cpp
+1415564583 source:f:\users\jg\documents\github\csv2marc\src\field020.cpp
 	"Field020.h"
 
 1415470352 f:\users\jg\documents\github\csv2marc\include\field020.h
@@ -146,7 +151,7 @@
 	<algorithm>
 	<vector>
 
-1415470836 source:f:\users\jg\documents\github\csv2marc\src\field022.cpp
+1415564590 source:f:\users\jg\documents\github\csv2marc\src\field022.cpp
 	"Field022.h"
 
 1415470339 f:\users\jg\documents\github\csv2marc\include\field022.h
@@ -163,6 +168,31 @@
 	<algorithm>
 	<vector>
 
-1415472375 source:f:\users\jg\documents\github\csv2marc\src\field024.cpp
+1415564600 source:f:\users\jg\documents\github\csv2marc\src\field024.cpp
 	"Field024.h"
+
+1415564629 source:f:\users\jg\documents\github\csv2marc\src\field028.cpp
+	"Field028.h"
+
+1415556409 f:\users\jg\documents\github\csv2marc\include\field028.h
+	<MarcField.h>
+
+1415564367 f:\users\jg\documents\github\csv2marc\include\field041.h
+	<MarcField.h>
+	<MarcRecordException.h>
+	<string>
+	<algorithm>
+	<vector>
+
+1415569452 f:\users\jg\documents\github\csv2marc\include\field100.h
+	<MarcField.h>
+	<string>
+	<algorithm>
+	<vector>
+
+1415567006 source:f:\users\jg\documents\github\csv2marc\src\field041.cpp
+	"Field041.h"
+
+1415569801 source:f:\users\jg\documents\github\csv2marc\src\field100.cpp
+	"Field100.h"
 
