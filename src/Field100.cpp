@@ -44,13 +44,20 @@ void Field100::update(char marcsubfield, std::string data)
     {
         datasegments.push_back(segment);
     }
-    for (std::vector<std::string>::iterator it = datasegments.begin(); it != datasegments.end(); ++it)
-    {
-        // TODO parse in more detailed way
-        MarcField::update('e', (*it).substr(0,(*it).find_first_of('>')));
-    }
-    fullstring = datasegments[0];       // discard all <> info from this string
 
+    if (datasegments.size() > 1) // item has relatorial remarks
+    {
+        for (std::vector<std::string>::iterator it2 = datasegments.begin()+1; it2 != datasegments.end(); ++it2)
+        {
+            // TODO parse in more detailed way
+            //get string
+            std::string tempstring = (*it2).substr(0,(*it2).find_first_of('>'));
+            //trim any beginning or ending spaces
+            tempstring = tempstring.erase(tempstring.find_last_not_of(" \n\r\t")+1).substr(tempstring.find_first_not_of(" \n\r\t"));
+            MarcField::update('e', tempstring);
+        }
+        fullstring = datasegments[0];       // discard all <> info from this string
+    }
 
     // the dates are anything in between ()
     datasegments.clear();
@@ -60,14 +67,23 @@ void Field100::update(char marcsubfield, std::string data)
     {
         datasegments.push_back(segment);
     }
-    for (std::vector<std::string>::iterator it = datasegments.begin(); it != datasegments.end(); ++it)
-    {
-        // TODO parse in more detailed way
-        MarcField::update('d', (*it).substr(0,(*it).find_first_of(')')));
-    }
-    fullstring = datasegments[0];       // discard all <> info from this string
 
-    // now add the author itself
+    if (datasegments.size() > 1) // item has dates
+    {
+        for (std::vector<std::string>::iterator it2 = datasegments.begin()+1; it2 != datasegments.end(); ++it2)
+        {
+            // TODO parse in more detailed way
+            std::string tempstring = (*it2).substr(0,(*it2).find_first_of(')'));
+            //trim any beginning or ending spaces
+            tempstring = tempstring.erase(tempstring.find_last_not_of(" \n\r\t")+1).substr(tempstring.find_first_not_of(" \n\r\t"));
+            MarcField::update('d', tempstring);
+        }
+        fullstring = datasegments[0];       // discard all <> info from this string
+    }
+
+    // now add the author itself.
+    // trim any beginning or ending spaces
+    fullstring = fullstring.erase(fullstring.find_last_not_of(" \n\r\t")+1).substr(fullstring.find_first_not_of(" \n\r\t"));
     MarcField::update('a', fullstring);
 
 }

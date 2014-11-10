@@ -36,7 +36,7 @@ std::string const Field008::print() const
 {
     // overloaded print function for fixed length field
     std::ostringstream output;
-    output << "=008\t" << fixedstring << endl;
+    output << "=008  " << fixedstring << endl;
     return output.str();
 }
 
@@ -76,8 +76,23 @@ void Field008::update(char marcsubfield, std::string data)
     if (data.length() == 4 && atoi(data.c_str()))           //suppose a 4-digit number is a publication date
     {
         fixedstring[6] = 's';
-        for (int i=0; i<4; ++i) {fixedstring[i] = data[i];}
+        for (int i=0; i<4; ++i) {fixedstring[i+7] = data[i];}
         return;             // only set this field
+    }
+    // also process date ranges, separated by "-" or " - "
+    if (data.length() == 9 && atoi(data.substr(0,4).c_str()) && atoi(data.substr(5,9).c_str()) )
+    {
+        fixedstring[6] = 'm';
+        for (int i=0; i<4; ++i) {fixedstring[i+7] = data[i];}
+        for (int i=0; i<4; ++i) {fixedstring[i+11] = data[i+5];}
+        return;
+    }
+    if (data.length() == 11 && atoi(data.substr(0,4).c_str()) && atoi(data.substr(7,11).c_str()) )
+    {
+        fixedstring[6] = 'm';
+        for (int i=0; i<4; ++i) {fixedstring[i+7] = data[i];}
+        for (int i=0; i<4; ++i) {fixedstring[i+11] = data[i+7];}
+        return;
     }
 
     /* fixed[15-17] : place of publication, as a country code
@@ -96,7 +111,7 @@ void Field008::update(char marcsubfield, std::string data)
     und - Undetermined
     [aaa] - Three-character alphabetic code
     */
-    // to set the language, this is a copy of Field040
+    // to set the language, this is a copy of Field041
 
     std::transform(data.begin(), data.end(), data.begin(), ::tolower);
     std::vector<std::string> datasegments;
@@ -212,9 +227,10 @@ void Field008::update(char marcsubfield, std::string data)
             strcpy(&fixedstring[35], "slv");
         else if ((*it).find("turks") != std::string::npos)
             strcpy(&fixedstring[35], "tur");
-        else
-            strcpy(&fixedstring[35], "und");
+        else {
+            //strcpy(&fixedstring[35], "und");
             //throw MarcRecordException("Unrecognized language for Field041: "+data);
+        }
         fixedstring[38] = '|';
     }
 

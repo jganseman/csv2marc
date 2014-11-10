@@ -64,5 +64,8 @@
 50  022 a
 #publication year goes in 008 . TODO: parse ranges and uncertain dates. Composition year moved to 045
 41  008 z
+#put language in 008 too
+38  008 z
 # standardized author: first one in 100, rest in 700. Put nonstandardized author names in 720 for the time being
 10  700 a
+

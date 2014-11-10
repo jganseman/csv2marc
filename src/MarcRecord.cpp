@@ -2,7 +2,7 @@
 
 
 // define the static members of this class
-std::map<int, t_marcfield> MarcRecord::fieldmap;
+std::multimap<int, t_marcfield> MarcRecord::fieldmap;
 bool MarcRecord::fieldmaploaded = false;
 
 
@@ -57,6 +57,7 @@ bool const& MarcRecord::hasfieldmap() const
 void MarcRecord::buildup()
 {
     //make sure record contains some text
+    /*
     if (csvline.empty() || csvline.find_first_not_of(" \t\r\n", 1) == csvline.npos)     // first csv char might be a delimiter value.
     {
         throw MarcRecordException("CSV string is empty or non-literal");
@@ -67,6 +68,7 @@ void MarcRecord::buildup()
     {
         throw MarcRecordException("No field mapping is loaded");
     }
+    */
 
     // parse csvline. Its fields are tab-separated, each field needs separate processing
     std::stringstream csvlinestream(csvline);
@@ -81,8 +83,12 @@ void MarcRecord::buildup()
     for(std::vector<std::string>::iterator csvit = csvfields.begin(); csvit != csvfields.end(); ++csvit)        // iterate over all fields
     {
         int csvcol = std::distance(csvfields.begin(), csvit);
-        int marcnr = fieldmap[csvcol].first;
-        char marcsubfield = fieldmap[csvcol].second;
+
+    for(std::multimap<int, t_marcfield >::iterator mapit = fieldmap.lower_bound(csvcol); mapit != fieldmap.upper_bound(csvcol); ++mapit)        // iterate over all fields
+    {
+
+        int marcnr = (*mapit).second.first;
+        char marcsubfield = (*mapit).second.second;
 
         //if this field was not present in the mapping, therefore marcsubfield == null, skip field
         if (marcsubfield == '\0')
@@ -109,6 +115,7 @@ void MarcRecord::buildup()
             marcfields.insert(newfield);
         }
 
+    }
     }
 
     // at the end, add some fixed fields

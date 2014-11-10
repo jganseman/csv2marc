@@ -17,7 +17,7 @@ std::string const Field005::print() const
 {
     // overloaded print function for fixed length field
     std::ostringstream output;
-    output << "=005\t" << fixedstring << endl;
+    output << "=005  " << fixedstring << endl;
     return output.str();
 }
 

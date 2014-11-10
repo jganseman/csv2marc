@@ -32,14 +32,21 @@ if ( argc != 3 ) /* 2 arguments: filename to process and resulting filename  */
     // all is still fine: process lines of csv one by one
     std::string line;
     MarcRecord* thisrecord;
-    int count = 0;
 
-    //while(std::getline(csvfile, line))
-    //{
 
-    for(int j=0; j<100; j++)
+    int j = -1;
+    while(std::getline(csvfile, line))
     {
+        j++;
+
+    /*
+    for(int j=0; j<1000; j++)
+    {
+    */
         std::getline(csvfile, line);
+
+        if (line.empty() || line == "")
+            continue;
 
         //cout << line << endl;
 
@@ -55,19 +62,16 @@ if ( argc != 3 ) /* 2 arguments: filename to process and resulting filename  */
         }
         catch (exception& e)
         {
-            cout << "!!! ERROR: Exception Thrown !!!" << endl;
-            cout << "Printing csv data line:" << endl;
-            cout << thisrecord << endl;
-            cout << "Error message was:" << endl;
-            cout << e.what() << endl;
-            cout << "... Exiting program ...";
+            cout << "!!! ERROR: while processing csv line nr " << j << endl;
+            cout << line.substr(0,50) << " ..." << endl;
+            cout << "Error message was: " << e.what() << endl;
             delete thisrecord;
-            return -1;
+            continue;           // continue processing
         }
 
-        cout << thisrecord << endl;
+        //cout << thisrecord << endl;
         marcfile << thisrecord << endl;         // operator<< is overloaded for pointers to MarcRecord
-        cout << "Outputted " << thisrecord << " ; This was record " << ++count << endl ;
+        // cout << "Outputted " << thisrecord << " ; This was record " << ++count << endl ;
 
         delete thisrecord;
     }

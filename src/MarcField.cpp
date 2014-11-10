@@ -16,7 +16,7 @@ std::string const MarcField::print() const
 {
     // print one entire field. First the numbers, then the indicators
     std::ostringstream output;
-    output << '=' << std::setfill ('0') << std::setw (3) << fieldnr << '\t';
+    output << '=' << std::setfill ('0') << std::setw (3) << fieldnr << "  ";
 
     // only print indicators and full subfields if field is equal to or larger than 10
     if (fieldnr >= 10 )
@@ -25,7 +25,7 @@ std::string const MarcField::print() const
 
         //add all subfields.subfield indicator is dollar sign
 
-        for ( std::map<char, std::string>::const_iterator it = subfields.begin(); it != subfields.end(); ++it)
+        for ( std::multimap<char, std::string>::const_iterator it = subfields.begin(); it != subfields.end(); ++it)
         {
             if (!((*it).second.empty() || (*it).second == "" ))
                 output << "$" << (*it).first << (*it).second;
@@ -33,7 +33,7 @@ std::string const MarcField::print() const
     }
     else        // if these are control fields, just print all text
     {
-        for ( std::map<char, std::string>::const_iterator it = subfields.begin(); it != subfields.end(); ++it)
+        for ( std::multimap<char, std::string>::const_iterator it = subfields.begin(); it != subfields.end(); ++it)
         {
             if (!((*it).second.empty() || (*it).second == "" ))
                 output << (*it).second;
@@ -46,16 +46,14 @@ std::string const MarcField::print() const
 
 void MarcField::update(char marcsubfield, std::string data)
 {
-    // do some basic data cleaning and string formatting here, if it's not worth writing an entire new class for
-    // TODO in an ideal setting, those are all different subclasses with consistency checking...
-    // TODO other possibility is to make a postprocess cleanup routine
-    switch (fieldnr)
-    {
-            case 5: (data == "") ? data = "00000000000000.0" : data += "000000.0" ;         // Latest Transaction Time: append time to date;
-    }
+    if (data.empty() || data == "")
+        return;
 
+    // by default create a new subfield with the same code
+    subfields.insert(std::make_pair(marcsubfield, data));
 
     // see whether this field already exists
+    /*
     map<char, std::string>::iterator it = subfields.find(marcsubfield);
     if (it == subfields.end())
     {
@@ -65,14 +63,12 @@ void MarcField::update(char marcsubfield, std::string data)
     {
         (*it).second += data;
     }
-
-
-
+    */
 }
 
 bool MarcField::isempty() const
 {
-    for ( std::map<char, std::string>::const_iterator it = subfields.begin(); it != subfields.end(); ++it)
+    for ( std::multimap<char, std::string>::const_iterator it = subfields.begin(); it != subfields.end(); ++it)
     {
         if (!((*it).second.empty() || (*it).second == "" ))
             return false;

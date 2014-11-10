@@ -27,8 +27,10 @@ void Field041::update(char marcsubfield, std::string data)
     while(std::getline(datastream, segment, ';'))
     {
         datasegments.push_back(segment);
+        //cout << "Found language segment: " << segment << endl;
     }
 
+    //cout << "nrsegments: " << datasegments.size() << endl;
 
     char a = marcsubfield;
     int langcount=0;

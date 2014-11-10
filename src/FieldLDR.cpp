@@ -32,7 +32,7 @@ std::string const FieldLDR::print() const
 {
     // overloaded print function for fixed length field
     std::ostringstream output;
-    output << "=LDR\t" << fixedstring << endl;
+    output << "=LDR  " << fixedstring << endl;
     return output.str();
 }
 

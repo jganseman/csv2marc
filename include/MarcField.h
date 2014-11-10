@@ -38,7 +38,7 @@ class MarcField
         char indicator1;
         char indicator2;
 
-        std::map<char, std::string> subfields;
+        std::multimap<char, std::string> subfields;
 
 };
 

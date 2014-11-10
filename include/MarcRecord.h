@@ -40,7 +40,7 @@ class MarcRecord
         std::string csvline;                     // a full line (1 record) of the csv file
         std::vector<std::string> csvfields;         // the same csv line parsed in a series of strings that correspond to the fields
 
-        static std::map<int, t_marcfield > fieldmap;         // mapping of csv columns to marc fields (int-char pairs), shared for all records!
+        static std::multimap<int, t_marcfield > fieldmap;         // mapping of csv columns to marc fields (int-char pairs), shared for all records!
         static bool fieldmaploaded;                          // indicate whether a fieldmap is loaded
 
         t_fieldset marcfields;         // One records contains several fields

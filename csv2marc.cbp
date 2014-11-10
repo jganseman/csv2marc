@@ -11,7 +11,7 @@
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
-				<Option parameters="C:\Users\BibPersoneel\Desktop\BBC2609.CSV C:\Users\BibPersoneel\Desktop\ConvTest.mrc " />
+				<Option parameters="C:\Users\BibPersoneel\Desktop\BBC1011.CSV C:\Users\BibPersoneel\Desktop\ConvTest.mrk " />
 				<Compiler>
 					<Add option="-g" />
 					<Add directory="include" />
@@ -44,6 +44,7 @@
 		<Unit filename="include/Field028.h" />
 		<Unit filename="include/Field041.h" />
 		<Unit filename="include/Field100.h" />
+		<Unit filename="include/Field700.h" />
 		<Unit filename="include/FieldFactory.h" />
 		<Unit filename="include/FieldLDR.h" />
 		<Unit filename="include/MarcField.h" />
@@ -58,6 +59,7 @@
 		<Unit filename="src/Field028.cpp" />
 		<Unit filename="src/Field041.cpp" />
 		<Unit filename="src/Field100.cpp" />
+		<Unit filename="src/Field700.cpp" />
 		<Unit filename="src/FieldFactory.cpp" />
 		<Unit filename="src/FieldLDR.cpp" />
 		<Unit filename="src/MarcField.cpp" />
