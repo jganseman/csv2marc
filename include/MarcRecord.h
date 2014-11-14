@@ -32,6 +32,8 @@ class MarcRecord
         void buildup();
         void loadfieldmap(std::string const& filename);
         bool const& hasfieldmap() const;
+        bool isvalid() const;
+        //void setValidity(bool value) { valid=value; }
     protected:
     private:
         friend std::ostream& operator<< (std::ostream& os, const MarcRecord& m);    // print object
@@ -44,6 +46,7 @@ class MarcRecord
         static bool fieldmaploaded;                          // indicate whether a fieldmap is loaded
 
         t_fieldset marcfields;         // One records contains several fields
+        //bool valid;
 };
 
 

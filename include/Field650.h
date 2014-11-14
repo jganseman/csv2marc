@@ -1,5 +1,5 @@
-#ifndef FIELD024_H
-#define FIELD024_H
+#ifndef FIELD650_H
+#define FIELD650_H
 
 #include <MarcField.h>
 #include <MarcRecordException.h>
@@ -8,17 +8,15 @@
 #include <algorithm>
 #include <vector>
 
-
-class Field024 : public MarcField
+class Field650 : public MarcField
 {
     public:
-        Field024(int nr);
-        virtual ~Field024();
-
+        Field650(int nr);
+        virtual ~Field650();
         virtual void update(char marcsubfield, std::string data);
         virtual std::string const print() const;
     protected:
     private:
 };
 
-#endif // FIELD024_H
+#endif // FIELD650_H

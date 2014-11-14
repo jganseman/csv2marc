@@ -13,6 +13,7 @@ class Field700 : public MarcField
         Field700(int nr);
         virtual ~Field700();
         virtual void update(char marcsubfield, std::string data);
+        virtual std::string const print() const;
     protected:
     private:
 };

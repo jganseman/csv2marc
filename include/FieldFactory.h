@@ -8,8 +8,15 @@
 #include <Field020.h>
 #include <Field022.h>
 #include <Field024.h>
+#include <Field028.h>
 #include <Field041.h>
 #include <Field100.h>
+#include <Field240.h>
+#include <Field245.h>
+#include <Field254.h>
+#include <Field490.h>
+#include <Field505.h>
+#include <Field650.h>
 #include <Field700.h>
 
 class FieldFactory

@@ -11,16 +11,18 @@ using namespace std;
 
 typedef std::pair<char, std::string> t_subfield;
 
+#define DEFAULT_INDIC   '\\'
+
 class MarcField
 {
     public:
-        MarcField(int nr, char defchar='\\');
+        MarcField(int nr, char defchar=DEFAULT_INDIC);
         virtual ~MarcField();
-        int Getfieldnr() { return fieldnr; }
+        int Getfieldnr() const { return fieldnr; }
         void Setfieldnr(int val) { fieldnr = val; }
-        char Getindicator1() { return indicator1; }
+        char Getindicator1() const { return indicator1; }
         void Setindicator1(char val) { indicator1 = val; }
-        char Getindicator2() { return indicator2; }
+        char Getindicator2() const { return indicator2; }
         void Setindicator2(char val) { indicator2 = val; }
 
         // operators that are overloaded such that elements can be looked up more easily
@@ -32,13 +34,13 @@ class MarcField
         virtual void update(char marcsubfield, std::string data);
         virtual bool isempty() const;
 
-    protected:
+    protected:              // make accessible to subclasses, to facilitate overriding functions
+        std::multimap<char, std::string> subfields;
+
     private:
         int fieldnr;
         char indicator1;
         char indicator2;
-
-        std::multimap<char, std::string> subfields;
 
 };
 

@@ -30,20 +30,27 @@ MarcRecord::~MarcRecord()
 //print function
 std::string const MarcRecord::print() const
 {
-    //return csvline;
-    std::ostringstream output;
-
-    // print all fields
-    for(t_fieldsetIterator it = marcfields.begin(); it!=marcfields.end(); ++it)
+    if (isvalid())
     {
-        if (!(*it)->isempty())
-            output << (*it)->print();
+         //return csvline;
+        std::ostringstream output;
+
+        // print all fields
+        for(t_fieldsetIterator it = marcfields.begin(); it!=marcfields.end(); ++it)
+        {
+            if (!(*it)->isempty())
+                output << (*it)->print();
+        }
+
+        // put a newline after each record
+        output << endl;
+
+        return output.str();
     }
-
-    // put a newline after each record
-    output << endl;
-
-    return output.str();
+    else        // do not print records marked as invalid
+    {
+        return "";
+    }
 }
 
 
@@ -56,20 +63,6 @@ bool const& MarcRecord::hasfieldmap() const
 //build up the marc record from the initial string
 void MarcRecord::buildup()
 {
-    //make sure record contains some text
-    /*
-    if (csvline.empty() || csvline.find_first_not_of(" \t\r\n", 1) == csvline.npos)     // first csv char might be a delimiter value.
-    {
-        throw MarcRecordException("CSV string is empty or non-literal");
-    }
-
-    // make sure there is a field mapping loaded
-    if (fieldmap.empty())
-    {
-        throw MarcRecordException("No field mapping is loaded");
-    }
-    */
-
     // parse csvline. Its fields are tab-separated, each field needs separate processing
     std::stringstream csvlinestream(csvline);
     std::string segment;
@@ -78,60 +71,70 @@ void MarcRecord::buildup()
         csvfields.push_back(segment);
     }
 
-    // for every field, create the corresponding Marc field
+    // for every CSV field, create the corresponding Marc field
 
     for(std::vector<std::string>::iterator csvit = csvfields.begin(); csvit != csvfields.end(); ++csvit)        // iterate over all fields
     {
         int csvcol = std::distance(csvfields.begin(), csvit);
 
-    for(std::multimap<int, t_marcfield >::iterator mapit = fieldmap.lower_bound(csvcol); mapit != fieldmap.upper_bound(csvcol); ++mapit)        // iterate over all fields
-    {
-
-        int marcnr = (*mapit).second.first;
-        char marcsubfield = (*mapit).second.second;
-
-        //if this field was not present in the mapping, therefore marcsubfield == null, skip field
-        if (marcsubfield == '\0')
-            continue;
-
-        // if field already exists but some subfield needs adding, then find it
-        // Now it constructs a dummy object for the search. TODO: with unique_ptr in C++11 this can be remedied
-        MarcField* dummy = new MarcField(marcnr);
-        t_fieldsetIterator fieldit = marcfields.find(dummy);
-        delete dummy;
-
-        if (fieldit != marcfields.end())        // a field with this number already exists in this record. update.
+        for(std::multimap<int, t_marcfield >::iterator mapit = fieldmap.lower_bound(csvcol); mapit != fieldmap.upper_bound(csvcol); ++mapit)        // iterate over all fields
         {
-            // Get field out , update, put back in. Set elements cannot be modified directly (map is kept sorted, would risk to undo sorting)
-            MarcField* oldfield = *fieldit;              // get the field out (this makes a copy)
-            oldfield->update(marcsubfield, (*csvit));          // update with new data
-            marcfields.erase(fieldit);                  // erase in map
-            marcfields.insert(oldfield);                // and re-add
-        }
-        else                     // a field with this number does not exist yet in this record. create and update.
-        {
-            MarcField* newfield = FieldFactory::getFactory()->getMarcField(marcnr);
-            newfield->update(marcsubfield, (*csvit));
-            marcfields.insert(newfield);
-        }
+            int marcnr = (*mapit).second.first;
+            char marcsubfield = (*mapit).second.second;
 
-    }
+            //if this field was not present in the mapping, therefore marcsubfield == null, skip field
+            if (marcsubfield == '\0')
+                continue;
+
+            // if field already exists but some subfield needs adding, then find it
+            // Now it constructs a dummy object for the search. TODO: with unique_ptr in C++11 this can be remedied
+            MarcField* dummy = new MarcField(marcnr);
+            t_fieldsetIterator fieldit = marcfields.find(dummy);
+            delete dummy;
+
+            if (fieldit != marcfields.end())        // a field with this number already exists in this record. update.
+            {
+                // Get field out , update, put back in. Set elements cannot be modified directly (map is kept sorted, would risk to undo sorting)
+                MarcField* oldfield = *fieldit;              // get the field out (this makes a copy)
+                oldfield->update(marcsubfield, (*csvit));          // update with new data
+                marcfields.erase(fieldit);                  // erase in map
+                marcfields.insert(oldfield);                // and re-add
+            }
+            else                     // a field with this number does not exist yet in this record. create and update.
+            {
+                MarcField* newfield = FieldFactory::getFactory()->getMarcField(marcnr);
+                newfield->update(marcsubfield, (*csvit));
+                marcfields.insert(newfield);
+            }
+
+        }
     }
 
-    // at the end, add some fixed fields
-    MarcField* newfield = new MarcField(3);
+    // At the end, add some fixed fields
+    MarcField* newfield = FieldFactory::getFactory()->getMarcField(3);
     newfield->update('a', "BBc");       // does not matter in which subfield this is put, it's a control field
     marcfields.insert(newfield);
 
-    newfield = new MarcField(38);    // rightful owner of this record
+    newfield = FieldFactory::getFactory()->getMarcField(38);    // rightful owner of this record
     newfield->update('a', "BBc");
     marcfields.insert(newfield);
 
-    newfield = new MarcField(40);    // creator of this record. Also has "Language of record" field. Set by default on Dutch
+    newfield = FieldFactory::getFactory()->getMarcField(40);    // creator of this record. Also has "Language of record" field. Set by default on Dutch
     newfield->update('a', "BBc");
     newfield->update('b', "dut");
     newfield->update('c', "BBc");
     marcfields.insert(newfield);
+
+    //According to the MARC21 standard, a title field must be present. If not, add [untitled].
+    MarcField* dummy = new MarcField(245);
+    t_fieldsetIterator fieldit = marcfields.find(dummy);
+    delete dummy;
+    if (fieldit == marcfields.end())
+    {
+        newfield = FieldFactory::getFactory()->getMarcField(245);
+        newfield->update('a', "[untitled]");       // does not matter in which subfield this is put, it's a control field
+        marcfields.insert(newfield);
+    }
 
 }
 
@@ -177,6 +180,35 @@ void MarcRecord::loadfieldmap(std::string const& filename)
 }
 
 
+
+bool MarcRecord::isvalid() const
+{
+
+    //if record has status field c or x , it is a cross reference of other records
+    //and therefore should not be retained in the print-out
+    for(t_fieldsetIterator it = marcfields.begin(); it!=marcfields.end(); ++it)
+    {
+        if ((*it)->Getfieldnr() == 583)       // overloaded operator
+        {
+            std::string data = (*it)->print();
+            // set lowercase
+            std::transform(data.begin(), data.end(), data.begin(), ::tolower);
+            // if string starts with $ax or $ac , set invalid .
+            const char* initlist[] = {"=583  \\$ax", "=583  \\$ac"};
+            std::vector<std::string> badlist(initlist, initlist+2);       //TODO: get this hardcoded size out
+            int nrbadlist = badlist.size();
+
+            for (int i=0; i<nrbadlist;i++)
+            {
+                if (data.compare(0, badlist[i].length(), badlist[i]) == 0) {         // if string begins with article
+                    return false;
+                }
+            }
+        }
+    }
+
+    return true;
+}
 
 
 

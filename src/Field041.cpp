@@ -142,6 +142,6 @@ void Field041::update(char marcsubfield, std::string data)
 
     // set indicators
     Setindicator1('0');             // if one of the languages is a translation, it should be '1'and subfield $h should be used to denote the source language
-    Setindicator2('#');
+    Setindicator2(DEFAULT_INDIC);
 
 }

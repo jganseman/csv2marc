@@ -60,8 +60,36 @@ void Field024::update(char marcsubfield, std::string data)
          }
     }
 
-    //TODO: some records have multiple ISMN nrs. These should appear on several different 024 fields, and not as several subfields a!
-    // For now: this program is only made to have repeat subfields, no repeat entire fields. Try to find a solution with MarcEdit?
-
     // TODO: DISCARDS RISM nrs now -> FIND OUT WHERE TO STORE THOSE IN MARC RECORDS! (510 ???)
 }
+
+// override print function to handle books with several ISBNs
+std::string const Field024::print() const
+{
+    // print one entire field. First the numbers, then the indicators
+    std::ostringstream output;
+    output << '=' << std::setfill ('0') << std::setw (3) << Getfieldnr() << "  ";
+
+    output << Getindicator1() << Getindicator2();
+
+    //add all subfields. subfield indicator is dollar sign
+    // subfields $a are not repeatable. start a new line for each new one
+
+    bool already_had_a = false;
+
+    for ( std::multimap<char, std::string>::const_iterator it = subfields.begin(); it != subfields.end(); ++it)
+    {
+        if ( ((*it).first == 'a') && already_had_a )       //start new line if we already had a previous a
+            output << endl << '=' << std::setfill ('0') << std::setw (3) << Getfieldnr() << "  " << Getindicator1() << Getindicator2();
+
+        if (!((*it).second.empty() || (*it).second == "" ))
+            output << "$" << (*it).first << (*it).second;
+
+        if ((*it).first == 'a')
+            already_had_a = true;
+    }
+
+    output << endl;
+    return output.str();
+}
+

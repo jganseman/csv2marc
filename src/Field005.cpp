@@ -34,7 +34,11 @@ void Field005::update(char marcsubfield, std::string data)
 
     // this is a field for the latest transaction. If given multiple dates, only use the last one
     std::string currentdata(fixedstring);
-    if (currentdata.substr(0,8) < data)
+
+    if (strcmp(fixedstring,"00000000000000.0"))         // enable proper lexical comparison
+        strcpy(&fixedstring[0], "99999999000000.0");
+
+    if (currentdata.substr(0,8) < data.substr(0,8))
     {
         for (int i=0; i<8; ++i) {fixedstring[i] = data[i];}
     }

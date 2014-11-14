@@ -49,6 +49,9 @@ void MarcField::update(char marcsubfield, std::string data)
     if (data.empty() || data == "")
         return;
 
+    //trim front and trailing whitespace
+    data = data.erase(data.find_last_not_of(" \n\r\t")+1).substr(data.find_first_not_of(" \n\r\t"));
+
     // by default create a new subfield with the same code
     subfields.insert(std::make_pair(marcsubfield, data));
 

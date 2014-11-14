@@ -1,25 +1,27 @@
-#include "Field022.h"
+#include "Field650.h"
 
-Field022::Field022(int nr) : MarcField(nr)
+Field650::Field650(int nr) : MarcField(nr)
 {
     //ctor
 }
 
-Field022::~Field022()
+Field650::~Field650()
 {
     //dtor
 }
 
 
-void Field022::update(char marcsubfield, std::string data)
+void Field650::update(char marcsubfield, std::string data)
 {
+
     if (data.empty() || data == "")
         return;
 
-    // first make all uppercase for ease of parsing
-    std::transform(data.begin(), data.end(), data.begin(), ::toupper);
+    // set indicators
+    Setindicator1('0');             // no 'level is encoded' of topics; they're all just basically tags
+    Setindicator2('4');             // no thesaurus is used
 
-    //clean up the data: get out the ISSN. First, segment by ';'
+    //First, segment by ';'
     std::vector<std::string> datasegments;
     std::stringstream datastream(data);
     std::string segment;
@@ -28,34 +30,26 @@ void Field022::update(char marcsubfield, std::string data)
         datasegments.push_back(segment);
     }
 
-    // now, find segments that contains the letters 'ISSN'
+    //TODO: this is not repeatable. Several 650 fields necessary...
+    // a subdivision can be used in different subfields:
+    //$a - Topical term or geographic name entry element (NR)
+    //$v - Form subdivision (R)             // form (e.g. study scores)
+    //$x - General subdivision (R)          // generic topic (e.g. history)
+    //$y - Chronological subdivision (R)    // time (e.g. century)
+    //$z - Geographic subdivision (R)       // place
+
+    // for now, we put everything in subfield a.
+
     for (std::vector<std::string>::iterator it = datasegments.begin(); it != datasegments.end(); ++it)
     {
-         std::size_t found = (*it).find("ISSN");
-         if (found == std::string::npos)
-         {
-            continue;
-         }
-         else
-         {
-             std::string cleaneddata = "";
-             std::size_t found2 = (*it).find_first_of("0123456789X");
-             while (found2!=std::string::npos)
-             {
-                cleaneddata += (*it)[found2];
-                found2=(*it).find_first_of("0123456789X",found2+1);
-             }
-             // put a '-' in the middle.
-             cleaneddata.insert(4, "-");
-             MarcField::update(marcsubfield, cleaneddata.substr(0,9));      // only insert first 9 characters
-         }
+        MarcField::update(marcsubfield, *it);
     }
 
 }
 
 
-// override print function to handle books with several ISBNs
-std::string const Field022::print() const
+// separate printing routine to make sure it prints all subfields a on different lines
+std::string const Field650::print() const
 {
     // print one entire field. First the numbers, then the indicators
     std::ostringstream output;
@@ -70,7 +64,7 @@ std::string const Field022::print() const
 
     for ( std::multimap<char, std::string>::const_iterator it = subfields.begin(); it != subfields.end(); ++it)
     {
-        if ( ((*it).first == 'a') && already_had_a )       //start new line if we already had a previous a
+        if ( ((*it).first == 'a') && already_had_a )       //start new line if not last $a field
             output << endl << '=' << std::setfill ('0') << std::setw (3) << Getfieldnr() << "  " << Getindicator1() << Getindicator2();
 
         if (!((*it).second.empty() || (*it).second == "" ))

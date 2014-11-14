@@ -13,7 +13,8 @@
 7	245	a
 11	250	a
 12	250	b
-26	254	a
+#General material statement : TODO map to other field instead of 254
+#26	#254	#a
 15	260	a
 16	260	a
 17	260	b
@@ -42,6 +43,7 @@
 3	590	a
 4	090	a
 8	720	a
+# music specific content, map this to 254 and not the general material statement
 14	254	a
 #25	#033	#a      # Only formatted dates here, of audio recordings or broadcasts. In Unparsed form: field 518?
 25	045	a

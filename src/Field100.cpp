@@ -17,7 +17,7 @@ void Field100::update(char marcsubfield, std::string data)
         return;
 
     Setindicator1('1');      // always suppose it's a family name
-    Setindicator1('#');
+    Setindicator2(DEFAULT_INDIC);
 
     //First, segment by ';'
     std::vector<std::string> datasegments;
@@ -77,6 +77,7 @@ void Field100::update(char marcsubfield, std::string data)
             //trim any beginning or ending spaces
             tempstring = tempstring.erase(tempstring.find_last_not_of(" \n\r\t")+1).substr(tempstring.find_first_not_of(" \n\r\t"));
             MarcField::update('d', tempstring);
+            break;      // only do this once; can't have multiple dates...
         }
         fullstring = datasegments[0];       // discard all <> info from this string
     }
