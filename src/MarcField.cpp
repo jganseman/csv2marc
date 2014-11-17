@@ -79,3 +79,14 @@ bool MarcField::isempty() const
     return true;
 }
 
+
+std::string MarcField::Getsubfield(char mychar) const
+{
+    for ( std::multimap<char, std::string>::const_iterator it = subfields.begin(); it != subfields.end(); ++it)
+    {
+        if ((*it).first == mychar)
+            return (*it).second;
+    }
+    return "";
+}
+

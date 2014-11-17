@@ -71,6 +71,19 @@ void MarcRecord::buildup()
         csvfields.push_back(segment);
     }
 
+    // if the line is empty, do not even build a record
+    try{
+        //trim front and trailing whitespace
+        std::string checkempty = csvline.erase(csvline.find_last_not_of(" \n\r\t")+1).substr(csvline.find_first_not_of(" \n\r\t"));
+        if (checkempty.empty())
+            return;
+    } catch (exception e)
+    {
+        return;
+        //throw MarcRecordException("ERROR Updating Field 700: empty value among authors.");
+    }
+
+
     // for every CSV field, create the corresponding Marc field
 
     for(std::vector<std::string>::iterator csvit = csvfields.begin(); csvit != csvfields.end(); ++csvit)        // iterate over all fields
@@ -92,7 +105,8 @@ void MarcRecord::buildup()
             t_fieldsetIterator fieldit = marcfields.find(dummy);
             delete dummy;
 
-            if (fieldit != marcfields.end())        // a field with this number already exists in this record. update.
+                    // special case of notes: many field maps to general note 500. needs duplication
+            if ((fieldit != marcfields.end()) && ((*fieldit)->Getfieldnr() != 500))       // a field with this number already exists in this record. update.
             {
                 // Get field out , update, put back in. Set elements cannot be modified directly (map is kept sorted, would risk to undo sorting)
                 MarcField* oldfield = *fieldit;              // get the field out (this makes a copy)
@@ -110,7 +124,18 @@ void MarcRecord::buildup()
         }
     }
 
-    // At the end, add some fixed fields
+    // skip records with status X (crossref) and status C (copies)
+    MarcField* dummy = new MarcField(583);
+    t_fieldsetIterator fieldit = marcfields.find(dummy);
+    delete dummy;
+    if (fieldit != marcfields.end())
+    {
+        if ((*fieldit)->Getsubfield('a') == "C" || (*fieldit)->Getsubfield('a') == "X")
+            return;
+    }
+
+
+    // At the end of regular records, add some fixed fields
     MarcField* newfield = FieldFactory::getFactory()->getMarcField(3);
     newfield->update('a', "BBc");       // does not matter in which subfield this is put, it's a control field
     marcfields.insert(newfield);
@@ -126,15 +151,26 @@ void MarcRecord::buildup()
     marcfields.insert(newfield);
 
     //According to the MARC21 standard, a title field must be present. If not, add [untitled].
-    MarcField* dummy = new MarcField(245);
-    t_fieldsetIterator fieldit = marcfields.find(dummy);
+    dummy = new MarcField(245);
+    fieldit = marcfields.find(dummy);
     delete dummy;
     if (fieldit == marcfields.end())
     {
         newfield = FieldFactory::getFactory()->getMarcField(245);
-        newfield->update('a', "[untitled]");       // does not matter in which subfield this is put, it's a control field
+        newfield->update('a', "[untitled]");
         marcfields.insert(newfield);
+        throw MarcRecordException("Warning (Field 245): No title present. Putting [untitled].");
+    } else if ((*fieldit)->Getsubfield('a').empty())
+    {
+        (*fieldit)->update('a', "[untitled]");
+        throw MarcRecordException("Warning (Field 245): No title present. Putting [untitled].");
     }
+
+    /*else {
+        if ((*fieldit)->Getfieldnr() != 245)
+            cout << "Found field 245 at field " << (*fieldit)->Getfieldnr() << endl;
+    }*/
+    // this was debug info
 
 }
 
@@ -183,6 +219,7 @@ void MarcRecord::loadfieldmap(std::string const& filename)
 
 bool MarcRecord::isvalid() const
 {
+    bool hastitle = false;
 
     //if record has status field c or x , it is a cross reference of other records
     //and therefore should not be retained in the print-out
@@ -190,11 +227,14 @@ bool MarcRecord::isvalid() const
     {
         if ((*it)->Getfieldnr() == 583)       // overloaded operator
         {
+            if ((*it)->Getsubfield('a') == "C" || (*it)->Getsubfield('a') == "X")
+                return false;
+            /*
             std::string data = (*it)->print();
             // set lowercase
             std::transform(data.begin(), data.end(), data.begin(), ::tolower);
             // if string starts with $ax or $ac , set invalid .
-            const char* initlist[] = {"=583  \\$ax", "=583  \\$ac"};
+            const char* initlist[] = {"=583  \\\\$ax", "=583  \\\\$ac"};    // note: escape backslashes!
             std::vector<std::string> badlist(initlist, initlist+2);       //TODO: get this hardcoded size out
             int nrbadlist = badlist.size();
 
@@ -204,10 +244,17 @@ bool MarcRecord::isvalid() const
                     return false;
                 }
             }
+            */
+        }
+
+        // if the record does not have a title in field 245, it is invalid
+        if ((*it)->Getfieldnr() == 245)
+        {
+            hastitle=true;
         }
     }
 
-    return true;
+    return hastitle;
 }
 
 

@@ -40,6 +40,7 @@ MarcField* FieldFactory::getMarcField(int marcnr)
         case 240 : return new Field240(marcnr);
         case 245 : return new Field245(marcnr);
         case 254 : return new Field254(marcnr);
+        case 264 : return new Field264(marcnr);
         case 490 : return new Field490(marcnr);
         case 505 : return new Field505(marcnr);
         case 650 : return new Field650(marcnr);

@@ -16,9 +16,13 @@ Field005::~Field005()
 std::string const Field005::print() const
 {
     // overloaded print function for fixed length field
-    std::ostringstream output;
-    output << "=005  " << fixedstring << endl;
-    return output.str();
+    if (!strcmp(fixedstring,"00000000000000.0"))
+    {
+        std::ostringstream output;
+        output << "=005  " << fixedstring << endl;
+        return output.str();
+    }
+    return "";
 }
 
 
@@ -32,11 +36,11 @@ void Field005::update(char marcsubfield, std::string data)
     if (!atol(data.c_str()))
         throw MarcRecordException("Error Updating Field 005: string is not a valid date : " + data);
 
-    // this is a field for the latest transaction. If given multiple dates, only use the last one
-    std::string currentdata(fixedstring);
-
     if (strcmp(fixedstring,"00000000000000.0"))         // enable proper lexical comparison
         strcpy(&fixedstring[0], "99999999000000.0");
+
+    // this is a field for the latest transaction. If given multiple dates, only use the last one
+    std::string currentdata(fixedstring);
 
     if (currentdata.substr(0,8) < data.substr(0,8))
     {

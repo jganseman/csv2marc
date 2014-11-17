@@ -59,11 +59,17 @@ void Field700::update(char marcsubfield, std::string data)
             {
                 // TODO parse in more detailed way
                 //get string
-                std::string tempstring = (*it2).substr(0,(*it2).find_first_of('>'));
-                //trim any beginning or ending spaces
-                tempstring = tempstring.erase(tempstring.find_last_not_of(" \n\r\t")+1).substr(tempstring.find_first_not_of(" \n\r\t"));
-                //MarcField::update('e', tempstring);
-                relator = relator + "$e" + tempstring;
+                try {
+                    std::string tempstring = (*it2).substr(0,(*it2).find_first_of('>'));
+                    //trim any beginning or ending spaces
+                    tempstring = tempstring.erase(tempstring.find_last_not_of(" \n\r\t")+1).substr(tempstring.find_first_not_of(" \n\r\t"));
+                    //MarcField::update('e', tempstring);
+                    relator = relator + "$e" + tempstring;
+                } catch (exception& e)
+                {
+                    throw MarcRecordException("ERROR Updating Field 700: empty author function.");
+                }
+
             }
             fullstring = datasegments[0];       // discard all <> info from this string
         }
@@ -82,18 +88,30 @@ void Field700::update(char marcsubfield, std::string data)
             for (std::vector<std::string>::iterator it2 = datasegments.begin()+1; it2 != datasegments.end(); ++it2)
             {
                 // TODO parse in more detailed way
-                std::string tempstring = (*it2).substr(0,(*it2).find_first_of(')'));
-                //trim any beginning or ending spaces
-                tempstring = tempstring.erase(tempstring.find_last_not_of(" \n\r\t")+1).substr(tempstring.find_first_not_of(" \n\r\t"));
-                //MarcField::update('d', tempstring);
-                dates = dates + "$d" + tempstring;
+                try{
+                    std::string tempstring = (*it2).substr(0,(*it2).find_first_of(')'));
+                    //trim any beginning or ending spaces
+                    tempstring = tempstring.erase(tempstring.find_last_not_of(" \n\r\t")+1).substr(tempstring.find_first_not_of(" \n\r\t"));
+                    //MarcField::update('d', tempstring);
+                    dates = dates + "$d" + tempstring;
+                } catch (exception& e)
+                {
+                    throw MarcRecordException("ERROR Updating Field 700: error in author dates.");
+                }
             }
             fullstring = datasegments[0];       // discard all <> info from this string
         }
 
         // now add the author itself.
-        // trim any beginning or ending spaces
-        fullstring = fullstring.erase(fullstring.find_last_not_of(" \n\r\t")+1).substr(fullstring.find_first_not_of(" \n\r\t"));
+
+        try{
+            //trim front and trailing whitespace
+            fullstring = fullstring.erase(fullstring.find_last_not_of(" \n\r\t")+1).substr(fullstring.find_first_not_of(" \n\r\t"));
+        } catch (exception e)
+        {
+            throw MarcRecordException("ERROR Updating Field 700: empty value among authors.");
+        }
+
         MarcField::update('a', fullstring+dates+relator);
     }
 

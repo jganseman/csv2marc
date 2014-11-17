@@ -14,6 +14,17 @@ Field245::~Field245()
 // copied mostly from Field240.cpp
 void Field245::update(char marcsubfield, std::string data)
 {
+    try{
+        //trim front and trailing whitespace
+        data = data.erase(data.find_last_not_of(" \n\r\t")+1).substr(data.find_first_not_of(" \n\r\t"));
+    } catch (exception e)
+    {
+        // this will throw an error if data is empty
+            //throw MarcRecordException("Empty title");
+        // just suppress the error for now
+            return;
+    }
+
     if (data.empty() || data == "")
         return;
 
@@ -23,8 +34,6 @@ void Field245::update(char marcsubfield, std::string data)
         Setindicator1('1');      // by default, add title entry into the catalog
         Setindicator2('0');
 
-        //trim front and trailing whitespace
-        data = data.erase(data.find_last_not_of(" \n\r\t")+1).substr(data.find_first_not_of(" \n\r\t"));
 
         // put data already in
         MarcField::update(marcsubfield, data);

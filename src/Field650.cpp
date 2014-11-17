@@ -42,7 +42,14 @@ void Field650::update(char marcsubfield, std::string data)
 
     for (std::vector<std::string>::iterator it = datasegments.begin(); it != datasegments.end(); ++it)
     {
-        MarcField::update(marcsubfield, *it);
+        // trim whitespace
+        try{
+            std::string curstring = (*it).erase((*it).find_last_not_of(" \n\r\t")+1).substr((*it).find_first_not_of(" \n\r\t"));
+            MarcField::update(marcsubfield, curstring);
+        } catch (exception& e)
+        {
+            throw MarcRecordException("Error updating field 650 : empty keyword");
+        }
     }
 
 }

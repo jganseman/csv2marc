@@ -1,6 +1,7 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <algorithm>
 #include <MarcRecord.h>
 
 
@@ -63,8 +64,9 @@ if ( argc != 3 ) /* 2 arguments: filename to process and resulting filename  */
         catch (exception& e)
         {
             cout << "!!! ERROR: while processing csv line nr " << j << endl;
-            cout << line.substr(0,50) << " ..." << endl;
-            cout << "Error message was: " << e.what() << endl;
+            std::replace( line.begin(), line.end(), '\t', ' ');     // for better printing
+            cout << line.substr(0,70) << " ..." << endl;
+            cout << "Error message was: " << e.what() << endl << endl;
             delete thisrecord;
             continue;           // continue processing
         }

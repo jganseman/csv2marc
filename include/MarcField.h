@@ -7,6 +7,8 @@
 #include <map>
 #include <iomanip>
 
+#include <MarcRecordException.h>
+
 using namespace std;
 
 typedef std::pair<char, std::string> t_subfield;
@@ -33,6 +35,8 @@ class MarcField
         virtual std::string const print() const;
         virtual void update(char marcsubfield, std::string data);
         virtual bool isempty() const;
+
+        std::string Getsubfield(char mychar) const;     // gets first occurring subfield only
 
     protected:              // make accessible to subclasses, to facilitate overriding functions
         std::multimap<char, std::string> subfields;
