@@ -35,7 +35,7 @@ if ( argc != 3 ) /* 2 arguments: filename to process and resulting filename  */
     MarcRecord* thisrecord;
 
 
-    int j = -1;
+    long j = -1;
     while(std::getline(csvfile, line))
     {
         j++;
@@ -43,8 +43,8 @@ if ( argc != 3 ) /* 2 arguments: filename to process and resulting filename  */
     /*
     for(int j=0; j<1000; j++)
     {
-    */
         std::getline(csvfile, line);
+    */
 
         if (line.empty() || line == "")
             continue;
@@ -63,9 +63,9 @@ if ( argc != 3 ) /* 2 arguments: filename to process and resulting filename  */
         }
         catch (exception& e)
         {
-            cout << "!!! ERROR: while processing csv line nr " << j << endl;
+            //cout << "!!! ERROR: while processing csv line nr " << j << endl;
             std::replace( line.begin(), line.end(), '\t', ' ');     // for better printing
-            cout << line.substr(0,70) << " ..." << endl;
+            cout << line.substr(0,80) << " ..." << endl;
             cout << "Error message was: " << e.what() << endl << endl;
             delete thisrecord;
             continue;           // continue processing
@@ -78,7 +78,8 @@ if ( argc != 3 ) /* 2 arguments: filename to process and resulting filename  */
         delete thisrecord;
     }
 
-    cout << "Finished!" << endl;
+    cout << "Finished processing " << j << " lines."<< endl;
+    cout << "Last line: " << line;
     return 0;
 
 }

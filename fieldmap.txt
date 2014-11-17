@@ -7,7 +7,6 @@
 50	024	a
 51	028	a
 38	041	a
-37	048	a
 10	100	a
 9	240	a
 7	245	a
@@ -33,8 +32,6 @@
 23	264	b
 24	264	c
 1	005	z
-39	384	a
-40	383	b
 5	852	c
 48	541	a
 43	031	t
@@ -70,4 +67,13 @@
 38  008 z
 # standardized author: first one in 100, rest in 700. Put nonstandardized author names in 720 for the time being
 10  700 a
-
+#key can be put in 240r or 384 (384 is RDA)
+39  240	r
+39	384	a
+#nr and opus can be put in 240n or 383 (RDA)
+40	240	n
+40	383	b
+#instrumentation can be put in 240m or 382 (RDA) . 048 contains the nr of voices only
+#37	#048	#a
+37	240	m
+37  382 a

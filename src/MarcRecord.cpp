@@ -227,7 +227,7 @@ bool MarcRecord::isvalid() const
     {
         if ((*it)->Getfieldnr() == 583)       // overloaded operator
         {
-            if ((*it)->Getsubfield('a') == "C" || (*it)->Getsubfield('a') == "X")
+            if ((*it)->Getsubfield('a') == "C" || (*it)->Getsubfield('a') == "X" || (*it)->Getsubfield('a') == "c" || (*it)->Getsubfield('a') == "x")
                 return false;
             /*
             std::string data = (*it)->print();
