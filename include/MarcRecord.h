@@ -22,6 +22,14 @@ typedef std::pair<int, t_marcfield> t_fieldmapelement;
 typedef std::set<MarcField*, MarcFieldPtrComparator> t_fieldset;
 typedef t_fieldset::const_iterator t_fieldsetIterator;
 
+#define ORGCODE "BE-BxLRC"
+
+// define a list of unique fields
+static const int UniqueFields[] = {20, 22};
+static const char UniqueSubfields[] = {'a', 'a'};
+static const int NrOfUniqueFields = 2;
+
+
 class MarcRecord
 {
     public:
@@ -34,6 +42,8 @@ class MarcRecord
         bool const& hasfieldmap() const;
         bool isvalid() const;
         //void setValidity(bool value) { valid=value; }
+        MarcField* getField(int nr) const;
+        void addField(MarcField* val){ marcfields.insert(val); }
     protected:
     private:
         friend std::ostream& operator<< (std::ostream& os, const MarcRecord& m);    // print object

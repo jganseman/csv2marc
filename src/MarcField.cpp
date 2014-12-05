@@ -5,6 +5,7 @@ MarcField::MarcField(int nr, char defchar)
     fieldnr=nr;
     indicator1=defchar;
     indicator2=defchar;
+//    parent=0;
 }
 
 MarcField::~MarcField()
@@ -25,7 +26,7 @@ std::string const MarcField::print() const
 
         //add all subfields.subfield indicator is dollar sign
 
-        for ( std::multimap<char, std::string>::const_iterator it = subfields.begin(); it != subfields.end(); ++it)
+        for ( t_subfields_constit it = subfields.begin(); it != subfields.end(); ++it)
         {
             if (!((*it).second.empty() || (*it).second == "" ))
                 output << "$" << (*it).first << (*it).second;
@@ -33,7 +34,7 @@ std::string const MarcField::print() const
     }
     else        // if these are control fields, just print all text
     {
-        for ( std::multimap<char, std::string>::const_iterator it = subfields.begin(); it != subfields.end(); ++it)
+        for ( t_subfields_constit it = subfields.begin(); it != subfields.end(); ++it)
         {
             if (!((*it).second.empty() || (*it).second == "" ))
                 output << (*it).second;
@@ -71,7 +72,7 @@ void MarcField::update(char marcsubfield, std::string data)
 
 bool MarcField::isempty() const
 {
-    for ( std::multimap<char, std::string>::const_iterator it = subfields.begin(); it != subfields.end(); ++it)
+    for ( t_subfields_constit it = subfields.begin(); it != subfields.end(); ++it)
     {
         if (!((*it).second.empty() || (*it).second == "" ))
             return false;
@@ -82,11 +83,43 @@ bool MarcField::isempty() const
 
 std::string MarcField::Getsubfield(char mychar) const
 {
-    for ( std::multimap<char, std::string>::const_iterator it = subfields.begin(); it != subfields.end(); ++it)
+    for ( t_subfields_constit it = subfields.begin(); it != subfields.end(); ++it)
     {
         if ((*it).first == mychar)
             return (*it).second;
     }
     return "";
+}
+
+
+
+
+vector < pair <char, string> > MarcField::extractDoubleSubfields(char mychar)
+{
+    vector < pair <char, string> > doublesubfields;
+//    if (parent == 0)
+//        return doublesubfields;
+
+    pair<t_subfields_it, t_subfields_it> range = subfields.equal_range(mychar);
+    if (range.first == range.second)        // subfield not found
+        return doublesubfields;
+
+    range.first++;      // only increment is supported, not operator+
+
+    if (range.second == range.first)      // only one subfield; nothing to uniquify
+        return doublesubfields;
+
+    for ( t_subfields_it it = range.first ; it != range.second; ++it)
+    {
+        doublesubfields.push_back(*it);
+        // create new field with same field nr
+        // TODO check MEMORY: maybe we need to make an explicit copy if we erase in subfieldmap later?
+    }
+
+    // erase those subfields in this field
+    subfields.erase(range.first, range.second);
+
+    return doublesubfields;
+
 }
 

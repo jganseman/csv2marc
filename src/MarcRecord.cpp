@@ -137,17 +137,17 @@ void MarcRecord::buildup()
 
     // At the end of regular records, add some fixed fields
     MarcField* newfield = FieldFactory::getFactory()->getMarcField(3);
-    newfield->update('a', "BBc");       // does not matter in which subfield this is put, it's a control field
+    newfield->update('a', ORGCODE);       // does not matter in which subfield this is put, it's a control field
     marcfields.insert(newfield);
 
     newfield = FieldFactory::getFactory()->getMarcField(38);    // rightful owner of this record
-    newfield->update('a', "BBc");
+    newfield->update('a', ORGCODE);
     marcfields.insert(newfield);
 
     newfield = FieldFactory::getFactory()->getMarcField(40);    // creator of this record. Also has "Language of record" field. Set by default on Dutch
-    newfield->update('a', "BBc");
+    newfield->update('a', ORGCODE);
     newfield->update('b', "dut");
-    newfield->update('c', "BBc");
+    newfield->update('c', ORGCODE);
     marcfields.insert(newfield);
 
     //According to the MARC21 standard, a title field must be present. If not, add [untitled].
@@ -171,6 +171,22 @@ void MarcRecord::buildup()
             cout << "Found field 245 at field " << (*fieldit)->Getfieldnr() << endl;
     }*/
     // this was debug info
+
+    // finally, process fields that have been marked as unique
+    for (int i=0; i<NrOfUniqueFields; ++i)
+    {
+        int curfield = UniqueFields[2];
+        char cursubfield = UniqueSubfields[2];
+        MarcField* badfield = getField(curfield);
+        vector< pair < char, string > > extractedFields = badfield->extractDoubleSubfields(cursubfield);
+
+        for(unsigned int j = 0; j<extractedFields.size(); ++j )
+        {
+            MarcField* newfield = FieldFactory::getFactory()->getMarcField(curfield);
+            newfield->update(cursubfield, extractedFields[j].second );
+            marcfields.insert(newfield);
+        }
+    }
 
 }
 
@@ -257,6 +273,21 @@ bool MarcRecord::isvalid() const
     return hastitle;
 }
 
+
+MarcField* MarcRecord::getField(int nr) const
+{
+    MarcField* dummy = new MarcField(nr);
+    t_fieldsetIterator fieldit = marcfields.find(dummy);
+    delete dummy;
+    if (fieldit == marcfields.end())
+    {
+        return 0;
+    }
+    else
+    {
+        return *fieldit;
+    }
+}
 
 
 // friend operators outside the class definition:

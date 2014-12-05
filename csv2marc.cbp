@@ -52,6 +52,7 @@
 		<Unit filename="include/Field505.h" />
 		<Unit filename="include/Field650.h" />
 		<Unit filename="include/Field700.h" />
+		<Unit filename="include/Field952.h" />
 		<Unit filename="include/FieldFactory.h" />
 		<Unit filename="include/FieldLDR.h" />
 		<Unit filename="include/MarcField.h" />
@@ -74,6 +75,7 @@
 		<Unit filename="src/Field505.cpp" />
 		<Unit filename="src/Field650.cpp" />
 		<Unit filename="src/Field700.cpp" />
+		<Unit filename="src/Field952.cpp" />
 		<Unit filename="src/FieldFactory.cpp" />
 		<Unit filename="src/FieldLDR.cpp" />
 		<Unit filename="src/MarcField.cpp" />

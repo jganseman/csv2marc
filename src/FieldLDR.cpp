@@ -58,6 +58,65 @@ void FieldLDR::update(char marcsubfield, std::string data)
     t - Manuscript language material (e.g. letters)
     */
 
+    // recognize a book by ISBN or ISSN number
+    std::transform(data.begin(), data.end(), data.begin(), ::toupper);
+    std::size_t found = data.find("ISBN");
+    if (found != std::string::npos)     // we found an ISBN number
+    {
+        fixedstring[6] = 'a';
+    }
+    found = data.find("ISSN");
+    if (found != std::string::npos)     // we found an ISSN number
+    {
+        fixedstring[6] = 'a';
+    }
+
+    // recognize a manuscript . This is from the Material field
+    found = data.find("TEKST");
+    if (found != std::string::npos)
+    {
+        fixedstring[6] = 'a';
+    }
+    found = data.find("MANUSC");
+    if (found != std::string::npos)
+    {
+        if (fixedstring[6] == 'a')
+            fixedstring[6] = 't';
+        else
+            fixedstring[6] = 'd';
+    }
+
+    found = data.find("MACHINE");
+    if (found != std::string::npos)
+    {
+        fixedstring[6] = 'm';
+    }
+
+    found = data.find("AFBEELDING");
+    if (found != std::string::npos)
+    {
+        fixedstring[6] = 'k';
+    }
+
+    found = data.find("CD");
+    if (found != std::string::npos)
+    {
+        fixedstring[6] = 'j';
+    }
+
+    found = data.find("LP");
+    if (found != std::string::npos)
+    {
+        fixedstring[6] = 'j';
+    }
+
+    found = data.find("VOORWERP");
+    if (found != std::string::npos)
+    {
+        fixedstring[6] = 'r';
+    }
+
+
     /* fixed[7] : if part of larger unit, set to d and use field 773 to identify superunit (only if superunit needs to be lend out as a whole).
                     if serial, set to t. Do not use a (monograph part), as that is intended for book chapters or individual articles.
 

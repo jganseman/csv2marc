@@ -19,13 +19,17 @@
 #include <Field505.h>
 #include <Field650.h>
 #include <Field700.h>
+#include <Field952.h>
+
+//Forward declaration of class MarcRecord to be able to use ptr to parent
+// class MarcRecord;
 
 class FieldFactory
 {
     public:
         virtual ~FieldFactory();
         static FieldFactory* getFactory();
-        static MarcField* getMarcField (int marcnr);
+        static MarcField* getMarcField (int marcnr);//, MarcRecord* parent=0);
     protected:
         FieldFactory();
     private:

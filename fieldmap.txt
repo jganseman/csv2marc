@@ -12,8 +12,9 @@
 7	245	a
 11	250	a
 12	250	b
-#General material statement : TODO map to other field instead of 254
+#General material statement : TODO map to other field instead of 254. Some of this stuff into Leader.
 #26	#254	#a
+26  000 a
 15	260	a
 16	260	a
 17	260	b
@@ -58,9 +59,11 @@
 4   001 z
 #date of creation of record should be put in 008
 0   008 z
-#isbn should be put in field 020. Same data can also contain ISSN
+#isbn should be put in field 020. Same data can also contain ISSN. Update leader record too
 50  020 a
 50  022 a
+50  000 a
+50  000 a
 #publication year goes in 008 . TODO: parse ranges and uncertain dates. Composition year moved to 045
 41  008 z
 #put language in 008 too
@@ -77,3 +80,14 @@
 #37	#048	#a
 37	240	m
 37  382 a
+#For the 952 field, internal KOHA circulation stuff: LOST status
+2	952	1
+#For the 952 field, internal KOHA circulation stuff: NOT FOR LOAN status
+6	952	7
+#For the 952 field, internal KOHA circulation stuff: inventory nr
+3	590	a
+#For the 952 field, internal KOHA circulation stuff: shelf nr and barcode
+4   952 o
+4   952 p
+#For the 952 field, internal KOHA circulation stuff: itemtype
+26  952 y

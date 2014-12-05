@@ -4,6 +4,7 @@
 #include <MarcField.h>
 
 #include<cstring>
+#include<algorithm>
 
 class FieldLDR : public MarcField
 {

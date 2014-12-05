@@ -5,15 +5,22 @@
 #include <iostream>
 #include <sstream>
 #include <map>
+#include <vector>
 #include <iomanip>
 
 #include <MarcRecordException.h>
 
+//forward declaration of class MarcRecord to be able to use ptr to parent
+//class MarcRecord;
+
 using namespace std;
 
 typedef std::pair<char, std::string> t_subfield;
+typedef std::multimap<char, std::string>::const_iterator t_subfields_constit;
+typedef std::multimap<char, std::string>::iterator t_subfields_it;
 
 #define DEFAULT_INDIC   '\\'
+
 
 class MarcField
 {
@@ -26,6 +33,8 @@ class MarcField
         void Setindicator1(char val) { indicator1 = val; }
         char Getindicator2() const { return indicator2; }
         void Setindicator2(char val) { indicator2 = val; }
+//        MarcRecord* Getparent() const { return parent; }
+//        void Setparent(MarcRecord* val) { parent = val; }
 
         // operators that are overloaded such that elements can be looked up more easily
         inline bool operator< (const MarcField& rhs) const { return fieldnr < rhs.fieldnr; }
@@ -38,6 +47,9 @@ class MarcField
 
         std::string Getsubfield(char mychar) const;     // gets first occurring subfield only
 
+        // helper function to split multiple subfields into separate fields in parent
+        vector < pair <char, string> > extractDoubleSubfields(char mychar);
+
     protected:              // make accessible to subclasses, to facilitate overriding functions
         std::multimap<char, std::string> subfields;
 
@@ -45,6 +57,7 @@ class MarcField
         int fieldnr;
         char indicator1;
         char indicator2;
+//        MarcRecord* parent;
 
 };
 
