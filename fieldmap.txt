@@ -4,6 +4,9 @@
 #
 # Currently, tailored towards Brussels conservatory library
 #
+#first just a line to force creation of a leader record
+0	000	z
+# then generic stuff
 50	024	a
 51	028	a
 38	041	a
@@ -32,6 +35,7 @@
 22	264	a
 23	264	b
 24	264	c
+0   005 z   #last transaction field 005: creation date, then update with correction date if applicable
 1	005	z
 5	852	c
 48	541	a
@@ -53,20 +57,17 @@
 49	500	a
 52	650	a
 53	501	a
-#adding first column as field zero
-0	000	z
 #local library id number should be in MARC field 1
 4   001 z
 #date of creation of record should be put in 008
 0   008 z
-#isbn should be put in field 020. Same data can also contain ISSN. Update leader record too
+#isbn should be put in field 020. Same bibnetdata can also contain ISSN. Update leader record too
 50  020 a
 50  022 a
 50  000 a
-50  000 a
 #publication year goes in 008 . TODO: parse ranges and uncertain dates. Composition year moved to 045
 41  008 z
-#put language in 008 too
+#put language in 008 too #see marcdoc online, make sure to take bibliographic marc record and not holdings one
 38  008 z
 # standardized author: first one in 100, rest in 700. Put nonstandardized author names in 720 for the time being
 10  700 a

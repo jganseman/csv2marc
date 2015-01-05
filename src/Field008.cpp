@@ -47,7 +47,7 @@ void Field008::update(char marcsubfield, std::string data)
 
     // this field does not use marcsubfields. It might be possible to use the subfield indicator as an enum to discriminate inputs?
 
-    // mostly we're going to put dates here as subfield.
+    // mostly we're going to put dates here as subfield. Only 6 chars of date -> delete 19/20 in beginning
     if (data.length() == 8 && atoi(data.c_str()))
     {
         for (int i=2; i<8; ++i) {fixedstring[i-2] = data[i];}

@@ -11,7 +11,7 @@
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
-				<Option parameters="C:\Users\BibPersoneel\Desktop\BBC1011.CSV C:\Users\BibPersoneel\Desktop\ConvTest.mrk " />
+				<Option parameters="C:\Users\BibPersoneel\Desktop\BBC0501.CSV C:\Users\BibPersoneel\Desktop\ConvTest.mrk " />
 				<Compiler>
 					<Add option="-g" />
 					<Add directory="include" />
