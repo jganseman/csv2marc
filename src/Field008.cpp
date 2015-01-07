@@ -162,7 +162,7 @@ void Field008::update(char marcsubfield, std::string data)
         else if ((*it).find("zweeds") != std::string::npos)
             strcpy(&fixedstring[35], "swe");
         else if ((*it).find("catalaans") != std::string::npos)
-            strcpy(&fixedstring[35], "dan");
+            strcpy(&fixedstring[35], "cat");
         else if ((*it).find("tsjechisch") != std::string::npos)
             strcpy(&fixedstring[35], "cze");
         else if ((*it).find("français") != std::string::npos)
