@@ -46,7 +46,7 @@
 4	090	a
 8	720	a
 # music specific content, map this to 254 and not the general material statement
-13	254	a
+14	254	a
 #25	#033	#a      # Only formatted dates here, of audio recordings or broadcasts. In Unparsed form: field 518?
 25	045	a
 # column 25 is date of composition (-> MARC field 45), column 41 date of publication (MARC field 008)
