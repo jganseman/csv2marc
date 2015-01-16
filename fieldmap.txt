@@ -4,91 +4,97 @@
 #
 # Currently, tailored towards Brussels conservatory library
 #
-#first just a line to force creation of a leader record
+# first just a line to force creation of a leader record
 0	000	z
-# then generic stuff
+# the leader record is updated with info from material type, ISBN and ISSN fields, last modification date
+26  000 m       #hack into marcsubfield m for material parsing routine
+50  000 a
+31  000 a
+34  000 a
+1	000	a
+# as local record number, we use the library's shelf number
+5   001 z
+#5	#090	#a      #do not duplicate. Field090 is for items from outside libraries
+0   005 z   #last transaction field 005: creation date, then update with correction date if applicable
+1	005	z
+#date of creation of record should be put in 008 too
+0   008 z
+#38  #008 #z        #do not put any language info or publication date info in 008 anymore. For clarity
+#41  #008 #z
+#
+# Now, fill in the data fields
+#
+# ISBN, ISSN, ISMN, Publisher nr, Text incipit, Language, Time period
+50  020 a
+50  022 a
 50	024	a
 51	028	a
+43	031	t
 38	041	a
-10	100	a
-9	240	a
-7	245	a
+#25	#033	#a      # Only formatted dates here, of audio recordings or broadcasts. In Unparsed form: field 518?
+25	045	a
+#
+# Authors and titles. Do not put key/opus/instrumentation here
+10	100	a       #first standardized author
+10  700 a       #additional standardized authors
+8	720	a       #non standardized (displayed) authors
+9	240	a       #uniform title
+7	245	a       #displayed title
+#39 #240	#r  #key
+#40 #240	#n  #opus
+#37	#240	#m  #instrumentation
+#
+# Editorial information
 11	250	a
 12	250	b
-#General material statement : TODO map to other field instead of 254. Some of this stuff into Leader.
+# music specific content, map this to 254 and not the general material statement
 #26	#254	#a
-26  000 a
+14	254	a
+#editor
 15	260	a
 16	260	a
 17	260	b
 18	260	c
+#printer
 19	260	e
 20	260	f
 21	260	g
+#distribution
+22	264	a
+23	264	b
+24	264	c
+#
+# Description fields: material, key, opus, instrumentation
 27	300	a
+37  382 a
+40	383	b
+39	384	a
+#
+# Series information
 29	490	a
 31	490	x
 32	490	a
 34	490	x
 35	490	a
 36	490	a
-22	264	a
-23	264	b
-24	264	c
-0   005 z   #last transaction field 005: creation date, then update with correction date if applicable
-1	005	z
-5	852	c
+#
+# Notes and any additional information
 48	541	a
-43	031	t
 6	506	a
 2	583	a
 3	590	a
-4	090	a
-8	720	a
-# music specific content, map this to 254 and not the general material statement
-14	254	a
-#25	#033	#a      # Only formatted dates here, of audio recordings or broadcasts. In Unparsed form: field 518?
-25	045	a
-# column 25 is date of composition (-> MARC field 45), column 41 date of publication (MARC field 008)
 44	505	a
 45	520	a
 46	500	a
 47	534	n
 49	500	a
-52	650	a
 53	501	a
-#local library id number should be in MARC field 1
-4   001 z
-#date of creation of record should be put in 008
-0   008 z
-#isbn should be put in field 020. Same bibnetdata can also contain ISSN. Update leader record too
-50  020 a
-50  022 a
-50  000 a
-#publication year goes in 008 . TODO: parse ranges and uncertain dates. Composition year moved to 045
-41  008 z
-#put language in 008 too #see marcdoc online, make sure to take bibliographic marc record and not holdings one
-38  008 z
-# standardized author: first one in 100, rest in 700. Put nonstandardized author names in 720 for the time being
-10  700 a
-#key can be put in 240r or 384 (384 is RDA)
-39  240	r
-39	384	a
-#nr and opus can be put in 240n or 383 (RDA)
-40	240	n
-40	383	b
-#instrumentation can be put in 240m or 382 (RDA) . 048 contains the nr of voices only
-#37	#048	#a
-37	240	m
-37  382 a
-#For the 952 field, internal KOHA circulation stuff: LOST status
-2	952	1
-#For the 952 field, internal KOHA circulation stuff: NOT FOR LOAN status
-6	952	7
-#For the 952 field, internal KOHA circulation stuff: inventory nr
-3	590	a
-#For the 952 field, internal KOHA circulation stuff: shelf nr and barcode
-4   952 o
-4   952 p
-#For the 952 field, internal KOHA circulation stuff: itemtype
-26  952 y
+52	650	a
+4	852	c   #inventory number
+#
+# 952 field, internal KOHA circulation stuff:
+2	952	1   #LOST status
+6	952	7   #NOT FOR LOAN status
+5   952 o   #shelf nr
+5   952 p   #barcode
+26  952 y   #itemtype

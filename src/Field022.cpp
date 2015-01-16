@@ -38,6 +38,7 @@ void Field022::update(char marcsubfield, std::string data)
          }
          else
          {
+             // get out all the numbers, copy them into 'cleaneddata'
              std::string cleaneddata = "";
              std::size_t found2 = (*it).find_first_of("0123456789X");
              while (found2!=std::string::npos)
@@ -45,9 +46,15 @@ void Field022::update(char marcsubfield, std::string data)
                 cleaneddata += (*it)[found2];
                 found2=(*it).find_first_of("0123456789X",found2+1);
              }
-             // put a '-' in the middle.
+             // now manually put a '-' in the middle.
              cleaneddata.insert(4, "-");
              MarcField::update(marcsubfield, cleaneddata.substr(0,9));      // only insert first 9 characters
+
+             if (! (cleaneddata.length() == 9))        // throw error when too many characters are present
+             {
+                 throw MarcRecordException("Warning Updating Field 22: ISSN too short/long: " + cleaneddata);
+             }
+
          }
     }
 

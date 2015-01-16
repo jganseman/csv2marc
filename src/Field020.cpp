@@ -45,16 +45,25 @@ void Field020::update(char marcsubfield, std::string data)
                 cleaneddata += (*it)[found2];
                 found2=(*it).find_first_of("0123456789X",found2+1);
              }
+
              //assert number is 10 or 13 digits
              if (! (cleaneddata.length() == 10 || cleaneddata.length() == 13))
-                throw MarcRecordException("Error Updating Field 020: string is not a valid ISBN : " + cleaneddata);
+             {
+                 // throw MarcRecordException("Error Updating Field 020: string is not a valid ISBN : " + cleaneddata);
+                 MarcField::update('z', cleaneddata);   // invalid ISBNs go in subfield 020$z
+                 throw MarcRecordException("Warning Updating Field 020: invalid ISBN, put in subfield §z: " + cleaneddata);
+             }
+             else // length is OK
+             {
+                 MarcField::update(marcsubfield, cleaneddata);
+             }
 
-             MarcField::update(marcsubfield, cleaneddata);
          }
     }
 
-    //TODO: some records have multiple ISBN nrs. These should appear on several different 020 fields, and not as several subfields a!
-    // For now: this program is only made to have repeat subfields, no repeat entire fields. Try to find a solution with MarcEdit?
+    //Subfields are non-repeatable according to MARC standard.
+    //This is solved in the PRINT function by printing a new line for every subfield that is present
+
 }
 
 
@@ -72,6 +81,7 @@ std::string const Field020::print() const
 
     bool already_had_a = false;
 
+    // this routine prints an entirely new line for each subfield, since it is non-repeatable
     for ( std::multimap<char, std::string>::const_iterator it = subfields.begin(); it != subfields.end(); ++it)
     {
         if ( ((*it).first == 'a') && already_had_a )       //start new line if we already had a previous a
@@ -80,7 +90,7 @@ std::string const Field020::print() const
         if (!((*it).second.empty() || (*it).second == "" ))
             output << "$" << (*it).first << (*it).second;
 
-        if ((*it).first == 'a')
+        if ((*it).first == 'a' || (*it).first == 'z')
             already_had_a = true;
     }
 

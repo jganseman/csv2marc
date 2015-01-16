@@ -2,6 +2,7 @@
 #define FIELDLDR_H
 
 #include <MarcField.h>
+#include <MarcRecordException.h>
 
 #include<cstring>
 #include<algorithm>
