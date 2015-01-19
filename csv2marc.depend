@@ -63,7 +63,7 @@
 	<exception>
 	<string>
 
-1416237807 source:c:\users\bibpersoneel\desktop\joachim\github\csv2marc\main.cpp
+1421670491 source:c:\users\bibpersoneel\desktop\joachim\github\csv2marc\main.cpp
 	<fstream>
 	<iostream>
 	<string>
@@ -83,7 +83,7 @@
 	<FieldFactory.h>
 	<MarcField.h>
 
-1417790955 c:\users\bibpersoneel\desktop\joachim\github\csv2marc\include\marcfield.h
+1421676806 c:\users\bibpersoneel\desktop\joachim\github\csv2marc\include\marcfield.h
 	<string>
 	<iostream>
 	<sstream>
@@ -92,10 +92,10 @@
 	<iomanip>
 	<MarcRecordException.h>
 
-1417791041 source:c:\users\bibpersoneel\desktop\joachim\github\csv2marc\src\marcfield.cpp
+1421676725 source:c:\users\bibpersoneel\desktop\joachim\github\csv2marc\src\marcfield.cpp
 	"MarcField.h"
 
-1417785470 source:c:\users\bibpersoneel\desktop\joachim\github\csv2marc\src\marcrecord.cpp
+1421660080 source:c:\users\bibpersoneel\desktop\joachim\github\csv2marc\src\marcrecord.cpp
 	"MarcRecord.h"
 
 1417792208 source:c:\users\bibpersoneel\desktop\joachim\github\csv2marc\src\fieldfactory.cpp
@@ -219,20 +219,20 @@
 1415569801 source:f:\users\jg\documents\github\csv2marc\src\field100.cpp
 	"Field100.h"
 
-1421421949 c:\users\bibpersoneel\desktop\joachim\github\csv2marc\include\fieldldr.h
+1421676806 c:\users\bibpersoneel\desktop\joachim\github\csv2marc\include\fieldldr.h
 	<MarcField.h>
 	<MarcRecordException.h>
 	<cstring>
 	<algorithm>
 
-1415608896 c:\users\bibpersoneel\desktop\joachim\github\csv2marc\include\field005.h
+1421676806 c:\users\bibpersoneel\desktop\joachim\github\csv2marc\include\field005.h
 	<MarcField.h>
 	<MarcRecordException.h>
 	<string>
 	<cstdlib>
 	<cstring>
 
-1415623837 c:\users\bibpersoneel\desktop\joachim\github\csv2marc\include\field008.h
+1421676806 c:\users\bibpersoneel\desktop\joachim\github\csv2marc\include\field008.h
 	<MarcField.h>
 	<MarcRecordException.h>
 	<cstring>
@@ -241,113 +241,115 @@
 	<algorithm>
 	<vector>
 
-1415972803 c:\users\bibpersoneel\desktop\joachim\github\csv2marc\include\field020.h
+1421676806 c:\users\bibpersoneel\desktop\joachim\github\csv2marc\include\field020.h
 	<MarcField.h>
 	<MarcRecordException.h>
 	<string>
 	<algorithm>
 	<vector>
 
-1415976146 c:\users\bibpersoneel\desktop\joachim\github\csv2marc\include\field022.h
+1421676806 c:\users\bibpersoneel\desktop\joachim\github\csv2marc\include\field022.h
 	<MarcField.h>
 	<MarcRecordException.h>
 	<string>
 	<algorithm>
 	<vector>
 
-1415976151 c:\users\bibpersoneel\desktop\joachim\github\csv2marc\include\field024.h
+1421676806 c:\users\bibpersoneel\desktop\joachim\github\csv2marc\include\field024.h
 	<MarcField.h>
 	<MarcRecordException.h>
 	<string>
 	<algorithm>
 	<vector>
 
-1415608896 c:\users\bibpersoneel\desktop\joachim\github\csv2marc\include\field041.h
+1421676806 c:\users\bibpersoneel\desktop\joachim\github\csv2marc\include\field041.h
 	<MarcField.h>
 	<MarcRecordException.h>
 	<string>
 	<algorithm>
 	<vector>
 
-1415608896 c:\users\bibpersoneel\desktop\joachim\github\csv2marc\include\field100.h
+1421676806 c:\users\bibpersoneel\desktop\joachim\github\csv2marc\include\field100.h
 	<MarcField.h>
 	<string>
 	<algorithm>
 	<vector>
+	<set>
 
-1415971044 c:\users\bibpersoneel\desktop\joachim\github\csv2marc\include\field700.h
+1421677275 c:\users\bibpersoneel\desktop\joachim\github\csv2marc\include\field700.h
 	<MarcField.h>
 	<string>
 	<algorithm>
 	<vector>
+	<set>
 
-1416241915 source:c:\users\bibpersoneel\desktop\joachim\github\csv2marc\src\field005.cpp
+1421676806 source:c:\users\bibpersoneel\desktop\joachim\github\csv2marc\src\field005.cpp
 	"Field005.h"
 
-1420638328 source:c:\users\bibpersoneel\desktop\joachim\github\csv2marc\src\field008.cpp
+1421676825 source:c:\users\bibpersoneel\desktop\joachim\github\csv2marc\src\field008.cpp
 	"Field008.h"
 
-1415972915 source:c:\users\bibpersoneel\desktop\joachim\github\csv2marc\src\field020.cpp
+1421676806 source:c:\users\bibpersoneel\desktop\joachim\github\csv2marc\src\field020.cpp
 	"Field020.h"
 
-1415976126 source:c:\users\bibpersoneel\desktop\joachim\github\csv2marc\src\field022.cpp
+1421676806 source:c:\users\bibpersoneel\desktop\joachim\github\csv2marc\src\field022.cpp
 	"Field022.h"
 
-1415976134 source:c:\users\bibpersoneel\desktop\joachim\github\csv2marc\src\field024.cpp
+1421676806 source:c:\users\bibpersoneel\desktop\joachim\github\csv2marc\src\field024.cpp
 	"Field024.h"
 
-1415608896 source:c:\users\bibpersoneel\desktop\joachim\github\csv2marc\src\field028.cpp
+1421676806 source:c:\users\bibpersoneel\desktop\joachim\github\csv2marc\src\field028.cpp
 	"Field028.h"
 
-1415608896 c:\users\bibpersoneel\desktop\joachim\github\csv2marc\include\field028.h
+1421676806 c:\users\bibpersoneel\desktop\joachim\github\csv2marc\include\field028.h
 	<MarcField.h>
 
-1420638386 source:c:\users\bibpersoneel\desktop\joachim\github\csv2marc\src\field041.cpp
+1421676806 source:c:\users\bibpersoneel\desktop\joachim\github\csv2marc\src\field041.cpp
 	"Field041.h"
 
-1415978193 source:c:\users\bibpersoneel\desktop\joachim\github\csv2marc\src\field100.cpp
+1421677685 source:c:\users\bibpersoneel\desktop\joachim\github\csv2marc\src\field100.cpp
 	"Field100.h"
 
-1417787054 source:c:\users\bibpersoneel\desktop\joachim\github\csv2marc\src\fieldldr.cpp
+1421676805 source:c:\users\bibpersoneel\desktop\joachim\github\csv2marc\src\fieldldr.cpp
 	"FieldLDR.h"
 
-1416219608 source:c:\users\bibpersoneel\desktop\joachim\github\csv2marc\src\field700.cpp
+1421677668 source:c:\users\bibpersoneel\desktop\joachim\github\csv2marc\src\field700.cpp
 	"Field700.h"
 
-1415968178 source:c:\users\bibpersoneel\desktop\joachim\github\csv2marc\src\field240.cpp
+1421676806 source:c:\users\bibpersoneel\desktop\joachim\github\csv2marc\src\field240.cpp
 	"Field240.h"
 
-1415965251 c:\users\bibpersoneel\desktop\joachim\github\csv2marc\include\field240.h
+1421676806 c:\users\bibpersoneel\desktop\joachim\github\csv2marc\include\field240.h
 	<MarcField.h>
 	<string>
 	<algorithm>
 	<vector>
 	<cstdlib>
 
-1416217579 c:\users\bibpersoneel\desktop\joachim\github\csv2marc\include\field245.h
+1421676806 c:\users\bibpersoneel\desktop\joachim\github\csv2marc\include\field245.h
 	<MarcField.h>
 	<string>
 	<algorithm>
 	<vector>
 	<cstdlib>
 
-1416217629 source:c:\users\bibpersoneel\desktop\joachim\github\csv2marc\src\field245.cpp
+1421676807 source:c:\users\bibpersoneel\desktop\joachim\github\csv2marc\src\field245.cpp
 	"Field245.h"
 
-1415969685 source:c:\users\bibpersoneel\desktop\joachim\github\csv2marc\src\field490.cpp
+1421676806 source:c:\users\bibpersoneel\desktop\joachim\github\csv2marc\src\field490.cpp
 	"Field490.h"
 
-1415969518 c:\users\bibpersoneel\desktop\joachim\github\csv2marc\include\field490.h
+1421676806 c:\users\bibpersoneel\desktop\joachim\github\csv2marc\include\field490.h
 	<MarcField.h>
 
-1415971031 c:\users\bibpersoneel\desktop\joachim\github\csv2marc\include\field650.h
+1421676806 c:\users\bibpersoneel\desktop\joachim\github\csv2marc\include\field650.h
 	<MarcField.h>
 	<MarcRecordException.h>
 	<string>
 	<algorithm>
 	<vector>
 
-1416219005 source:c:\users\bibpersoneel\desktop\joachim\github\csv2marc\src\field650.cpp
+1421676806 source:c:\users\bibpersoneel\desktop\joachim\github\csv2marc\src\field650.cpp
 	"Field650.h"
 
 1415975926 c:\users\bibpersoneel\desktop\joachim\github\csv2marc\include\field254.h
@@ -356,22 +358,22 @@
 1415975921 source:c:\users\bibpersoneel\desktop\joachim\github\csv2marc\src\field254.cpp
 	"Field254.h"
 
-1415977577 c:\users\bibpersoneel\desktop\joachim\github\csv2marc\include\field505.h
+1421676807 c:\users\bibpersoneel\desktop\joachim\github\csv2marc\include\field505.h
 	<MarcField.h>
 
-1415977622 source:c:\users\bibpersoneel\desktop\joachim\github\csv2marc\src\field505.cpp
+1421676806 source:c:\users\bibpersoneel\desktop\joachim\github\csv2marc\src\field505.cpp
 	"Field505.h"
 
-1416222801 c:\users\bibpersoneel\desktop\joachim\github\csv2marc\include\field264.h
+1421676806 c:\users\bibpersoneel\desktop\joachim\github\csv2marc\include\field264.h
 	<MarcField.h>
 
-1416222809 source:c:\users\bibpersoneel\desktop\joachim\github\csv2marc\src\field264.cpp
+1421676807 source:c:\users\bibpersoneel\desktop\joachim\github\csv2marc\src\field264.cpp
 	"Field264.h"
 
-1417790674 source:c:\users\bibpersoneel\desktop\joachim\github\csv2marc\src\field952.cpp
+1421676806 source:c:\users\bibpersoneel\desktop\joachim\github\csv2marc\src\field952.cpp
 	"Field952.h"
 
-1417787944 c:\users\bibpersoneel\desktop\joachim\github\csv2marc\include\field952.h
+1421676806 c:\users\bibpersoneel\desktop\joachim\github\csv2marc\include\field952.h
 	<MarcField.h>
 	<algorithm>
 

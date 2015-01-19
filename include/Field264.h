@@ -9,7 +9,7 @@ class Field264 : public MarcField
     public:
         Field264(int nr);
         virtual ~Field264();
-        void update(char marcsubfield, std::string data);
+        virtual void update(char marcsubfield, std::string data);
     protected:
     private:
 };

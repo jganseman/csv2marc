@@ -64,9 +64,19 @@ if ( argc != 3 ) /* 2 arguments: filename to process and resulting filename  */
         catch (exception& e)
         {
             //cout << "!!! ERROR: while processing csv line nr " << j << endl;
-            std::replace( line.begin(), line.end(), '\t', ' ');     // for better printing
-            cout << line.substr(0,80) << " ..." << endl;
-            cout << "Error message was: " << e.what() << endl << endl;
+            if (thisrecord->getField(001) && !(thisrecord->getField(001)->isempty()))
+            {
+                // if it already has a placenumber, print by placenr
+                cout << "Error converting record pl=" << thisrecord->getField(001)->print().substr(5) << endl;
+                cout << "   " << e.what() << endl << endl;
+            }
+            else    // unformatted error
+            {
+                std::replace( line.begin(), line.end(), '\t', ' ');     // for better printing
+                cout << "ERR in " << line.substr(0,80) << " ..." << endl;
+                cout << "       " << e.what() << endl << endl;
+            }
+
             delete thisrecord;
             continue;           // continue processing
         }

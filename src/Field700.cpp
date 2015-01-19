@@ -1,5 +1,56 @@
 #include "Field700.h"
 
+
+// initialize relator terms
+std::set<std::string> Field700::init()
+{
+    int nrterms=33;
+    std::string validterms[]={
+        "act.",
+        "a.",
+        "beg.",
+        "bew.",
+        "cadensschr.",
+        "choreogr.",
+        "comm.",
+        "c.",
+        "kop.",
+        "dir.",
+        "ed.",
+        "prod.",
+        "sign.",
+        "red.",
+        "ill.",
+        "impr.",
+        "inl.",
+        "perf.",
+        "docent",
+        "tekstd.",
+        "medium",
+        "thema",
+        "tech.",
+        "optek.",
+        "prod.",
+        "pseudo.",
+        "reconstr.",
+        "reg.",
+        "samenst.",
+        "scen.",
+        "vert.",
+        "volt.",
+        "arr."
+         };
+    std::set<std::string> tmp(validterms, validterms+nrterms);
+
+    return tmp;
+ }
+
+// initialize that list as static member of class
+std::set<std::string> Field700::relatorterms(init());
+
+
+
+
 Field700::Field700(int nr) : MarcField(nr)
 {
     //ctor
@@ -29,7 +80,8 @@ void Field700::update(char marcsubfield, std::string data)
         alldatasegments.push_back(allsegment);
     }
 
-    // iterate over all starting from the second
+    // iterate over all segments starting from the second (first one is in Field100)
+
     for (std::vector<std::string>::iterator it = alldatasegments.begin()+1; it != alldatasegments.end(); ++it)
     {
 
@@ -53,6 +105,54 @@ void Field700::update(char marcsubfield, std::string data)
             datasegments.push_back(segment);
         }
 
+        // this part: copied from Field100
+        if (datasegments.size() > 1) // item has relatorial remarks
+        {
+            for (std::vector<std::string>::iterator it2 = datasegments.begin()+1; it2 != datasegments.end(); ++it2)
+            {
+                std::string tempstring;
+                try{
+                    tempstring = (*it2).substr(0,(*it2).find_first_of('>'));
+                    //first remove trailing and beginning whitespace; for next segmentation to work properly
+                    tempstring = tempstring.erase(tempstring.find_last_not_of(" \n\r\t")+1).substr(tempstring.find_first_not_of(" \n\r\t"));
+                } catch(exception& e)
+                {
+                    throw MarcRecordException("ERROR Updating Field 700: empty author function.");
+                }
+
+                // note: sometimes added in wrong way, with 2 terms in one set of brackets. thus -> segment further
+                std::vector<std::string> relatorsegments;
+                std::stringstream relatorstream(tempstring);
+                while(std::getline(relatorstream, segment, ' '))        // will still err if no spacing used
+                {
+                    relatorsegments.push_back(segment);
+                }
+
+                for (std::vector<std::string>::iterator it3 = relatorsegments.begin(); it3 != relatorsegments.end(); ++it3)
+                {
+                    //get string
+                        std::string tempstring = (*it3);
+                        //trim any beginning or ending spaces
+                        tempstring = tempstring.erase(tempstring.find_last_not_of(" \n\r\t")+1).substr(tempstring.find_first_not_of(" \n\r\t"));
+                        //forcibly make this all lowercase
+                        std::transform(tempstring.begin(), tempstring.end(), tempstring.begin(), ::tolower);
+                        //update
+                        relatorFixer(tempstring);
+                        // check that the list conforms to the given list of names
+                        if (!isValidRelator(tempstring))
+                        {
+                            throw MarcRecordException("WARNING Updating 700: Unknown author function: "+tempstring);
+                        }
+                        // to preserve the link with the author $a subfield, everything is internally stored in the
+                        // $a subfield as one entire string that is already printed
+                        relator = relator + "$e" + tempstring;
+                }
+            }
+            fullstring = datasegments[0];       // discard all <relator> info from this string
+        }
+
+
+        /*
         if (datasegments.size() > 1) // item has relatorial remarks
         {
             for (std::vector<std::string>::iterator it2 = datasegments.begin()+1; it2 != datasegments.end(); ++it2)
@@ -73,6 +173,7 @@ void Field700::update(char marcsubfield, std::string data)
             }
             fullstring = datasegments[0];       // discard all <> info from this string
         }
+        */
 
         // the dates are anything in between ()
         datasegments.clear();
@@ -90,8 +191,10 @@ void Field700::update(char marcsubfield, std::string data)
                 // TODO parse in more detailed way
                 try{
                     std::string tempstring = (*it2).substr(0,(*it2).find_first_of(')'));
+                    //trim any whitespaces out
+                    tempstring.erase(remove_if(tempstring.begin(), tempstring.end(), ::isspace), tempstring.end());
                     //trim any beginning or ending spaces
-                    tempstring = tempstring.erase(tempstring.find_last_not_of(" \n\r\t")+1).substr(tempstring.find_first_not_of(" \n\r\t"));
+                    //tempstring = tempstring.erase(tempstring.find_last_not_of(" \n\r\t")+1).substr(tempstring.find_first_not_of(" \n\r\t"));
                     //MarcField::update('d', tempstring);
                     dates = dates + "$d" + tempstring;
                 } catch (exception& e)
@@ -99,7 +202,7 @@ void Field700::update(char marcsubfield, std::string data)
                     throw MarcRecordException("ERROR Updating Field 700: error in author dates.");
                 }
             }
-            fullstring = datasegments[0];       // discard all <> info from this string
+            fullstring = datasegments[0];       // discard all (date) info from this string
         }
 
         // now add the author itself.
@@ -145,4 +248,47 @@ std::string const Field700::print() const
 
     output << endl;
     return output.str();
+}
+
+
+
+
+bool Field700::isValidRelator(std::string& data)
+{
+    return (relatorterms.find(data) != relatorterms.end());
+}
+
+void Field700::relatorFixer(std::string& data)
+{
+    // append shortening point where necessary
+    if ((data == "a") || (data == "c") || (data == "ill") || (data == "ed")
+        || (data == "tekstd") || (data == "pseudo") || (data == "inl") || (data == "bew")
+        || (data == "vert") || (data == "perf") || (data == "red")
+        )
+    {
+        data += ".";
+        return;
+    }
+
+    // remove shortening point where necessary
+    if (data == "thema.")
+    {
+        data = "thema";
+        return;
+    }
+
+    // fix common spelling mistakes
+    if (data.find("teks") != data.npos) data = "tekstd.";
+    if (data.find("tesk") != data.npos) data = "tekstd.";
+    if (data.find("tekt") != data.npos) data = "tekstd.";
+    if (data.find("tel") != data.npos) data = "tekstd.";
+    if (data.find("trad") != data.npos) data = "vert.";
+    if (data.find("cop") != data.npos) data = "kop.";
+    if (data.find("chor") != data.npos) data = "choreogr.";
+    if (data.find("cond") != data.npos) data = "dir.";
+    if (data.find("trans") != data.npos) data = "ed.";
+    if (data.find("exec") != data.npos) data = "perf.";
+    if (data.find("caden") != data.npos) data = "cadensschr.";
+
+    return;
 }

@@ -30,6 +30,10 @@ void Field028::update(char marcsubfield, std::string data)
     5 - Other publisher number
     */
 
+    //TODO: for sound recordings, is most likely 0 - issue number
+    //For printed material, is most likely 2 - plate number
+    //For video, is most likely 4 - video number
+
     Setindicator2('0');
     /*
     Note/added entry controller

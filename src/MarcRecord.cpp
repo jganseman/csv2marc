@@ -147,7 +147,7 @@ void MarcRecord::buildup()
     newfield = FieldFactory::getFactory()->getMarcField(40);    // creator of this record. Also has "Language of record" field. Set by default on Dutch
     newfield->update('a', ORGCODE);
     newfield->update('b', "dut");
-    newfield->update('c', ORGCODE);
+    //newfield->update('c', ORGCODE);
     marcfields.insert(newfield);
 
     //According to the MARC21 standard, a title field must be present. If not, add [untitled].
