@@ -202,6 +202,7 @@ void Field100::relatorFixer(std::string& data)
     if (data.find("teks") != data.npos) data = "tekstd.";
     if (data.find("tesk") != data.npos) data = "tekstd.";
     if (data.find("tekt") != data.npos) data = "tekstd.";
+    if (data.find("tekd") != data.npos) data = "tekstd.";
     if (data.find("tel") != data.npos) data = "tekstd.";
     if (data.find("trad") != data.npos) data = "vert.";
     if (data.find("cop") != data.npos) data = "kop.";
@@ -210,6 +211,8 @@ void Field100::relatorFixer(std::string& data)
     if (data.find("trans") != data.npos) data = "ed.";
     if (data.find("exec") != data.npos) data = "perf.";
     if (data.find("caden") != data.npos) data = "cadensschr.";
+    if (data.find("rev") != data.npos) data = "ed.";
+    if (data.find("com") != data.npos) data = "comm.";
 
     return;
 }
