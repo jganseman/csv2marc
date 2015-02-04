@@ -29,6 +29,7 @@ MarcField* FieldFactory::getMarcField(int marcnr)//, MarcRecord* parent)
     switch (marcnr)
     {
         case 0 : return new FieldLDR(marcnr);
+        case 1 : return new Field001(marcnr);
         case 5 : return new Field005(marcnr);
         case 8 : return  new Field008(marcnr);
         case 20 : return new Field020(marcnr);

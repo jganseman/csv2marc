@@ -3,6 +3,7 @@
 
 #include <MarcField.h>
 #include <FieldLDR.h>
+#include <Field001.h>
 #include <Field005.h>
 #include <Field008.h>
 #include <Field020.h>

@@ -236,6 +236,7 @@ void MarcRecord::loadfieldmap(std::string const& filename)
 bool MarcRecord::isvalid() const
 {
     bool hastitle = false;
+    bool hasplacenr = false;
 
     //if record has status field c or x , it is a cross reference of other records
     //and therefore should not be retained in the print-out
@@ -245,22 +246,6 @@ bool MarcRecord::isvalid() const
         {
             if ((*it)->Getsubfield('a') == "C" || (*it)->Getsubfield('a') == "X" || (*it)->Getsubfield('a') == "c" || (*it)->Getsubfield('a') == "x")
                 return false;
-            /*
-            std::string data = (*it)->print();
-            // set lowercase
-            std::transform(data.begin(), data.end(), data.begin(), ::tolower);
-            // if string starts with $ax or $ac , set invalid .
-            const char* initlist[] = {"=583  \\\\$ax", "=583  \\\\$ac"};    // note: escape backslashes!
-            std::vector<std::string> badlist(initlist, initlist+2);       //TODO: get this hardcoded size out
-            int nrbadlist = badlist.size();
-
-            for (int i=0; i<nrbadlist;i++)
-            {
-                if (data.compare(0, badlist[i].length(), badlist[i]) == 0) {         // if string begins with article
-                    return false;
-                }
-            }
-            */
         }
 
         // if the record does not have a title in field 245, it is invalid
@@ -268,9 +253,16 @@ bool MarcRecord::isvalid() const
         {
             hastitle=true;
         }
+
+        // if the record has no place nr, it is invalid
+        if ((*it)->Getfieldnr() == 1)
+        {
+            if ((*it)->Getsubfield('a') != "")
+                hasplacenr=true;
+        }
     }
 
-    return hastitle;
+    return (hastitle && hasplacenr);
 }
 
 

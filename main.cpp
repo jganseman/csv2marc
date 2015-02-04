@@ -67,7 +67,7 @@ if ( argc != 3 ) /* 2 arguments: filename to process and resulting filename  */
             if (thisrecord->getField(001) && !(thisrecord->getField(001)->isempty()))
             {
                 // if it already has a placenumber, print by placenr
-                cout << "Error converting record pl=" << thisrecord->getField(001)->print().substr(5) << endl;
+                cout << "Error converting record pl=" << thisrecord->getField(001)->print().substr(5) ; // endl included in print()
                 cout << "   " << e.what() << endl << endl;
             }
             else    // unformatted error
