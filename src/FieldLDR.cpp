@@ -200,7 +200,7 @@ if (marcsubfield == 'm')
 
     if (!ok)
     {
-        throw MarcRecordException("Warning LDR: could not auto-determine classification. Classified as Score: " + data);
+        throw MarcRecordException("WARNING LDR: could not auto-determine classification. Classified as Score: " + data);
     }
 
 }

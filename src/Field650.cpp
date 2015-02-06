@@ -48,7 +48,7 @@ void Field650::update(char marcsubfield, std::string data)
             MarcField::update(marcsubfield, curstring);
         } catch (exception& e)
         {
-            throw MarcRecordException("Error updating field 650 : empty keyword");
+            throw MarcRecordException("ERROR Field 650 : empty keyword");
         }
     }
 

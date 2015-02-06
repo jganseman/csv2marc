@@ -52,7 +52,7 @@ void Field022::update(char marcsubfield, std::string data)
 
              if (! (cleaneddata.length() == 9))        // throw error when too many characters are present
              {
-                 throw MarcRecordException("Warning Updating Field 22: ISSN too short/long: " + cleaneddata);
+                 throw MarcRecordException("WARNING Field 022: ISSN too short/long: " + cleaneddata);
              }
 
          }

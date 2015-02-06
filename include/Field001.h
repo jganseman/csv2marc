@@ -2,7 +2,9 @@
 #define FIELD001_H
 
 #include <set>
+#include <map>
 #include <string>
+#include <cstdlib>
 #include <MarcField.h>
 #include <MarcRecordException.h>
 
@@ -18,6 +20,9 @@ class Field001 : public MarcField
     private:
         static std::set<std::string> usedIDs;
         static std::set<std::string> init();
+        static std::map<std::string, int> IDcount;
+        static std::map<std::string, int> init2();
+
 };
 
 #endif // FIELD001_H

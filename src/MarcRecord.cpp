@@ -159,11 +159,11 @@ void MarcRecord::buildup()
         newfield = FieldFactory::getFactory()->getMarcField(245);
         newfield->update('a', "[untitled]");
         marcfields.insert(newfield);
-        throw MarcRecordException("Warning (Field 245): No title present. Putting [untitled].");
+        throw MarcRecordException("WARNING Field 245: No title present. Putting [untitled].");
     } else if ((*fieldit)->Getsubfield('a').empty())
     {
         (*fieldit)->update('a', "[untitled]");
-        throw MarcRecordException("Warning (Field 245): No title present. Putting [untitled].");
+        throw MarcRecordException("WARNING Field 245: No title present. Putting [untitled].");
     }
 
     /*else {
