@@ -50,7 +50,10 @@ void Field001::update(char marcsubfield, std::string data)
 
     // only afterwards, throw an error
     if (usedIDs.find(data) == usedIDs.end())        // if not found in set of already used nrs
-        usedIDs.insert(data);
+    {
+                usedIDs.insert(data);
+                MarcField::update(marcsubfield, data);
+    }
     else
     {
         //throw MarcRecordException("ERROR Field 001: placenumber already in use : " + data);
@@ -59,9 +62,8 @@ void Field001::update(char marcsubfield, std::string data)
         char buffer[6];
         data = data + "-" + itoa(IDcount[data], buffer, 10);
 
+        MarcField::update(marcsubfield, data);      // first insert, then throw error
         throw MarcRecordException("WARNING Field 001: placenumber used, creating new one : " + data);
     }
-
-    MarcField::update(marcsubfield, data);
 
 }

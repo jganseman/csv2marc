@@ -132,7 +132,7 @@ void Field100::update(char marcsubfield, std::string data)
                 // check that the list conforms to the given list of names
                 if (!isValidRelator(tempstring))
                 {
-                    throw MarcRecordException("WARNING Updating 100: Unknown author function: "+tempstring);
+                    throw MarcRecordException("ERROR Updating 100: Unknown author function: "+tempstring);
                 }
             }
         }

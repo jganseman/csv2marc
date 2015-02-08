@@ -1,17 +1,18 @@
-#include "Field024.h"
+#include "Field510.h"
 
-Field024::Field024(int nr) : MarcField(nr)
+Field510::Field510(int nr) : MarcField(nr)
 {
     //ctor
+    Setindicator1('4');
 }
 
-Field024::~Field024()
+Field510::~Field510()
 {
     //dtor
 }
 
 
-void Field024::update(char marcsubfield, std::string data)
+void Field510::update(char marcsubfield, std::string data)
 {
     if (data.empty() || data == "")
         return;
@@ -19,7 +20,7 @@ void Field024::update(char marcsubfield, std::string data)
     // first make all uppercase for ease of parsing
     std::transform(data.begin(), data.end(), data.begin(), ::toupper);
 
-    //clean up the data: get out the ISMN. First, segment by ';'
+    //clean up the data: get out the ISBN. First, segment by ';'
     std::vector<std::string> datasegments;
     std::stringstream datastream(data);
     std::string segment;
@@ -28,43 +29,35 @@ void Field024::update(char marcsubfield, std::string data)
         datasegments.push_back(segment);
     }
 
-    // now, find segments that contains the letters 'ISMN'
+    // now, find segments that contains the letters 'RISM'
     for (std::vector<std::string>::iterator it = datasegments.begin(); it != datasegments.end(); ++it)
     {
-         std::size_t found = (*it).find("ISMN");
+         std::string rism = "RISM";
+         std::size_t found = (*it).find(rism);
          if (found == std::string::npos)
          {
             continue;
          }
          else
          {
-             std::string cleaneddata = "";
-             std::size_t found2 = (*it).find_first_of("M0123456789");       // nr cannot contain X
-             while (found2!=std::string::npos)
-             {
-                cleaneddata += (*it)[found2];
-                found2=(*it).find_first_of("M0123456789",found2+1);
-             }
+             //then put the rest of string in subfield 4c
+             (*it).replace((*it).find(rism),rism.length(),"");      // remove the word RISM
+             (*it) = (*it).erase((*it).find_last_not_of(" \n\r\t")+1).substr((*it).find_first_not_of(" \n\r\t"));       // trim beginning and trailing whitespace
 
-             //erase the first M, as that comes from the word ISMN
-             if (cleaneddata[0] == 'M')
-                cleaneddata = cleaneddata.substr(1);
-
-             MarcField::update(marcsubfield, cleaneddata);
-             // set indicator to ISMN
-             Setindicator1('2');
-
-            //assert number starts with 9790 or M
-             if (! (cleaneddata[0] == 'M' || cleaneddata.substr(0,4) == "9790"))
-                throw MarcRecordException("WARNING Field 024: string is not a valid ISMN : " + cleaneddata);
+             // hack for grouped subfields: such that $a and $c are always kept together (instead of first printing all $a's then all $c's)
+             // insert this as one string in subfield a .
+             MarcField::update('a', rism+"$c"+(*it));
          }
     }
 
-    // TODO: DISCARDS RISM nrs now -> FIND OUT WHERE TO STORE THOSE IN MARC RECORDS! (510 ???)
+    //Subfields are non-repeatable according to MARC standard.
+    //This is solved in the PRINT function by printing a new line for every subfield that is present
+
 }
 
+
 // override print function to handle books with several ISBNs
-std::string const Field024::print() const
+std::string const Field510::print() const
 {
     // print one entire field. First the numbers, then the indicators
     std::ostringstream output;
@@ -77,6 +70,7 @@ std::string const Field024::print() const
 
     bool already_had_a = false;
 
+    // this routine prints an entirely new line for each subfield, since it is non-repeatable
     for ( std::multimap<char, std::string>::const_iterator it = subfields.begin(); it != subfields.end(); ++it)
     {
         if ( ((*it).first == 'a') && already_had_a )       //start new line if we already had a previous a
@@ -85,11 +79,10 @@ std::string const Field024::print() const
         if (!((*it).second.empty() || (*it).second == "" ))
             output << "$" << (*it).first << (*it).second;
 
-        if ((*it).first == 'a')
+        if ((*it).first == 'a' || (*it).first == 'z')
             already_had_a = true;
     }
 
     output << endl;
     return output.str();
 }
-

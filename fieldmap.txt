@@ -6,14 +6,14 @@
 #
 # first just a line to force creation of a leader record
 0	000	z
-# the leader record is updated with info from material type, ISBN and ISSN fields, last modification date
-26  000 m       #hack into marcsubfield m for material parsing routine
-50  000 a
-31  000 a
-34  000 a
-1	000	a
 # as local record number, we use the library's shelf number
 5   001 a
+# the leader record is updated with info from material type, ISBN and ISSN fields, last modification date
+26  000 m       #hack into marcsubfield m for material parsing routine
+50  000 a       #ISBN etc
+31  000 a       #ISSN series
+34  000 a       #ISSN subseries
+1	000	a       #date of latest change
 #5	#090	#a      #do not duplicate. Field090 is for items from outside libraries
 0   005 z   #last transaction field 005: creation date, then update with correction date if applicable
 1	005	z
@@ -25,14 +25,16 @@
 # Now, fill in the data fields
 #
 # ISBN, ISSN, ISMN, Publisher nr, Text incipit, Language, Time period
-50  020 a
-50  022 a
-50	024	a
-51	028	a
-43	031	t
-38	041	a
+50  020 a       #ISBN
+50  022 a       #ISSN
+31  022 a       #ISSN series
+34  022 a       #ISSN subseries
+50	024	a       #ISMN
+51	028	a       #Editor number / plate number
+43	031	t       #Musical Incipit
+38	041	a       #Languages
 #25	#033	#a      # Only formatted dates here, of audio recordings or broadcasts. In Unparsed form: field 518?
-25	045	a
+#25	#045	#a      # Time period of content: also formatted
 #
 # Authors and titles. Do not put key/opus/instrumentation here
 10	100	a       #first standardized author
@@ -65,10 +67,10 @@
 24	264	c
 #
 # Description fields: material, key, opus, instrumentation
-27	300	a
-37  382 a
-40	383	b
-39	384	a
+27	300	a       #collation: material extent
+37  382 a       #instrumentation
+40	383	b       #opus
+39	384	a       #key
 #
 # Series information
 29	490	a
@@ -79,6 +81,7 @@
 36	490	a
 #
 # Notes and any additional information
+50  510 a   #RISM number
 48	541	a
 6	506	a
 2	583	a

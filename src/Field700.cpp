@@ -141,7 +141,7 @@ void Field700::update(char marcsubfield, std::string data)
                         // check that the list conforms to the given list of names
                         if (!isValidRelator(tempstring))
                         {
-                            throw MarcRecordException("WARNING Field 700: Unknown author function: "+tempstring);
+                            throw MarcRecordException("ERROR Field 700: Unknown author function: "+tempstring);
                         }
                         // to preserve the link with the author $a subfield, everything is internally stored in the
                         // $a subfield as one entire string that is already printed
