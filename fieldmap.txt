@@ -87,17 +87,19 @@
 2	583	a
 3	590	a
 44	505	a
-45	520	a
+45	520	a       #summary note
 46	500	a
 47	534	n
 49	500	a
 53	501	a
+#material classification now in 513: type of report. actually: 300b/336/337/338?
+26  513 a
 52	650	a
 4	852	c   #inventory number
 #
 # 952 field, internal KOHA circulation stuff:
 2	952	1   #LOST status
 6	952	7   #NOT FOR LOAN status
-5   952 o   #shelf nr
-5   952 p   #barcode
+#5   #952 #o   #shelf nr        // direct copy: moved this to record.cpp postprocessing
+#5   #952 #p   #barcode
 26  952 y   #itemtype

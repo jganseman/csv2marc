@@ -188,6 +188,13 @@ void MarcRecord::buildup()
         }
     }
 
+
+    //then, copy the new record number from field 001 into field 952 (KOHA specific)
+    std::string recordnr = getField(1)->Getsubfield('a');
+    getField(952)->update('o', recordnr);        // shelf number
+    getField(952)->update('p', recordnr);        // barcode
+
+
 }
 
 

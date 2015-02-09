@@ -10,7 +10,7 @@ Field952::~Field952()
     //dtor
 }
 
-
+//shelf number and barcode are copied  from field001 at end of record.cpp buildup()
 void Field952::update(char marcsubfield, std::string data)
 {
     // see http://wiki.koha-community.org/wiki/Holdings_data_fields_%289xx%29

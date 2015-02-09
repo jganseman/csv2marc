@@ -25,9 +25,9 @@ typedef t_fieldset::const_iterator t_fieldsetIterator;
 #define ORGCODE "BE-BxLRC"
 
 // define a list of unique fields
-static const int UniqueFields[] = {20, 22};
-static const char UniqueSubfields[] = {'a', 'a'};
-static const int NrOfUniqueFields = 2;
+static const int UniqueFields[] = {20, 22, 384};
+static const char UniqueSubfields[] = {'a', 'a', 'a'};
+static const int NrOfUniqueFields = 3;
 
 
 class MarcRecord

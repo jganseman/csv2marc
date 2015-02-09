@@ -63,7 +63,7 @@ void Field001::update(char marcsubfield, std::string data)
         data = data + "-" + itoa(IDcount[data], buffer, 10);
 
         MarcField::update(marcsubfield, data);      // first insert, then throw error
-        throw MarcRecordException("WARNING Field 001: placenumber used, creating new one : " + data);
+        //throw MarcRecordException("WARNING Field 001: placenumber used, creating new one : " + data);
     }
 
 }
