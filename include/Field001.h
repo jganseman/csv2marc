@@ -16,6 +16,7 @@ class Field001 : public MarcField
         Field001(int nr);
         virtual ~Field001();
         virtual void update(char marcsubfield, std::string data);
+        static void printIDcounts();
     protected:
     private:
         static std::set<std::string> usedIDs;

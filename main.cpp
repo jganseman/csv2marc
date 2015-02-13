@@ -3,6 +3,7 @@
 #include <string>
 #include <algorithm>
 #include <MarcRecord.h>
+#include <Field001.h>
 
 
 using namespace std;
@@ -96,6 +97,10 @@ if ( argc != 3 ) /* 2 arguments: filename to process and resulting filename  */
 
     cout << "Finished processing " << j << " lines."<< endl;
     cout << "Last line: " << line;
+
+    // print all double callnumbers, by number. From static field
+    Field001::printIDcounts();
+
     return 0;
 
 }

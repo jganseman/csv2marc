@@ -67,3 +67,21 @@ void Field001::update(char marcsubfield, std::string data)
     }
 
 }
+
+void Field001::printIDcounts()
+{
+    cout << "Printing counts >1 of double callnumbers" << endl;
+    long count = 0;
+    long total = 0;
+    for (std::map<std::string, int>::iterator it = IDcount.begin(); it != IDcount.end(); ++it)
+    {
+        if ((*it).second >= 2)
+        {
+             cout << (*it).first << "\t\t" << (*it).second << endl;
+             count += 1;
+             total += (*it).second;
+        }
+
+    }
+    cout << "TOTALS: " << total << " records from " << count << " callnumbers." << endl;
+}
