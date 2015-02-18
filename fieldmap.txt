@@ -33,6 +33,7 @@
 51	028	a       #Editor number / plate number
 43	031	t       #Musical Incipit
 38	041	a       #Languages
+37  041 L       #Legacy: instrumentation field might contain language info
 #25	#033	#a      # Only formatted dates here, of audio recordings or broadcasts. In Unparsed form: field 518?
 #25	#045	#a      # Time period of content: also formatted
 #
@@ -71,6 +72,7 @@
 37  382 a       #instrumentation
 40	383	b       #opus
 39	384	a       #key
+37  384 L       #legacy: instrumentation field might contain tonality. Separate parsing using phony subfieldcode
 #
 # Series information
 29	490	a

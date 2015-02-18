@@ -23,7 +23,7 @@ void Field384::update(char marcsubfield, std::string data)
     //make all lowercase
     std::transform(data.begin(), data.end(), data.begin(), ::tolower);
 
-    //clean up the data: get out the ISBN. First, segment by ';'
+    //segment by ';' to process multiple tonalities
     std::vector<std::string> datasegments;
     std::stringstream datastream(data);
     std::string segment;
@@ -32,9 +32,41 @@ void Field384::update(char marcsubfield, std::string data)
         datasegments.push_back(segment);
     }
 
-    // now, find segments that contains the letters 'ISBN'
+    // LEGACY instrumentation field handling
+    if (marcsubfield == 'L')
+    {
+        std::string reparse = "";
+        for (std::vector<std::string>::iterator it = datasegments.begin(); it != datasegments.end(); ++it)
+        {
+            // trim beginning and trailing whitespace
+            (*it) = (*it).erase((*it).find_last_not_of(" \n\r\t")+1).substr((*it).find_first_not_of(" \n\r\t"));
+            // if it doesn't start with "t=", erase
+            if ((*it).find("t=") == std::string::npos)
+                (*it).clear();
+            else
+            {
+                reparse += (*it);       // add to a string of all tonalities here
+                reparse += " ";         // separated by spaces
+            }
+        }
+
+        // now make a new segmentation of this string, based on spaces
+        datasegments.clear();
+        while(std::getline(datastream, segment, ' '))
+        {
+            datasegments.push_back(segment);
+        }
+
+        marcsubfield = 'a'; // reset marcsubfield to std code for tonalities
+    }
+
+
+    // now, find segments that contains the letters 't='
     for (std::vector<std::string>::iterator it = datasegments.begin(); it != datasegments.end(); ++it)
     {
+        if ((*it).empty())
+            continue;
+
         // replace string "t=" by empty string
         if ((*it).find("t=") != std::string::npos)
             (*it).replace((*it).find("t="), 2, "");

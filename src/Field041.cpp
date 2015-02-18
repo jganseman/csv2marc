@@ -12,6 +12,8 @@ Field041::~Field041()
 
 void Field041::update(char marcsubfield, std::string data)
 {
+    // warning: this routine might also need to process legacy instrumentation strings.
+
     if (data.empty() || data == "")
         return;
 
@@ -32,10 +34,42 @@ void Field041::update(char marcsubfield, std::string data)
 
     //cout << "nrsegments: " << datasegments.size() << endl;
 
+    // LEGACY instrumentation field handling
+    if (marcsubfield == 'L')
+    {
+        std::string reparse = "" ;      // create a string containing only the language component
+        for (std::vector<std::string>::iterator it = datasegments.begin(); it != datasegments.end(); ++it)
+        {
+            // trim beginning and trailing whitespace
+            (*it) = (*it).erase((*it).find_last_not_of(" \n\r\t")+1).substr((*it).find_first_not_of(" \n\r\t"));
+            // if it doesn't start with "t=", erase
+            if ((*it).find("l=") == std::string::npos)
+                (*it).clear();
+            else
+            {
+                reparse += (*it);       // add to a string of all languages here
+                reparse += " ";         // separated by spaces
+            }
+        }
+
+        // now make a new segmentation of this string, based on spaces
+        datasegments.clear();
+        while(std::getline(datastream, segment, ' '))
+        {
+            datasegments.push_back(segment);
+        }
+
+        marcsubfield = 'a'; // reset marcsubfield to std code for languages
+    }
+
+
     char a = marcsubfield;
     int langcount=0;
     for (std::vector<std::string>::iterator it = datasegments.begin(); it != datasegments.end(); ++it)
     {
+        if ((*it).empty())
+            continue;
+
         if ((*it).find("nederlands") != std::string::npos)
             MarcField::update(a, "dut");
         else if ((*it).find("engels") != std::string::npos)
@@ -135,7 +169,16 @@ void Field041::update(char marcsubfield, std::string data)
         else if ((*it).find("turks") != std::string::npos)
             MarcField::update(a, "tur");
         else
-            MarcField::update(a, "und");
+        {
+            // if string does not start with l= , it is not a language and should be skipped. Otherwise, put undefined
+            (*it) = (*it).erase((*it).find_last_not_of(" \n\r\t")+1).substr((*it).find_first_not_of(" \n\r\t"));
+            if ((*it)[0] == 'l')
+            {
+                MarcField::update(a, "und");
+                throw MarcRecordException("WARNING Field 041 : Unrecognized language : " + (*it));
+            }
+        }
+            //MarcField::update(a, "und");
             //throw MarcRecordException("Unrecognized language for Field041: "+data);
         langcount++;
     }
