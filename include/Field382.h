@@ -3,6 +3,8 @@
 
 #include <MarcField.h>
 
+#include <algorithm>
+#include <cstring>
 
 class Field382 : public MarcField
 {

@@ -10,11 +10,11 @@
 5   001 a
 # the leader record is updated with info from material type, ISBN and ISSN fields, last modification date
 26  000 m       #hack into marcsubfield m for material parsing routine
-50  000 a       #ISBN etc
+#50  #000 #a       #ISBN etc            NOTE: score can also have ISBN. Rely completely on material field.
 31  000 a       #ISSN series
-34  000 a       #ISSN subseries
+#34  #000 #a       #ISSN subseries      NOTE: only one record which also has main ISSN. Not needed anymore.
 1	000	a       #date of latest change
-#5	#090	#a      #do not duplicate. Field090 is for items from outside libraries
+#5	#090	#a      #NOTE: do not duplicate. Field090 is for items from outside libraries
 0   005 z   #last transaction field 005: creation date, then update with correction date if applicable
 1	005	z
 #date of creation of record should be put in 008 too
