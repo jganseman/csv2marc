@@ -64,4 +64,12 @@ void Field490::update(char marcsubfield, std::string data)
     datasegments[0] = datasegments[0].erase(datasegments[0].find_last_not_of(" \n\r\t")+1).substr(datasegments[0].find_first_not_of(" \n\r\t"));
 
     MarcField::update(marcsubfield, datasegments[0]+volume);
+
+
+    // throw a warning if the field does not contain a semicolon but contains a regular colon.
+    if ((volume == "") && (data.find_first_of(":") != data.npos))
+    {
+        throw MarcRecordException("WARNING field 490: colon instead of semicolon? : " + data);
+    }
+
 }
