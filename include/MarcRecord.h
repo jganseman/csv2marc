@@ -44,6 +44,7 @@ class MarcRecord
         //void setValidity(bool value) { valid=value; }
         MarcField* getField(int nr) const;
         void addField(MarcField* val){ marcfields.insert(val); }
+        bool isCRB() const;
     protected:
     private:
         friend std::ostream& operator<< (std::ostream& os, const MarcRecord& m);    // print object

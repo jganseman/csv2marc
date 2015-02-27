@@ -35,17 +35,16 @@ if ( argc != 3 ) /* 2 arguments: filename to process and resulting filename  */
     std::string line;
     MarcRecord* thisrecord;
 
+    std::ostringstream KCBerrs;
+    std::ostringstream CRBerrs;
 
     long j = -1;
     while(std::getline(csvfile, line))
     {
         j++;
 
-    /*
-    for(int j=0; j<1000; j++)
-    {
-        std::getline(csvfile, line);
-    */
+        if (j%5000 == 0)
+            cout << "Processed "  << j << " records" << endl;
 
         if (line.empty() || line == "")
             continue;
@@ -70,14 +69,22 @@ if ( argc != 3 ) /* 2 arguments: filename to process and resulting filename  */
             if (thisrecord->getField(001) && !(thisrecord->getField(001)->isempty()))
             {
                 // if it already has a placenumber, print by placenr
-                cout << "Error converting record pl=" << thisrecord->getField(001)->print().substr(5) ; // endl included in print()
-                cout << "   " << what << endl << endl;
+                if(thisrecord->isCRB())
+                {
+                    CRBerrs << "Error converting record pl=" << thisrecord->getField(001)->print().substr(5) ; // endl included in print()
+                    CRBerrs << "   " << what << endl << endl;
+                } else
+                {
+                    KCBerrs << "Error converting record pl=" << thisrecord->getField(001)->print().substr(5) ; // endl included in print()
+                    KCBerrs << "   " << what << endl << endl;
+                }
+
             }
             else    // unformatted error
             {
                 std::replace( line.begin(), line.end(), '\t', ' ');     // for better printing
-                cout << "ERR in " << line.substr(0,80) << " ..." << endl;
-                cout << "       " << what << endl << endl;
+                KCBerrs << "ERR in " << line.substr(0,80) << " ..." << endl;
+                KCBerrs << "       " << what << endl << endl;
             }
 
             // Only when the output is an actual error, and not a warning, delete and continue
@@ -95,8 +102,16 @@ if ( argc != 3 ) /* 2 arguments: filename to process and resulting filename  */
         delete thisrecord;
     }
 
+
+    cout << " === CRB ERROR LIST === " << endl;
+    cout << CRBerrs.str() << endl;
+
+    cout << " === KCB ERROR LIST === " << endl;
+    cout << KCBerrs.str() << endl;
+
+
     cout << "Finished processing " << j << " lines."<< endl;
-    cout << "Last line: " << line;
+    //cout << "Last line: " << line;
 
     // print all double callnumbers, by number. From static field
     Field001::printIDcounts();

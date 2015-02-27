@@ -61,12 +61,15 @@ void Field382::update(char marcsubfield, std::string data)
         // Handling of LEGACY tonalities and languages now done using subfield L in fields 041 and 384
 
         // up next: fixing some often occurring spelling mistakes
+            // --> also been fixed already
+        /*
         if (instrumentation.find("toest") != std::string::npos)
             instrumentation.replace(instrumentation.find("toest"), 5, "toets");
+            */
 
         // get string until first ':'
         std::size_t found = instrumentation.find_first_of(":");
-        if (found==std::string::npos)
+        if (found==std::string::npos && instrumentation != "N")     // some pieces are for N unspecified instr
             throw MarcRecordException("ERROR Field 382: no quantity of instruments: " + instrumentation);
 
         number = instrumentation.substr(0, found);
@@ -113,6 +116,9 @@ void Field382::update(char marcsubfield, std::string data)
         // iterate over segments, make sure the 14 categories appear in the right order ...
         std::string options[] = {"V", "koor", "str", "hout", "kop", "bla", "perc", "toets", "tok", "elek", "beg", "varia", "instr", "orkest"};
         int optioncount = 14;
+
+// code below is a routine that enforces the order of occurence as in the array above
+        /*
         unsigned int cursegment = 0;
         for (int i=0; i<optioncount; ++i)
         {
@@ -122,9 +128,11 @@ void Field382::update(char marcsubfield, std::string data)
             {
                 // This segment starts with option i. Approved.
                 // Check if the last character is a number or N
-                found = gensegments[cursegment].find_last_of("1234567890N");
-                if (found == std::string::npos)
-                    throw MarcRecordException("ERROR Field 382: no quantity after " + gensegments[cursegment]);
+                    // NOTE: absence of number indicates unknown, not error.
+                //found = gensegments[cursegment].find_last_of("1234567890N");
+                //if (found == std::string::npos)
+                //    throw MarcRecordException("ERROR Field 382: no quantity after " + gensegments[cursegment]);
+
                 //Move to the next segment.
                 cursegment++;
                 //When that was the last segment: break the loop
@@ -136,6 +144,27 @@ void Field382::update(char marcsubfield, std::string data)
 
         if (cursegment != gensegments.size())
             throw MarcRecordException("ERROR Field 382: wrong category or ordering: " + general);
+        */
+
+// this version does not enforce order
+        //int nrofsegments = gensegments.size();
+        unsigned int recognized = 0;
+        for (std::vector<std::string>::iterator jt = gensegments.begin(); jt!=gensegments.end(); ++jt)
+        {
+            for (int k=0; k<optioncount; ++k)
+            {
+                unsigned int len = options[k].size();
+                if ((*jt).substr(0, len).compare(options[k]) == 0)
+                    recognized++;
+            }
+        }
+
+        if (recognized < gensegments.size())
+            throw MarcRecordException("ERROR Field 382: wrong category in: " + general);
+        else if (recognized > gensegments.size())
+            throw MarcRecordException("ERROR Field 382: excess category in: " + general);
+
+
 
 
         found = instrumentation.find_first_of("<");

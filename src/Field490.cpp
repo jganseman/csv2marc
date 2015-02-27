@@ -67,9 +67,11 @@ void Field490::update(char marcsubfield, std::string data)
 
 
     // throw a warning if the field does not contain a semicolon but contains a regular colon.
+    /*
     if ((volume == "") && (data.find_first_of(":") != data.npos))
     {
         throw MarcRecordException("WARNING field 490: colon instead of semicolon? : " + data);
     }
+    */
 
 }

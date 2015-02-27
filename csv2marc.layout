@@ -2,9 +2,14 @@
 <CodeBlocks_layout_file>
 	<FileVersion major="1" minor="0" />
 	<ActiveTarget name="Debug" />
-	<File name="src\MarcField.cpp" open="1" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\Field384.cpp" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="1366" topLine="0" />
+			<Cursor1 position="2847" topLine="75" />
+		</Cursor>
+	</File>
+	<File name="include\Field264.h" open="0" top="0" tabpos="15" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="198" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="src\Field264.cpp" open="0" top="0" tabpos="27" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -12,19 +17,24 @@
 			<Cursor1 position="230" topLine="0" />
 		</Cursor>
 	</File>
+	<File name="src\Field490.cpp" open="1" top="1" tabpos="15" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2275" topLine="47" />
+		</Cursor>
+	</File>
 	<File name="include\Field382.h" open="1" top="0" tabpos="14" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="107" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="src\MarcRecord.cpp" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\Field505.cpp" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="7157" topLine="0" />
+			<Cursor1 position="128" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="src\MarcRecordException.cpp" open="0" top="0" tabpos="38" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\Field510.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="372" topLine="0" />
+			<Cursor1 position="88" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="include\Field384.h" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -32,14 +42,24 @@
 			<Cursor1 position="97" topLine="0" />
 		</Cursor>
 	</File>
+	<File name="fieldmap.txt" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1106" topLine="12" />
+		</Cursor>
+	</File>
+	<File name="src\Field650.cpp" open="0" top="0" tabpos="39" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="635" topLine="35" />
+		</Cursor>
+	</File>
 	<File name="include\Field490.h" open="0" top="0" tabpos="37" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="198" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="fieldmap.txt" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\Field700.cpp" open="1" top="0" tabpos="12" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="1106" topLine="12" />
+			<Cursor1 position="8129" topLine="194" />
 		</Cursor>
 	</File>
 	<File name="include\Field505.h" open="0" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -47,14 +67,24 @@
 			<Cursor1 position="186" topLine="0" />
 		</Cursor>
 	</File>
+	<File name="include\Field001.h" open="0" top="0" tabpos="13" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="428" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src\Field952.cpp" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="215" topLine="0" />
+		</Cursor>
+	</File>
 	<File name="include\Field510.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="162" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="include\Field001.h" open="0" top="0" tabpos="13" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\FieldFactory.cpp" open="0" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="428" topLine="0" />
+			<Cursor1 position="1328" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="include\Field650.h" open="0" top="0" tabpos="13" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -62,9 +92,19 @@
 			<Cursor1 position="292" topLine="0" />
 		</Cursor>
 	</File>
+	<File name="src\FieldLDR.cpp" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="7109" topLine="54" />
+		</Cursor>
+	</File>
 	<File name="include\Field700.h" open="0" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="510" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src\MarcField.cpp" open="1" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1366" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="include\Field952.h" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -72,9 +112,19 @@
 			<Cursor1 position="343" topLine="0" />
 		</Cursor>
 	</File>
+	<File name="src\MarcRecord.cpp" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="7157" topLine="0" />
+		</Cursor>
+	</File>
 	<File name="include\FieldFactory.h" open="0" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="463" topLine="12" />
+		</Cursor>
+	</File>
+	<File name="src\MarcRecordException.cpp" open="0" top="0" tabpos="38" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="372" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="include\FieldLDR.h" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -112,11 +162,6 @@
 			<Cursor1 position="323" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="src\Field382.cpp" open="1" top="0" tabpos="13" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="4292" topLine="77" />
-		</Cursor>
-	</File>
 	<File name="src\Field005.cpp" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="1274" topLine="21" />
@@ -137,11 +182,6 @@
 			<Cursor1 position="66" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="src\Field384.cpp" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="2847" topLine="75" />
-		</Cursor>
-	</File>
 	<File name="src\Field020.cpp" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="197" topLine="9" />
@@ -150,11 +190,6 @@
 	<File name="include\Field022.h" open="0" top="0" tabpos="36" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="296" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="src\Field490.cpp" open="1" top="1" tabpos="15" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="2275" topLine="47" />
 		</Cursor>
 	</File>
 	<File name="src\Field022.cpp" open="0" top="0" tabpos="30" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -167,11 +202,6 @@
 			<Cursor1 position="296" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="src\Field505.cpp" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="128" topLine="0" />
-		</Cursor>
-	</File>
 	<File name="src\Field024.cpp" open="0" top="0" tabpos="31" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="1657" topLine="31" />
@@ -180,11 +210,6 @@
 	<File name="include\Field028.h" open="0" top="0" tabpos="21" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="200" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="src\Field510.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="88" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="src\Field028.cpp" open="0" top="0" tabpos="32" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -197,11 +222,6 @@
 			<Cursor1 position="292" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="src\Field650.cpp" open="0" top="0" tabpos="39" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="635" topLine="35" />
-		</Cursor>
-	</File>
 	<File name="src\Field041.cpp" open="0" top="0" tabpos="29" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="260" topLine="114" />
@@ -210,11 +230,6 @@
 	<File name="include\Field100.h" open="0" top="0" tabpos="19" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="274" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="src\Field700.cpp" open="1" top="0" tabpos="12" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="8129" topLine="194" />
 		</Cursor>
 	</File>
 	<File name="src\Field100.cpp" open="0" top="0" tabpos="33" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -227,24 +242,19 @@
 			<Cursor1 position="278" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="src\Field952.cpp" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="215" topLine="0" />
-		</Cursor>
-	</File>
 	<File name="src\Field240.cpp" open="0" top="0" tabpos="33" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="420" topLine="8" />
 		</Cursor>
 	</File>
+	<File name="src\Field382.cpp" open="1" top="0" tabpos="13" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="4292" topLine="77" />
+		</Cursor>
+	</File>
 	<File name="include\Field245.h" open="0" top="0" tabpos="17" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="278" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="src\FieldFactory.cpp" open="0" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1328" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="src\Field245.cpp" open="0" top="0" tabpos="11" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -257,20 +267,10 @@
 			<Cursor1 position="228" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="src\FieldLDR.cpp" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="7109" topLine="54" />
-		</Cursor>
-	</File>
 	<File name="src\Field254.cpp" open="0" top="0" tabpos="36" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="130" topLine="14" />
 		</Cursor>
 	</File>
-	<File name="include\Field264.h" open="0" top="0" tabpos="15" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="198" topLine="0" />
-		</Cursor>
-	</File>
-	<EditorTabsLayout layout="083bbdc054e5ac4e00006e9100000002=0;csv2marc:fieldmap.txt,1;csv2marc:include\Field384.h,2;csv2marc:src\Field384.cpp,3;csv2marc:src\Field505.cpp,4;csv2marc:src\Field020.cpp,5;csv2marc:src\MarcRecord.cpp,6;csv2marc:src\Field952.cpp,7;csv2marc:src\MarcField.cpp,8;csv2marc:include\MarcField.h,9;csv2marc:include\MarcRecord.h,10;csv2marc:main.cpp,11;csv2marc:src\Field700.cpp,12;csv2marc:src\Field382.cpp,13;csv2marc:include\Field382.h,*14;csv2marc:src\Field490.cpp@layout2|name=dummy;caption=;state=2098174;dir=3;layer=0;row=0;pos=0;prop=100000;bestw=534;besth=278;minw=534;minh=278;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=083bbdc054e5ac4e00006e9100000002;caption=;state=2098172;dir=5;layer=0;row=0;pos=0;prop=100000;bestw=200;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|dock_size(5,0,0)=202|" />
+	<EditorTabsLayout layout="088e325854ede12a0000657e00000002=0;csv2marc:fieldmap.txt,1;csv2marc:include\Field384.h,2;csv2marc:src\Field384.cpp,3;csv2marc:src\Field505.cpp,4;csv2marc:src\Field020.cpp,5;csv2marc:src\MarcRecord.cpp,6;csv2marc:src\Field952.cpp,7;csv2marc:src\MarcField.cpp,8;csv2marc:include\MarcField.h,9;csv2marc:include\MarcRecord.h,10;csv2marc:main.cpp,11;csv2marc:src\Field700.cpp,12;csv2marc:src\Field382.cpp,13;csv2marc:include\Field382.h,*14;csv2marc:src\Field490.cpp@layout2|name=dummy;caption=;state=2098174;dir=3;layer=0;row=0;pos=0;prop=100000;bestw=534;besth=278;minw=534;minh=278;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=088e325854ede12a0000657e00000002;caption=;state=2098172;dir=5;layer=0;row=0;pos=0;prop=100000;bestw=200;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|dock_size(5,0,0)=202|" />
 </CodeBlocks_layout_file>

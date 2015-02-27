@@ -8,6 +8,8 @@
 0	000	z
 # as local record number, we use the library's shelf number
 5   001 a
+# first store who the author of the original record is, for error reporting
+3	590	a
 # the leader record is updated with info from material type, ISBN and ISSN fields, last modification date
 26  000 m       #hack into marcsubfield m for material parsing routine
 #50  #000 #a       #ISBN etc            NOTE: score can also have ISBN. Rely completely on material field.
@@ -87,7 +89,7 @@
 48	541	a
 6	506	a
 2	583	a
-3	590	a
+
 44	505	a
 45	520	a       #summary note
 46	500	a

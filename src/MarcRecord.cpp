@@ -289,6 +289,30 @@ MarcField* MarcRecord::getField(int nr) const
 }
 
 
+bool MarcRecord::isCRB() const
+{
+    for(t_fieldsetIterator it = marcfields.begin(); it!=marcfields.end(); ++it)
+    {
+        if ((*it)->Getfieldnr() == 590)       // this is where the author is stored
+        {
+            std::string author = (*it)->Getsubfield('a');
+            if  ( (author == "mv") || (author == "im") || (author == "mcl") || (author == "sdp") || (author == "lm")
+                || (author == "ah") || (author == "ar") || (author == "bkb") || (author == "cc") || (author == "cf")
+                || (author == "df") || (author == "dl") || (author == "ed") || (author == "fb") || (author == "hl")
+                || (author == "id") || (author == "ls") || (author == "mdd") || (author == "mt")
+                || (author == "rs") || (author == "th") || (author == "vdf") )
+            {
+                return true;
+            } else
+            {
+                return false;
+            }
+        }
+    }
+    return false;
+}
+
+
 // friend operators outside the class definition:
 
 std::ostream& operator<< (std::ostream& os, const MarcRecord& m)
