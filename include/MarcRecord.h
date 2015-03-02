@@ -47,6 +47,12 @@ class MarcRecord
         bool isCRB() const;
     protected:
     private:
+        void AddFixedValues();
+        void CheckTitle();
+        void ProcessNonRepeatableFields();
+        void ProcessParts();
+        void AddKohaData();
+
         friend std::ostream& operator<< (std::ostream& os, const MarcRecord& m);    // print object
         friend std::ostream& operator<< (std::ostream& os, const MarcRecord* m);    // print pointer to object
 

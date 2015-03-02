@@ -134,7 +134,18 @@ void MarcRecord::buildup()
             return;
     }
 
+    // Now, do all the postprocessing that's required to finetune this record
 
+    AddFixedValues();
+    CheckTitle();
+    ProcessNonRepeatableFields();
+    ProcessParts();
+    AddKohaData();
+
+}
+
+void MarcRecord::AddFixedValues()
+{
     // At the end of regular records, add some fixed fields
     MarcField* newfield = FieldFactory::getFactory()->getMarcField(3);
     newfield->update('a', ORGCODE);       // does not matter in which subfield this is put, it's a control field
@@ -149,30 +160,41 @@ void MarcRecord::buildup()
     newfield->update('b', "dut");
     //newfield->update('c', ORGCODE);
     marcfields.insert(newfield);
+}
 
+
+void MarcRecord::CheckTitle()
+{
     //According to the MARC21 standard, a title field must be present. If not, add [untitled].
-    dummy = new MarcField(245);
-    fieldit = marcfields.find(dummy);
+    MarcField* myfield = getField(245);
+    /*
+    new MarcField(245);
+    t_fieldsetIterator fieldit = marcfields.find(dummy);
     delete dummy;
     if (fieldit == marcfields.end())
+    */
+    if (myfield == 0)
     {
-        newfield = FieldFactory::getFactory()->getMarcField(245);
+        MarcField* newfield = FieldFactory::getFactory()->getMarcField(245);
         newfield->update('a', "[untitled]");
         marcfields.insert(newfield);
         throw MarcRecordException("WARNING Field 245: No title present. Putting [untitled].");
-    } else if ((*fieldit)->Getsubfield('a').empty())
+    } else if (myfield->Getsubfield('a').empty())
     {
-        (*fieldit)->update('a', "[untitled]");
+        myfield->update('a', "[untitled]");
         throw MarcRecordException("WARNING Field 245: No title present. Putting [untitled].");
     }
-
     /*else {
         if ((*fieldit)->Getfieldnr() != 245)
             cout << "Found field 245 at field " << (*fieldit)->Getfieldnr() << endl;
     }*/
     // this was debug info
+}
 
-    // finally, process fields that have been marked as unique
+
+void MarcRecord::ProcessNonRepeatableFields()
+{
+    // finally, process fields that have been marked as unique -> decouple them into separate fields
     for (int i=0; i<NrOfUniqueFields; ++i)
     {
         int curfield = UniqueFields[2];
@@ -187,14 +209,49 @@ void MarcRecord::buildup()
             marcfields.insert(newfield);
         }
     }
+}
+
+void MarcRecord::ProcessParts()
+{
+    // when the place number contains ONDERDEEL,
+        // - change bibliography level (leader) to "a" (part of monograph)
+        // - add a field 773$w linking to the mother record.
+    if (getField(001) && !(getField(001)->isempty()))
+    {
+        std::string recordnr = getField(1)->Getsubfield('a');
+        std::transform(recordnr.begin(), recordnr.end(), recordnr.begin(), ::toupper);
+        std::size_t found = recordnr.find("ONDERDEEL");
+        if (found == recordnr.npos)
+            return;
+        else
+        {
+            // set bibliographic level to: monograph part
+            (dynamic_cast<FieldLDR*>(getField(0)))->Setfixedstring(7, 'a');
+
+            // prepare string for 773
+            std::string hostcode = "(";
+            hostcode += ORGCODE;
+            hostcode += ")";
+            std::string location = getField(1)->Getsubfield('a');
+            location = location.substr(0, found);
+
+            // add field 773: Host entry
+            MarcField* newfield = FieldFactory::getFactory()->getMarcField(773);
+            newfield->Setindicator1('0');
+            newfield->Setindicator2('#');
+            newfield->update('w', hostcode+location );
+            marcfields.insert(newfield);
+        }
+    }
+}
 
 
+void MarcRecord::AddKohaData()
+{
     //then, copy the new record number from field 001 into field 952 (KOHA specific)
     std::string recordnr = getField(1)->Getsubfield('a');
     getField(952)->update('o', recordnr);        // shelf number
     getField(952)->update('p', recordnr);        // barcode
-
-
 }
 
 
