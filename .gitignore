@@ -69,4 +69,8 @@ $RECYCLE.BIN/
 *.msi
 *.msm
 *.msp
+
+# CodeBlocks Project Files
 csv2marc.cbp
+csv2marc.depend
+csv2marc.layout
