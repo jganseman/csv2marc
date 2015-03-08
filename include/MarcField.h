@@ -9,6 +9,7 @@
 #include <iomanip>
 
 #include <MarcRecordException.h>
+#include <Helper.h>
 
 //forward declaration of class MarcRecord to be able to use ptr to parent
 //class MarcRecord;

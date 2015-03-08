@@ -16,7 +16,7 @@ void Field245::update(char marcsubfield, std::string data)
 {
     try{
         //trim front and trailing whitespace
-        data = data.erase(data.find_last_not_of(" \n\r\t")+1).substr(data.find_first_not_of(" \n\r\t"));
+        Helper::Trim(data);
     } catch (exception e)
     {
         // this will throw an error if data is empty
@@ -27,6 +27,8 @@ void Field245::update(char marcsubfield, std::string data)
 
     if (data.empty() || data == "")
         return;
+
+    Helper::Remove(data, "¬");
 
     if (marcsubfield == 'a')        // this is the main title
     {
@@ -42,7 +44,7 @@ void Field245::update(char marcsubfield, std::string data)
         // so, calculate nr of letters used by articles in NL, FR, EN
 
         std::string upper = data;
-        std::transform(upper.begin(), upper.end(), upper.begin(), ::toupper);
+        Helper::MakeUppercase(upper);
 
         // dutch articles, make sure to have whitespace after each!
         const char* initlist[] = {"DE ", "HET ", "EEN ", "L'", "LA ", "LE ", "LES ", "UN ", "UNE ", "A ", "AN ", "THE " };

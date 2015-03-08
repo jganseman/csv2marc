@@ -71,13 +71,7 @@ void Field100::update(char marcsubfield, std::string data)
     Setindicator2(DEFAULT_INDIC);
 
     //First, segment by ';'
-    std::vector<std::string> datasegments;
-    std::stringstream datastream(data);
-    std::string segment;
-    while(std::getline(datastream, segment, ';'))
-    {
-        datasegments.push_back(segment);
-    }
+    std::vector<std::string> datasegments = Helper::Segment(data, ';');
 
     // only use the first author for field 100. Put the rest in field 700.
     std::string fullstring = datasegments[0];
@@ -89,12 +83,7 @@ void Field100::update(char marcsubfield, std::string data)
 
     // the relator (function of this author) is anything in between <>
     datasegments.clear();
-    datastream.clear();
-    datastream.str(fullstring);             // set new contents
-    while(std::getline(datastream, segment, '<'))
-    {
-        datasegments.push_back(segment);
-    }
+    datasegments = Helper::Segment(fullstring, '<');
 
     if (datasegments.size() > 1) // item has relatorial remarks
     {
@@ -104,28 +93,23 @@ void Field100::update(char marcsubfield, std::string data)
             try{
                 tempstring = (*it2).substr(0,(*it2).find_first_of('>'));
                 //first remove trailing and beginning whitespace; such that next segmentation works properly
-                tempstring = tempstring.erase(tempstring.find_last_not_of(" \n\r\t")+1).substr(tempstring.find_first_not_of(" \n\r\t"));
+                Helper::Trim(tempstring);
             } catch(exception& e)
             {
                 throw MarcRecordException("ERROR Updating Field 100: empty author function.");
             }
 
             // note: sometimes added in wrong way, with 2 terms in one set of brackets. thus -> segment further
-            std::vector<std::string> relatorsegments;
-            std::stringstream relatorstream(tempstring);
-            while(std::getline(relatorstream, segment, ' '))        // will still err if no spacing used
-            {
-                relatorsegments.push_back(segment);
-            }
+            std::vector<std::string> relatorsegments = Helper::Segment(tempstring, ' ');        // will still err if no spacing used
 
             for (std::vector<std::string>::iterator it3 = relatorsegments.begin(); it3 != relatorsegments.end(); ++it3)
             {
                 //get string
                 std::string tempstring = (*it3);
                 //trim any beginning or ending spaces
-                tempstring = tempstring.erase(tempstring.find_last_not_of(" \n\r\t")+1).substr(tempstring.find_first_not_of(" \n\r\t"));
+                Helper::Trim(tempstring);
                 //forcibly make this all lowercase
-                std::transform(tempstring.begin(), tempstring.end(), tempstring.begin(), ::tolower);
+                Helper::MakeLowercase(tempstring);
                 //update
                 relatorFixer(tempstring);
                 MarcField::update('e', tempstring);
@@ -141,12 +125,7 @@ void Field100::update(char marcsubfield, std::string data)
 
     // the dates are anything in between ()
     datasegments.clear();
-    datastream.clear();
-    datastream.str(fullstring);             // set new contents
-    while(std::getline(datastream, segment, '('))
-    {
-        datasegments.push_back(segment);
-    }
+    datasegments = Helper::Segment(fullstring, '(');
 
     if (datasegments.size() > 1) // item has dates
     {
@@ -155,8 +134,7 @@ void Field100::update(char marcsubfield, std::string data)
             // TODO parse in more detailed way
             std::string tempstring = (*it2).substr(0,(*it2).find_first_of(')'));
             //trim any whitespaces out
-            tempstring.erase(remove_if(tempstring.begin(), tempstring.end(), ::isspace), tempstring.end());
-            //tempstring = tempstring.erase(tempstring.find_last_not_of(" \n\r\t")+1).substr(tempstring.find_first_not_of(" \n\r\t"));
+            Helper::EraseWhitespace(tempstring);
             MarcField::update('d', tempstring);
             break;      // only do this once; can't have multiple dates...
         }
@@ -165,7 +143,7 @@ void Field100::update(char marcsubfield, std::string data)
 
     // now add the author itself.
     // trim any beginning or ending spaces
-    fullstring = fullstring.erase(fullstring.find_last_not_of(" \n\r\t")+1).substr(fullstring.find_first_not_of(" \n\r\t"));
+    Helper::Trim(fullstring);
     MarcField::update('a', fullstring);
 
 }

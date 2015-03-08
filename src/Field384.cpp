@@ -18,19 +18,13 @@ void Field384::update(char marcsubfield, std::string data)
         return;
 
     // trim beginning and trailing whitespace
-    data = data.erase(data.find_last_not_of(" \n\r\t")+1).substr(data.find_first_not_of(" \n\r\t"));
+    Helper::Trim(data);
 
     //make all lowercase
-    std::transform(data.begin(), data.end(), data.begin(), ::tolower);
+    Helper::MakeLowercase(data);
 
     //segment by ';' to process multiple tonalities
-    std::vector<std::string> datasegments;
-    std::stringstream datastream(data);
-    std::string segment;
-    while(std::getline(datastream, segment, ';'))
-    {
-        datasegments.push_back(segment);
-    }
+    std::vector<std::string> datasegments = Helper::Segment(data, ';');
 
     // LEGACY instrumentation field handling
     if (marcsubfield == 'L')
@@ -39,11 +33,9 @@ void Field384::update(char marcsubfield, std::string data)
         for (std::vector<std::string>::iterator it = datasegments.begin(); it != datasegments.end(); ++it)
         {
             // trim beginning and trailing whitespace
-            (*it) = (*it).erase((*it).find_last_not_of(" \n\r\t")+1).substr((*it).find_first_not_of(" \n\r\t"));
-            // if it doesn't start with "t=", erase
-            if ((*it).find("t=") == std::string::npos)
-                (*it).clear();
-            else
+            Helper::Trim((*it));
+            // if it contains "t=", retain
+            if ((*it).find("t=") != std::string::npos)
             {
                 reparse += (*it);       // add to a string of all tonalities here
                 reparse += " ";         // separated by spaces
@@ -52,10 +44,7 @@ void Field384::update(char marcsubfield, std::string data)
 
         // now make a new segmentation of this string, based on spaces
         datasegments.clear();
-        while(std::getline(datastream, segment, ' '))
-        {
-            datasegments.push_back(segment);
-        }
+        datasegments = Helper::Segment(reparse, ' ');
 
         marcsubfield = 'a'; // reset marcsubfield to std code for tonalities
     }
@@ -68,11 +57,14 @@ void Field384::update(char marcsubfield, std::string data)
             continue;
 
         // replace string "t=" by empty string
-        if ((*it).find("t=") != std::string::npos)
-            (*it).replace((*it).find("t="), 2, "");
-        // trim beginning and trailing whitespace
-        (*it) = (*it).erase((*it).find_last_not_of(" \n\r\t")+1).substr((*it).find_first_not_of(" \n\r\t"));
+        Helper::Remove((*it), "t=");
 
+        // if this still accidentally contains a language, skip it
+         if ((*it).find("l=") != std::string::npos)
+            continue;
+
+        // trim beginning and trailing whitespace
+        Helper::Trim((*it));
 
         //prepare empty string as new key
         std::string tonality;
@@ -105,7 +97,6 @@ void Field384::update(char marcsubfield, std::string data)
             modal=true;
 
 
-
         // this builds the string according to regular text
 
         tonality += ((*it)[0] -32);      // character arithmetic: subtract 32 to make uppercase
@@ -115,7 +106,6 @@ void Field384::update(char marcsubfield, std::string data)
         if (major) tonality += "major";
         if (minor) tonality += "minor";
         if (modal) tonality += "modal";
-
 
 
         // this builds the string according to the UNIMARC standard, which is more detailed

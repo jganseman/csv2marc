@@ -2,6 +2,7 @@
 #define FIELD490_H
 
 #include <MarcField.h>
+#include <Helper.h>
 
 
 class Field490 : public MarcField

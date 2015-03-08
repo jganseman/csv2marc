@@ -18,16 +18,10 @@ void Field510::update(char marcsubfield, std::string data)
         return;
 
     // first make all uppercase for ease of parsing
-    std::transform(data.begin(), data.end(), data.begin(), ::toupper);
+    Helper::MakeUppercase(data);
 
     //clean up the data: get out the ISBN. First, segment by ';'
-    std::vector<std::string> datasegments;
-    std::stringstream datastream(data);
-    std::string segment;
-    while(std::getline(datastream, segment, ';'))
-    {
-        datasegments.push_back(segment);
-    }
+    std::vector<std::string> datasegments = Helper::Segment(data, ';');
 
     // now, find segments that contains the letters 'RISM'
     for (std::vector<std::string>::iterator it = datasegments.begin(); it != datasegments.end(); ++it)
@@ -42,7 +36,7 @@ void Field510::update(char marcsubfield, std::string data)
          {
              //then put the rest of string in subfield 4c
              (*it).replace((*it).find(rism),rism.length(),"");      // remove the word RISM
-             (*it) = (*it).erase((*it).find_last_not_of(" \n\r\t")+1).substr((*it).find_first_not_of(" \n\r\t"));       // trim beginning and trailing whitespace
+             Helper::Trim((*it));       // trim beginning and trailing whitespace
 
              // hack for grouped subfields: such that $a and $c are always kept together (instead of first printing all $a's then all $c's)
              // insert this as one string in subfield a .

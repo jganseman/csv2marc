@@ -113,14 +113,10 @@ void Field008::update(char marcsubfield, std::string data)
     */
     // to set the language, this is a copy of Field041
 
-    std::transform(data.begin(), data.end(), data.begin(), ::tolower);
-    std::vector<std::string> datasegments;
-    std::stringstream datastream(data);
-    std::string segment;
-    while(std::getline(datastream, segment, ';'))
-    {
-        datasegments.push_back(segment);
-    }
+    Helper::MakeLowercase(data);
+
+    std::vector<std::string> datasegments = Helper::Segment(data, ';');
+
     if (datasegments.size() > 1)
     {
         strcpy(&fixedstring[35], "mul"); fixedstring[38] = '|';     // reset char38 to remove null character of string terminator

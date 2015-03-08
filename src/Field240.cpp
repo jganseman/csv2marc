@@ -21,8 +21,9 @@ void Field240::update(char marcsubfield, std::string data)
         Setindicator1('1');      // always display title on screen
         Setindicator2('0');
 
+        Helper::Remove(data, "¬");          // legacy symbol denoting articles. Remove.
         //trim front and trailing whitespace
-        data = data.erase(data.find_last_not_of(" \n\r\t")+1).substr(data.find_first_not_of(" \n\r\t"));
+        Helper::Trim(data);
 
         // put data already in
         MarcField::update(marcsubfield, data);
@@ -31,7 +32,7 @@ void Field240::update(char marcsubfield, std::string data)
         // so, calculate nr of letters used by articles in NL, FR, EN
 
         std::string upper = data;
-        std::transform(upper.begin(), upper.end(), upper.begin(), ::toupper);
+        Helper::MakeUppercase(upper);
 
         // dutch articles, make sure to have whitespace after each!
         const char* initlist[] = {"DE ", "HET ", "EEN ", "L'", "LA ", "LE ", "LES ", "UN ", "UNE ", "A ", "AN ", "THE " };

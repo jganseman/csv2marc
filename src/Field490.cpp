@@ -37,13 +37,7 @@ void Field490::update(char marcsubfield, std::string data)
     std::string volume = "";
 
     //First, segment by ';'
-    std::vector<std::string> datasegments;
-    std::stringstream datastream(data);
-    std::string segment;
-    while(std::getline(datastream, segment, ';'))
-    {
-        datasegments.push_back(segment);
-    }
+    std::vector<std::string> datasegments = Helper::Segment(data, ';');
 
     // there might be multiple series statements (for subseries etc)
     // perform the concatenation trick here as with author (see field 700):
@@ -55,13 +49,13 @@ void Field490::update(char marcsubfield, std::string data)
         for (std::vector<std::string>::iterator it = datasegments.begin()+1; it != datasegments.end(); ++it)
         {
             // trim trailing and beginning spaces
-            (*it) = (*it).erase((*it).find_last_not_of(" \n\r\t")+1).substr((*it).find_first_not_of(" \n\r\t"));
+            Helper::Trim((*it));
             volume += (*it);
         }
     }
 
     // trim trailing and beginning spaces
-    datasegments[0] = datasegments[0].erase(datasegments[0].find_last_not_of(" \n\r\t")+1).substr(datasegments[0].find_first_not_of(" \n\r\t"));
+    Helper::Trim(datasegments[0]);
 
     MarcField::update(marcsubfield, datasegments[0]+volume);
 

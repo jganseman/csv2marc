@@ -17,16 +17,10 @@ void Field022::update(char marcsubfield, std::string data)
         return;
 
     // first make all uppercase for ease of parsing
-    std::transform(data.begin(), data.end(), data.begin(), ::toupper);
+    Helper::MakeUppercase(data);
 
     //clean up the data: get out the ISSN. First, segment by ';'
-    std::vector<std::string> datasegments;
-    std::stringstream datastream(data);
-    std::string segment;
-    while(std::getline(datastream, segment, ';'))
-    {
-        datasegments.push_back(segment);
-    }
+    std::vector<std::string> datasegments = Helper::Segment(data, ';');
 
     // now, find segments that contains the letters 'ISSN'
     for (std::vector<std::string>::iterator it = datasegments.begin(); it != datasegments.end(); ++it)

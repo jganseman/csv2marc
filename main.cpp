@@ -158,14 +158,14 @@ void ProcessConstituents(std::set<std::string>& callnumbers, std::multimap<std::
     {
         // if callnumber contains onderdeel
         std::string curstring = (*it);
-        std::transform(curstring.begin(), curstring.end(), curstring.begin(), ::toupper);
+        Helper::MakeUppercase(curstring);
         std::size_t found = curstring.find("ONDERDEEL");
         if (found != curstring.npos)
         {
             // create string with the pre-onderdeel string
             std::string mothercallnr = (*it).substr(0, found);
             // trim whitespace
-            mothercallnr = mothercallnr.erase(mothercallnr.find_last_not_of(" \n\r\t")+1).substr(mothercallnr.find_first_not_of(" \n\r\t"));
+            Helper::Trim(mothercallnr);
             // find in set of callnumbers
             std::set<std::string>::iterator present = callnumbers.find(mothercallnr);
             if (present == callnumbers.end())       // Mother record NOT FOUND! throw warning

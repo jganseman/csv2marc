@@ -67,7 +67,7 @@ void FieldLDR::update(char marcsubfield, std::string data)
     */
 
     // recognize a book by ISBN or ISSN number
-    std::transform(data.begin(), data.end(), data.begin(), ::toupper);
+    Helper::MakeUppercase(data);
     std::size_t found = data.find("ISBN");
     if (found != std::string::npos)     // we found an ISBN number
     {

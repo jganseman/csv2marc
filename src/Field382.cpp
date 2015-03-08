@@ -18,13 +18,7 @@ void Field382::update(char marcsubfield, std::string data)
         return;
 
     // several parallel instrumentations are possible, separated by ';'
-    std::vector<std::string> alldatasegments;
-    std::stringstream alldatastream(data);
-    std::string allsegment;
-    while(std::getline(alldatastream, allsegment, ';'))
-    {
-        alldatasegments.push_back(allsegment);
-    }
+    std::vector<std::string> alldatasegments = Helper::Segment(data, ';');
 
     std::string number = "";        // placeholder for correct number
     std::string general = "";       // placeholder for correct general description
@@ -35,7 +29,7 @@ void Field382::update(char marcsubfield, std::string data)
     {
         std::string instrumentation = *it;
         // remove beginning and trailing whitespaces
-        instrumentation = instrumentation.erase(instrumentation.find_last_not_of(" \n\r\t")+1).substr(instrumentation.find_first_not_of(" \n\r\t"));
+        Helper::Trim(instrumentation);
 
 
         // LEGACY subroutine: this might contain t=tonality or l=language style strings. Give warning when so
@@ -43,29 +37,12 @@ void Field382::update(char marcsubfield, std::string data)
             throw MarcRecordException("WARNING Field 382: possibly semicolon too much");
                 // only throw ERR when multiple present, since those are separated by spaces and not by semicolons
         if (instrumentation[0] == 't') continue;
-        /*
-            { if (instrumentation.size() > 10)
-                throw MarcRecordException("ERROR Field 382: Instrumentation contains tonalities: " + instrumentation);
-              else
-                continue;
-            }
-            */
         if (instrumentation[0] == 'l') continue;
-        /*
-            { if (instrumentation.size() > 12)
-                throw MarcRecordException("ERROR Field 382: Instrumentation contains languages: " + instrumentation);
-              else
-                continue;
-            }
-            */
-        // Handling of LEGACY tonalities and languages now done using subfield L in fields 041 and 384
+            // Handling of LEGACY tonalities and languages now done using subfield L in fields 041 and 384
 
         // up next: fixing some often occurring spelling mistakes
-            // --> also been fixed already
-        /*
         if (instrumentation.find("toest") != std::string::npos)
             instrumentation.replace(instrumentation.find("toest"), 5, "toets");
-            */
 
         // get string until first ':'
         std::size_t found = instrumentation.find_first_of(":");
@@ -74,8 +51,7 @@ void Field382::update(char marcsubfield, std::string data)
 
         number = instrumentation.substr(0, found);
         // remove all spaces
-        number.erase(remove_if(number.begin(), number.end(), ::isspace), number.end());
-        // make uppercase
+        Helper::EraseWhitespace(number);
 
         // first character must be a number or N
         found = number.find_first_of("123456789N");
@@ -92,26 +68,22 @@ void Field382::update(char marcsubfield, std::string data)
         // Move on to the general description in between : and <
 
         found = instrumentation.find_first_of(":");
+        // if no general instrumentation is provided, then only the number of instruments is present. Then skip all the following
+        if (found==std::string::npos)
+        {
+            MarcField::update(marcsubfield, number);
+            continue;
+        }
 
         std::size_t found2 = instrumentation.find_first_of("<");
         general = instrumentation.substr(found+1, found2-(found+1));      // 2nd param is length!
+        // remove beginning and trailing whitespaces
+        Helper::Trim(general);
         if (general.empty() || general == "")
             throw MarcRecordException("ERROR Field 382: no general instrumentation description: " + instrumentation);
 
-        // remove beginning and trailing whitespaces
-        general = general.erase(general.find_last_not_of(" \n\r\t")+1).substr(general.find_first_not_of(" \n\r\t"));
-
-
         // segment by space
-        std::vector<std::string> gensegments;
-        std::stringstream gendatastream(general);
-        std::string gensegment;
-        while(std::getline(gendatastream, gensegment, ' '))
-        {
-            // remove any remaining spaces in this particular segment
-            gensegment.erase(remove_if(gensegment.begin(), gensegment.end(), ::isspace), gensegment.end());
-            gensegments.push_back(gensegment);
-        }
+        std::vector<std::string> gensegments = Helper::Segment(general, ' ');
 
         // iterate over segments, make sure the 14 categories appear in the right order ...
         std::string options[] = {"V", "koor", "str", "hout", "kop", "bla", "perc", "toets", "tok", "elek", "beg", "varia", "instr", "orkest"};
@@ -146,11 +118,13 @@ void Field382::update(char marcsubfield, std::string data)
             throw MarcRecordException("ERROR Field 382: wrong category or ordering: " + general);
         */
 
+
 // this version does not enforce order
         //int nrofsegments = gensegments.size();
         unsigned int recognized = 0;
         for (std::vector<std::string>::iterator jt = gensegments.begin(); jt!=gensegments.end(); ++jt)
         {
+            Helper::Trim((*jt));        // trim whitespace of this segment
             for (int k=0; k<optioncount; ++k)
             {
                 unsigned int len = options[k].size();
@@ -176,7 +150,7 @@ void Field382::update(char marcsubfield, std::string data)
             if (details.empty() || details == "")
                 throw MarcRecordException("ERROR Field 382: no detailed instrumentation description: " + instrumentation);
             // remove beginning and trailing whitespaces
-            details = details.erase(details.find_last_not_of(" \n\r\t")+1).substr(details.find_first_not_of(" \n\r\t"));
+            Helper::Trim(details);
         }
         else
         {

@@ -74,8 +74,8 @@ void MarcRecord::buildup()
     // if the line is empty, do not even build a record
     try{
         //trim front and trailing whitespace
-        std::string checkempty = csvline.erase(csvline.find_last_not_of(" \n\r\t")+1).substr(csvline.find_first_not_of(" \n\r\t"));
-        if (checkempty.empty())
+        Helper::Trim(csvline);
+        if (csvline.empty())
             return;
     } catch (exception e)
     {
@@ -219,7 +219,7 @@ void MarcRecord::ProcessParts()
     if (getField(001) && !(getField(001)->isempty()))
     {
         std::string recordnr = getField(1)->Getsubfield('a');
-        std::transform(recordnr.begin(), recordnr.end(), recordnr.begin(), ::toupper);
+        Helper::MakeUppercase(recordnr);
         std::size_t found = recordnr.find("ONDERDEEL");
         if (found == recordnr.npos)
             return;

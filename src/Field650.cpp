@@ -22,13 +22,7 @@ void Field650::update(char marcsubfield, std::string data)
     Setindicator2('4');             // no thesaurus is used
 
     //First, segment by ';'
-    std::vector<std::string> datasegments;
-    std::stringstream datastream(data);
-    std::string segment;
-    while(std::getline(datastream, segment, ';'))
-    {
-        datasegments.push_back(segment);
-    }
+    std::vector<std::string> datasegments = Helper::Segment(data, ';');
 
     //TODO: this is not repeatable. Several 650 fields necessary...
     // a subdivision can be used in different subfields:
@@ -44,8 +38,8 @@ void Field650::update(char marcsubfield, std::string data)
     {
         // trim whitespace
         try{
-            std::string curstring = (*it).erase((*it).find_last_not_of(" \n\r\t")+1).substr((*it).find_first_not_of(" \n\r\t"));
-            MarcField::update(marcsubfield, curstring);
+            Helper::Trim((*it));
+            MarcField::update(marcsubfield, (*it));
         } catch (exception& e)
         {
             throw MarcRecordException("ERROR Field 650 : empty keyword");

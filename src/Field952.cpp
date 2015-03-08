@@ -18,7 +18,7 @@ void Field952::update(char marcsubfield, std::string data)
     if (data.empty() || data == "")
         return;
 
-    std::transform(data.begin(), data.end(), data.begin(), ::toupper);
+    Helper::MakeUppercase(data);
     std::size_t found;
 
     if (marcsubfield == '1')        // LOST status

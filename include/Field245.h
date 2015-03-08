@@ -2,6 +2,7 @@
 #define FIELD245_H
 
 #include <MarcField.h>
+#include <Helper.h>
 
 #include <string>
 #include <algorithm>

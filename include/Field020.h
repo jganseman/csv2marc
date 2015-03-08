@@ -8,6 +8,8 @@
 #include <algorithm>
 #include <vector>
 
+#include <Helper.h>
+
 
 class Field020 : public MarcField
 {

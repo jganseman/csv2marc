@@ -72,13 +72,7 @@ void Field700::update(char marcsubfield, std::string data)
     Setindicator2(DEFAULT_INDIC);
 
     //First, segment by ';'
-    std::vector<std::string> alldatasegments;
-    std::stringstream alldatastream(data);
-    std::string allsegment;
-    while(std::getline(alldatastream, allsegment, ';'))
-    {
-        alldatasegments.push_back(allsegment);
-    }
+    std::vector<std::string> alldatasegments = Helper::Segment(data, ';');
 
     // iterate over all segments starting from the second (first one is in Field100)
 
@@ -97,13 +91,7 @@ void Field700::update(char marcsubfield, std::string data)
         // such that it remains preserved when printing multiple lines of Field 700
 
         // the relator (function of this author) is anything in between <>
-        std::vector<std::string> datasegments;
-        std::stringstream datastream(fullstring);
-        std::string segment;
-        while(std::getline(datastream, segment, '<'))
-        {
-            datasegments.push_back(segment);
-        }
+        std::vector<std::string> datasegments = Helper::Segment(fullstring, '<');
 
         // this part: copied from Field100
         if (datasegments.size() > 1) // item has relatorial remarks
@@ -114,28 +102,23 @@ void Field700::update(char marcsubfield, std::string data)
                 try{
                     tempstring = (*it2).substr(0,(*it2).find_first_of('>'));
                     //first remove trailing and beginning whitespace; for next segmentation to work properly
-                    tempstring = tempstring.erase(tempstring.find_last_not_of(" \n\r\t")+1).substr(tempstring.find_first_not_of(" \n\r\t"));
+                    Helper::Trim(tempstring);
                 } catch(exception& e)
                 {
                     throw MarcRecordException("ERROR Field 700: empty author function.");
                 }
 
                 // note: sometimes added in wrong way, with 2 terms in one set of brackets. thus -> segment further
-                std::vector<std::string> relatorsegments;
-                std::stringstream relatorstream(tempstring);
-                while(std::getline(relatorstream, segment, ' '))        // will still err if no spacing used
-                {
-                    relatorsegments.push_back(segment);
-                }
+                std::vector<std::string> relatorsegments = Helper::Segment(tempstring, ' ' ); // will still err if no spacing used
 
                 for (std::vector<std::string>::iterator it3 = relatorsegments.begin(); it3 != relatorsegments.end(); ++it3)
                 {
                     //get string
                         std::string tempstring = (*it3);
                         //trim any beginning or ending spaces
-                        tempstring = tempstring.erase(tempstring.find_last_not_of(" \n\r\t")+1).substr(tempstring.find_first_not_of(" \n\r\t"));
+                        Helper::Trim(tempstring);
                         //forcibly make this all lowercase
-                        std::transform(tempstring.begin(), tempstring.end(), tempstring.begin(), ::tolower);
+                        Helper::MakeLowercase(tempstring);
                         //update
                         relatorFixer(tempstring);
                         // check that the list conforms to the given list of names
@@ -152,37 +135,9 @@ void Field700::update(char marcsubfield, std::string data)
         }
 
 
-        /*
-        if (datasegments.size() > 1) // item has relatorial remarks
-        {
-            for (std::vector<std::string>::iterator it2 = datasegments.begin()+1; it2 != datasegments.end(); ++it2)
-            {
-                // TODO parse in more detailed way
-                //get string
-                try {
-                    std::string tempstring = (*it2).substr(0,(*it2).find_first_of('>'));
-                    //trim any beginning or ending spaces
-                    tempstring = tempstring.erase(tempstring.find_last_not_of(" \n\r\t")+1).substr(tempstring.find_first_not_of(" \n\r\t"));
-                    //MarcField::update('e', tempstring);
-                    relator = relator + "$e" + tempstring;
-                } catch (exception& e)
-                {
-                    throw MarcRecordException("ERROR Updating Field 700: empty author function.");
-                }
-
-            }
-            fullstring = datasegments[0];       // discard all <> info from this string
-        }
-        */
-
         // the dates are anything in between ()
         datasegments.clear();
-        datastream.clear();
-        datastream.str(fullstring);             // set new contents
-        while(std::getline(datastream, segment, '('))
-        {
-            datasegments.push_back(segment);
-        }
+        datasegments = Helper::Segment(fullstring, '(');
 
         if (datasegments.size() > 1) // item has dates
         {
@@ -192,9 +147,7 @@ void Field700::update(char marcsubfield, std::string data)
                 try{
                     std::string tempstring = (*it2).substr(0,(*it2).find_first_of(')'));
                     //trim any whitespaces out
-                    tempstring.erase(remove_if(tempstring.begin(), tempstring.end(), ::isspace), tempstring.end());
-                    //trim any beginning or ending spaces
-                    //tempstring = tempstring.erase(tempstring.find_last_not_of(" \n\r\t")+1).substr(tempstring.find_first_not_of(" \n\r\t"));
+                    Helper::EraseWhitespace(tempstring);
                     //MarcField::update('d', tempstring);
                     dates = dates + "$d" + tempstring;
                 } catch (exception& e)
@@ -209,7 +162,7 @@ void Field700::update(char marcsubfield, std::string data)
 
         try{
             //trim front and trailing whitespace
-            fullstring = fullstring.erase(fullstring.find_last_not_of(" \n\r\t")+1).substr(fullstring.find_first_not_of(" \n\r\t"));
+            Helper::Trim(fullstring);
         } catch (exception e)
         {
             throw MarcRecordException("ERROR Field 700: empty value among authors.");

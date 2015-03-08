@@ -3,6 +3,7 @@
 
 #include <MarcField.h>
 #include <MarcRecordException.h>
+#include <Helper.h>
 
 #include <string>
 #include <algorithm>

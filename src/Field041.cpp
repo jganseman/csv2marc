@@ -20,17 +20,10 @@ void Field041::update(char marcsubfield, std::string data)
     // This field contains the languages. Parse and translate to ISO language codes
 
     // first make all lowercase for ease of parsing
-    std::transform(data.begin(), data.end(), data.begin(), ::tolower);
+    Helper::MakeLowercase(data);
 
     //First, segment by ';'
-    std::vector<std::string> datasegments;
-    std::stringstream datastream(data);
-    std::string segment;
-    while(std::getline(datastream, segment, ';'))
-    {
-        datasegments.push_back(segment);
-        //cout << "Found language segment: " << segment << endl;
-    }
+    std::vector<std::string> datasegments = Helper::Segment(data, ';');
 
     //cout << "nrsegments: " << datasegments.size() << endl;
 
@@ -41,11 +34,9 @@ void Field041::update(char marcsubfield, std::string data)
         for (std::vector<std::string>::iterator it = datasegments.begin(); it != datasegments.end(); ++it)
         {
             // trim beginning and trailing whitespace
-            (*it) = (*it).erase((*it).find_last_not_of(" \n\r\t")+1).substr((*it).find_first_not_of(" \n\r\t"));
-            // if it doesn't start with "t=", erase
-            if ((*it).find("l=") == std::string::npos)
-                (*it).clear();
-            else
+            Helper::Trim((*it));
+            // if it doesn't start with "l=", erase
+            if ((*it).find("l=") != std::string::npos)
             {
                 reparse += (*it);       // add to a string of all languages here
                 reparse += " ";         // separated by spaces
@@ -54,10 +45,7 @@ void Field041::update(char marcsubfield, std::string data)
 
         // now make a new segmentation of this string, based on spaces
         datasegments.clear();
-        while(std::getline(datastream, segment, ' '))
-        {
-            datasegments.push_back(segment);
-        }
+        datasegments = Helper::Segment(reparse, ' ');
 
         marcsubfield = 'a'; // reset marcsubfield to std code for languages
     }
@@ -168,10 +156,26 @@ void Field041::update(char marcsubfield, std::string data)
             MarcField::update(a, "slv");
         else if ((*it).find("turks") != std::string::npos)
             MarcField::update(a, "tur");
+        else if ((*it).find("japans") != std::string::npos)
+            MarcField::update(a, "jpn");
+        else if ((*it).find("lunda") != std::string::npos)
+            MarcField::update(a, "lun");
+        else if ((*it).find("azeri") != std::string::npos)
+            MarcField::update(a, "aze");
+        else if ((*it).find("maleis") != std::string::npos)
+            MarcField::update(a, "may");
+        else if ((*it).find("galici") != std::string::npos)
+            MarcField::update(a, "glg");
+        else if ((*it).find("fries") != std::string::npos)
+            MarcField::update(a, "fry");
+        else if ((*it).find("iers") != std::string::npos)
+            MarcField::update(a, "gle");
+//        else if ((*it).find("romaans") != std::string::npos)
+//            MarcField::update(a, "roa");
         else
         {
             // if string does not start with l= , it is not a language and should be skipped. Otherwise, put undefined
-            (*it) = (*it).erase((*it).find_last_not_of(" \n\r\t")+1).substr((*it).find_first_not_of(" \n\r\t"));
+            Helper::Trim((*it));
             if ((*it)[0] == 'l')
             {
                 MarcField::update(a, "und");
