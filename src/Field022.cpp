@@ -42,11 +42,15 @@ void Field022::update(char marcsubfield, std::string data)
              }
              // now manually put a '-' in the middle.
              cleaneddata.insert(4, "-");
-             MarcField::update(marcsubfield, cleaneddata.substr(0,9));      // only insert first 9 characters
+                   // only insert first 9 characters
 
              if (! (cleaneddata.length() == 9))        // throw error when too many characters are present
              {
-                 throw MarcRecordException("WARNING Field 022: ISSN too short/long: " + cleaneddata);
+                 MarcField::update('y', cleaneddata);
+                 throw MarcRecordException("WARNING Field 022: invalid ISSN, put in subfield $y: " + cleaneddata);
+             } else
+             {
+                 MarcField::update(marcsubfield, cleaneddata);
              }
 
          }
