@@ -23,13 +23,13 @@ void Field383::update(char marcsubfield, std::string data)
     // and a truckload of errors. Get those out first
 
     if (data.find("<") != data.npos)
-        throw MarcRecordException("ERROR field 383 : instrumentation in opusnr?");
+        throw MarcRecordException("ERROR field 383 : instrumentation in opusnr? : " + data);
 
     if (data.find("gr-t") != data.npos)
-        throw MarcRecordException("ERROR field 383 : tonality in opusnr?");
+        throw MarcRecordException("ERROR field 383 : tonality in opusnr? : " + data);
 
     if (data.find("kl-t") != data.npos)
-        throw MarcRecordException("ERROR field 383 : tonality in opusnr?");
+        throw MarcRecordException("ERROR field 383 : tonality in opusnr? : " + data);
 
     // now, assume we can segment on ';' . However, somtimes it's '=' .
     // -> first, replace all equal signs by ;
@@ -83,17 +83,17 @@ void Field383::update(char marcsubfield, std::string data)
 
         // skip everything that is not an opus nr
         if ((*it).find("boek") != string::npos)
-            throw MarcRecordException("WARNING field 383 : volume info in opusnr");
+            throw MarcRecordException("WARNING field 383 : volume info in opusnr : " + (*it));
         if ((*it).find("Boek") != string::npos)
-            throw MarcRecordException("WARNING field 383 : volume info in opusnr");
+            throw MarcRecordException("WARNING field 383 : volume info in opusnr : " + (*it));
         if ((*it).find("book") != string::npos)
-            throw MarcRecordException("WARNING field 383 : volume info in opusnr");
+            throw MarcRecordException("WARNING field 383 : volume info in opusnr : " + (*it));
         if ((*it).find("Book") != string::npos)
-            throw MarcRecordException("WARNING field 383 : volume info in opusnr");
+            throw MarcRecordException("WARNING field 383 : volume info in opusnr : " + (*it));
         if ((*it).find("livre") != string::npos)
-            throw MarcRecordException("WARNING field 383 : volume info in opusnr");
+            throw MarcRecordException("WARNING field 383 : volume info in opusnr : " + (*it));
         if ((*it).find("Livre") != string::npos)
-            throw MarcRecordException("WARNING field 383 : volume info in opusnr");
+            throw MarcRecordException("WARNING field 383 : volume info in opusnr : " + (*it));
 
         // else, it is probably a thematic catalogue nr. Then, first comes the catalog name, then the nr
         // problem: segmentation. No good way, but the following is probably safest:
@@ -102,7 +102,7 @@ void Field383::update(char marcsubfield, std::string data)
         Helper::ReplaceAll((*it), "-", " ");
         std::vector<std::string> themanrs = Helper::Segment((*it), ' ');
         if (themanrs.size() <= 1)
-            throw MarcRecordException("ERROR field 383: thematic catalog unspecified.");
+            throw MarcRecordException("ERROR field 383: thematic catalog unspecified: " + (*it));
 
         std::string catalogname = themanrs[0];
         std::string catalognr = (*it).substr((*it).find_first_of(" "));
@@ -130,21 +130,19 @@ void Field383::update(char marcsubfield, std::string data)
 
         // error on Nr-s
         if (catalogname.find("nr") != string::npos)
-            throw MarcRecordException("WARNING field 383: not an opus?");
+            throw MarcRecordException("WARNING field 383: not an opus? : " + (*it));
         if (catalogname.find("Nr") != string::npos)
-            throw MarcRecordException("WARNING field 383: not an opus?");
+            throw MarcRecordException("WARNING field 383: not an opus? : " + (*it));
         if (catalogname.find("n°") != string::npos)
-            throw MarcRecordException("WARNING field 383: not an opus?");
+            throw MarcRecordException("WARNING field 383: not an opus? : " + (*it));
         if (catalogname.find("N°") != string::npos)
-            throw MarcRecordException("WARNING field 383: not an opus?");
+            throw MarcRecordException("WARNING field 383: not an opus? : " + (*it));
 
         //update catalogname, only if no catalog field already present
         if (Getsubfield('d') == "")
             MarcField::update('d', catalogname);
 
     }
-
-    MarcField::update(marcsubfield, data);
 
     // opus number should be in $b, thematic index numbers (like KV, BWV etc) should be in $c
 
