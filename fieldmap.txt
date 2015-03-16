@@ -56,7 +56,7 @@
 #26	#254	#a
 14	254	a
 #editor
-15	260	a
+15	260	L       #Legacy: requires additional parsing
 16	260	a
 17	260	b
 18	260	c

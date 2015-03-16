@@ -2,7 +2,10 @@
 #define FIELD383_H
 
 #include <MarcField.h>
+#include <MarcRecordException.h>
+#include <Helper.h>
 
+#include <cstring>
 
 class Field383 : public MarcField
 {

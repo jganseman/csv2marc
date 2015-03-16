@@ -98,7 +98,7 @@ if ( argc != 3 ) /* 2 arguments: filename to process and resulting filename  */
             }
 
             // Only when the output is an actual error, and not a warning, delete and continue
-            if (what.find("ERROR"))
+            if (what.find("ERROR") != what.npos)
             {
                 delete thisrecord;
                 continue;           // continue processing

@@ -79,18 +79,17 @@ void MarcRecord::buildup()
             return;
     } catch (exception e)
     {
-        return;
-        //throw MarcRecordException("ERROR Updating Field 700: empty value among authors.");
+        return;         // error encountered in basic data in this line / empty
     }
 
+    std::string errorlist = "";     // accumulate all errors about this record here
 
     // for every CSV field, create the corresponding Marc field
-
-    for(std::vector<std::string>::iterator csvit = csvfields.begin(); csvit != csvfields.end(); ++csvit)        // iterate over all fields
+    for(std::vector<std::string>::iterator csvit = csvfields.begin(); csvit != csvfields.end(); ++csvit)        // iterate over all CSV fields
     {
-        int csvcol = std::distance(csvfields.begin(), csvit);
+        int csvcol = std::distance(csvfields.begin(), csvit);       // calculate the column number
 
-        for(std::multimap<int, t_marcfield >::iterator mapit = fieldmap.lower_bound(csvcol); mapit != fieldmap.upper_bound(csvcol); ++mapit)        // iterate over all fields
+        for(std::multimap<int, t_marcfield >::iterator mapit = fieldmap.lower_bound(csvcol); mapit != fieldmap.upper_bound(csvcol); ++mapit)        // iterate over all associated MARC fields
         {
             int marcnr = (*mapit).second.first;
             char marcsubfield = (*mapit).second.second;
@@ -101,46 +100,77 @@ void MarcRecord::buildup()
 
             // if field already exists but some subfield needs adding, then find it
             // Now it constructs a dummy object for the search. TODO: with unique_ptr in C++11 this can be remedied
-            MarcField* dummy = new MarcField(marcnr);
-            t_fieldsetIterator fieldit = marcfields.find(dummy);
-            delete dummy;
+            MarcField* thisfield = getField(marcnr);
 
-                    // special case of notes: many field maps to general note 500. needs duplication
-            if ((fieldit != marcfields.end()) && ((*fieldit)->Getfieldnr() != 500))       // a field with this number already exists in this record. update.
-            {
-                // Get field out , update, put back in. Set elements cannot be modified directly (map is kept sorted, would risk to undo sorting)
-                MarcField* oldfield = *fieldit;              // get the field out (this makes a copy)
-                oldfield->update(marcsubfield, (*csvit));          // update with new data
-                marcfields.erase(fieldit);                  // erase in map
-                marcfields.insert(oldfield);                // and re-add
-            }
-            else                     // a field with this number does not exist yet in this record. create and update.
-            {
-                MarcField* newfield = FieldFactory::getFactory()->getMarcField(marcnr);
-                newfield->update(marcsubfield, (*csvit));
-                marcfields.insert(newfield);
-            }
+            try {
 
+                if (thisfield != 0)       // a field with this number already exists in this record. update.
+                {
+                    thisfield->update(marcsubfield, (*csvit));          // update with new data
+                    //marcfields.erase(thisfield);                  // erase in map
+                    //marcfields.insert(thisfield);                // and re-add
+                }
+                else                     // a field with this number does not exist yet in this record. create and update.
+                {
+                    MarcField* newfield = FieldFactory::getFactory()->getMarcField(marcnr);
+                    // first insert the field, so at least we have the data
+                    // if any exceptions contain the word ERROR, it will later be deleted anyway
+                    marcfields.insert(newfield);
+                    newfield->update(marcsubfield, (*csvit));       // then build the subfield
+                }
+
+            } catch(exception& e) {
+                if (!errorlist.empty())         // add newline when necessary
+                    errorlist += "\r\n";
+                errorlist += e.what();          // add any error to the errorlist of this record
+            }
         }
     }
 
     // skip records with status X (crossref) and status C (copies)
-    MarcField* dummy = new MarcField(583);
-    t_fieldsetIterator fieldit = marcfields.find(dummy);
-    delete dummy;
-    if (fieldit != marcfields.end())
+    MarcField* f583 = getField(583);
+    if (f583)
     {
-        if ((*fieldit)->Getsubfield('a') == "C" || (*fieldit)->Getsubfield('a') == "X")
+        if (f583->Getsubfield('a') == "C" || f583->Getsubfield('a') == "X")
             return;
     }
 
     // Now, do all the postprocessing that's required to finetune this record
+    try {
+        AddFixedValues();
+    } catch(exception& e) {
+        errorlist += e.what();          // add any error to the errorlist of this record
+    }
 
-    AddFixedValues();
-    CheckTitle();
-    ProcessNonRepeatableFields();
-    ProcessParts();
-    AddKohaData();
+    try {
+        CheckTitle();
+    } catch(exception& e) {
+        errorlist += e.what();          // add any error to the errorlist of this record
+    }
+
+    try {
+        ProcessNonRepeatableFields();
+    } catch(exception& e) {
+        errorlist += e.what();          // add any error to the errorlist of this record
+    }
+
+    try {
+        ProcessParts();
+    } catch(exception& e) {
+        errorlist += e.what();          // add any error to the errorlist of this record
+    }
+
+    try {
+        AddKohaData();
+    } catch(exception& e) {
+        errorlist += e.what();          // add any error to the errorlist of this record
+    }
+
+    // throw out the error list
+    if (errorlist != "")
+    {
+        throw MarcRecordException(errorlist);
+    }
 
 }
 
@@ -167,12 +197,7 @@ void MarcRecord::CheckTitle()
 {
     //According to the MARC21 standard, a title field must be present. If not, add [untitled].
     MarcField* myfield = getField(245);
-    /*
-    new MarcField(245);
-    t_fieldsetIterator fieldit = marcfields.find(dummy);
-    delete dummy;
-    if (fieldit == marcfields.end())
-    */
+
     if (myfield == 0)
     {
         MarcField* newfield = FieldFactory::getFactory()->getMarcField(245);
@@ -216,9 +241,10 @@ void MarcRecord::ProcessParts()
     // when the place number contains ONDERDEEL,
         // - change bibliography level (leader) to "a" (part of monograph)
         // - add a field 773$w linking to the mother record.
-    if (getField(001) && !(getField(001)->isempty()))
+    MarcField* f001 = getField(001);
+    if (f001 && !(f001->isempty()))
     {
-        std::string recordnr = getField(1)->Getsubfield('a');
+        std::string recordnr = f001->Getsubfield('a');
         Helper::MakeUppercase(recordnr);
         std::size_t found = recordnr.find("ONDERDEEL");
         if (found == recordnr.npos)
@@ -232,7 +258,7 @@ void MarcRecord::ProcessParts()
             std::string hostcode = "(";
             hostcode += ORGCODE;
             hostcode += ")";
-            std::string location = getField(1)->Getsubfield('a');
+            std::string location = f001->Getsubfield('a');
             location = location.substr(0, found);
 
             // add field 773: Host entry
@@ -348,22 +374,20 @@ MarcField* MarcRecord::getField(int nr) const
 
 bool MarcRecord::isCRB() const
 {
-    for(t_fieldsetIterator it = marcfields.begin(); it!=marcfields.end(); ++it)
+    MarcField* f590 = getField(590);
+    if (f590)
     {
-        if ((*it)->Getfieldnr() == 590)       // this is where the author is stored
+        std::string author = f590->Getsubfield('a');
+        if  ( (author == "mv") || (author == "im") || (author == "mcl") || (author == "sdp") || (author == "lm")
+            || (author == "ah") || (author == "ar") || (author == "bkb") || (author == "cc") || (author == "cf")
+            || (author == "df") || (author == "dl") || (author == "ed") || (author == "fb") || (author == "hl")
+            || (author == "id") || (author == "ls") || (author == "mdd") || (author == "mt")
+            || (author == "rs") || (author == "th") || (author == "vdf") )
         {
-            std::string author = (*it)->Getsubfield('a');
-            if  ( (author == "mv") || (author == "im") || (author == "mcl") || (author == "sdp") || (author == "lm")
-                || (author == "ah") || (author == "ar") || (author == "bkb") || (author == "cc") || (author == "cf")
-                || (author == "df") || (author == "dl") || (author == "ed") || (author == "fb") || (author == "hl")
-                || (author == "id") || (author == "ls") || (author == "mdd") || (author == "mt")
-                || (author == "rs") || (author == "th") || (author == "vdf") )
-            {
-                return true;
-            } else
-            {
-                return false;
-            }
+            return true;
+        } else
+        {
+            return false;
         }
     }
     return false;

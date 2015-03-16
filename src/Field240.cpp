@@ -48,6 +48,13 @@ void Field240::update(char marcsubfield, std::string data)
             }
         }
 
+        // Throw warning in case of too many comma's.
+        /*
+        size_t n = std::count(data.begin(), data.end(), ',');
+        if (n > 2)
+            throw MarcRecordException("WARNING field 240: too many keywords in uniform title.");
+        */
+        // Also, list of keywords should be limited but that's for later
     }
 
 

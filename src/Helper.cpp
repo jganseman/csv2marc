@@ -50,4 +50,10 @@ void Helper::Remove(std::string& data, std::string toBeRemoved)
         data.replace(data.find(toBeRemoved), toBeRemoved.length(), "");
 }
 
+void Helper::ReplaceAll(std::string& data, std::string toFind, std::string toSubstitute)
+{
+    while (data.find(toFind) != std::string::npos)
+        data.replace(data.find(toFind), toFind.length(), toSubstitute);
+}
+
 
