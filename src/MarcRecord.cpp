@@ -264,7 +264,7 @@ void MarcRecord::ProcessParts()
             // add field 773: Host entry
             MarcField* newfield = FieldFactory::getFactory()->getMarcField(773);
             newfield->Setindicator1('0');
-            newfield->Setindicator2('#');
+            newfield->Setindicator2(DEFAULT_INDIC);
             newfield->update('w', hostcode+location );
             marcfields.insert(newfield);
         }

@@ -13,6 +13,9 @@ Field384::~Field384()
 
 void Field384::update(char marcsubfield, std::string data)
 {
+
+
+
     //this field contains the key of the work. Transcode to English here
     if (data.empty() || data == "")
         return;
@@ -122,4 +125,6 @@ void Field384::update(char marcsubfield, std::string data)
         if (modal) throw MarcRecordException("WARNING Field 384: Modal Key. To define later in more detail : " + (*it));
         */
     }
+
+
 }

@@ -28,7 +28,7 @@ typedef t_fieldset::const_iterator t_fieldsetIterator;
 static const int UniqueFields[] = {20, 22, 384, 500};
 static const char UniqueSubfields[] = {'a', 'a', 'a', 'a'};
 static const int NrOfUniqueFields = 4;
-
+//TODO add 260 here? not strictly unique, but for clarity it might be better to have it repeatable
 
 class MarcRecord
 {
