@@ -183,7 +183,7 @@ void ProcessConstituents(std::set<std::string>& callnumbers, std::multimap<std::
                 // add field 774: Host entry
                 MarcField* newfield = FieldFactory::getFactory()->getMarcField(774);
                 newfield->Setindicator1('0');
-                newfield->Setindicator2('#');
+                newfield->Setindicator2(DEFAULT_INDIC);
                 newfield->update('w', hostcode+(*it) );
                 mother->addField(newfield);
             }
