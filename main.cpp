@@ -75,6 +75,13 @@ if ( argc != 3 ) /* 2 arguments: filename to process and resulting filename  */
         {
             std::string what(e.what());
 
+            //coarse escaping routine: do not print errors belonging to certain field
+            /*
+            if ( (what.find("382") != what.npos) || (what.find("383") != what.npos) || (what.find("384") != what.npos) ||
+                (what.find("020") != what.npos) || (what.find("700") != what.npos) || (what.find("245") != what.npos) )
+                continue;
+                */
+
             //cout << "!!! ERROR: while processing csv line nr " << j << endl;
             if (thisrecord->getField(001) && !(thisrecord->getField(001)->isempty()))
             {

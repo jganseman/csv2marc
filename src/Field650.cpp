@@ -48,6 +48,7 @@ void Field650::update(char marcsubfield, std::string data)
 
 }
 
+/*
 
 // separate printing routine to make sure it prints all subfields a on different lines
 std::string const Field650::print() const
@@ -78,3 +79,5 @@ std::string const Field650::print() const
     output << endl;
     return output.str();
 }
+
+*/

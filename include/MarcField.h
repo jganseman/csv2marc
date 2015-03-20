@@ -64,8 +64,11 @@ class MarcField
 
 
 // MarcFieldPtr Comparator Functor. Define this as parameter in template definition
+
+
 struct MarcFieldPtrComparator
 {
+
   bool operator()(MarcField* f, MarcField* s) const
   {
     return f->Getfieldnr() < s->Getfieldnr();
@@ -77,5 +80,7 @@ struct MarcFieldPtrComparator
   }
 
 };
+
+
 
 #endif // MARCFIELD_H

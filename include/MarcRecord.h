@@ -19,15 +19,15 @@ using namespace std;
 typedef std::pair<int, char> t_marcfield;
 typedef std::pair<int, t_marcfield> t_fieldmapelement;
 
-typedef std::set<MarcField*, MarcFieldPtrComparator> t_fieldset;
+typedef std::multiset<MarcField*, MarcFieldPtrComparator> t_fieldset;
 typedef t_fieldset::const_iterator t_fieldsetIterator;
 
 #define ORGCODE "BE-BxLRC"
 
 // define a list of unique subfields. These can only contain one nr, any multiples need another field
-static const int UniqueFields[] = {20, 22, 384, 500};
-static const char UniqueSubfields[] = {'a', 'a', 'a', 'a'};
-static const int NrOfUniqueFields = 4;
+static const int UniqueFields[] = {20, 22, 384, 500, 650};
+static const char UniqueSubfields[] = {'a', 'a', 'a', 'a', 'a'};
+static const int NrOfUniqueFields = 5;
 //TODO add 260 here? not strictly unique, but for clarity it might be better to have it repeatable
 
 class MarcRecord

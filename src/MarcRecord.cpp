@@ -222,8 +222,8 @@ void MarcRecord::ProcessNonRepeatableFields()
     // finally, process fields that have been marked as unique -> decouple them into separate fields
     for (int i=0; i<NrOfUniqueFields; ++i)
     {
-        int curfield = UniqueFields[2];
-        char cursubfield = UniqueSubfields[2];
+        int curfield = UniqueFields[i];
+        char cursubfield = UniqueSubfields[i];
         MarcField* badfield = getField(curfield);
         vector< pair < char, string > > extractedFields = badfield->extractDoubleSubfields(cursubfield);
 
