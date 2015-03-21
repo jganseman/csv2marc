@@ -18,7 +18,6 @@ class Field020 : public MarcField
         virtual ~Field020();
 
         virtual void update(char marcsubfield, std::string data);
-        virtual std::string const print() const;
     protected:
     private:
 };

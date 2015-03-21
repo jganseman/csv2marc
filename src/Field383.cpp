@@ -102,7 +102,7 @@ void Field383::update(char marcsubfield, std::string data)
         Helper::ReplaceAll((*it), "-", " ");
         std::vector<std::string> themanrs = Helper::Segment((*it), ' ');
         if (themanrs.size() <= 1)
-            throw MarcRecordException("ERROR field 383: thematic catalog unspecified: " + (*it));
+            throw MarcRecordException("ERROR field 383: unspecified catalogname (no dash/space?): " + (*it));
 
         std::string catalogname = themanrs[0];
         std::string catalognr = (*it).substr((*it).find_first_of(" "));

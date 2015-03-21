@@ -53,7 +53,7 @@ if ( argc != 3 ) /* 2 arguments: filename to process and resulting filename  */
     {
         j++;
 
-        if (j%5000 == 0)
+        if (j%1000 == 0)
             cout << "Processed "  << j << " records" << endl;
 
         if (line.empty() || line == "")

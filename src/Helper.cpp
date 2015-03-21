@@ -14,21 +14,30 @@ Helper::~Helper()
 
 void Helper::MakeUppercase(std::string& data)
 {
+    if (data.empty())
+        return;
     std::transform(data.begin(), data.end(), data.begin(), ::toupper);
 }
 
 void Helper::MakeLowercase(std::string& data)
 {
+    if (data.empty())
+        return;
     std::transform(data.begin(), data.end(), data.begin(), ::tolower);
 }
 
 void Helper::EraseWhitespace(std::string& data)
 {
+    if (data.empty())
+        return;
     data.erase(remove_if(data.begin(), data.end(), ::isspace), data.end());
 }
 
 void Helper::Trim(std::string& data)
 {
+    if (data.empty())
+        return;
+
     data = data.erase(data.find_last_not_of(" \n\r\t")+1).substr(data.find_first_not_of(" \n\r\t"));
 }
 
@@ -46,12 +55,16 @@ std::vector<std::string> Helper::Segment(std::string& data, char delim)
 
 void Helper::Remove(std::string& data, std::string toBeRemoved)
 {
+    if (data.empty() || toBeRemoved.empty())
+        return;
     while (data.find(toBeRemoved) != std::string::npos)
         data.replace(data.find(toBeRemoved), toBeRemoved.length(), "");
 }
 
 void Helper::ReplaceAll(std::string& data, std::string toFind, std::string toSubstitute)
 {
+    if (data.empty() || toFind.empty())
+        return;
     while (data.find(toFind) != std::string::npos)
         data.replace(data.find(toFind), toFind.length(), toSubstitute);
 }

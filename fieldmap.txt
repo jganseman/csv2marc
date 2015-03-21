@@ -78,9 +78,9 @@
 #
 # Series information
 29	490	a
-31	490	x
+#31	#490	#x      #All ISSN info now recorded in field 022
 32	490	a
-34	490	x
+#34	#490	#x      #All ISSN info now recorded in field 022
 35	490	a
 36	490	a
 #

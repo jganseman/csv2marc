@@ -39,45 +39,12 @@ void Field650::update(char marcsubfield, std::string data)
         // trim whitespace
         try{
             Helper::Trim((*it));
-            MarcField::update(marcsubfield, (*it));
+            if (!((*it).empty() || (*it) == ""))
+                MarcField::update(marcsubfield, (*it));
         } catch (exception& e)
         {
-            throw MarcRecordException("ERROR Field 650 : empty keyword");
+            throw MarcRecordException("ERROR Field 650 : empty keyword or excess semicolon.");
         }
     }
-
 }
 
-/*
-
-// separate printing routine to make sure it prints all subfields a on different lines
-std::string const Field650::print() const
-{
-    // print one entire field. First the numbers, then the indicators
-    std::ostringstream output;
-    output << '=' << std::setfill ('0') << std::setw (3) << Getfieldnr() << "  ";
-
-    output << Getindicator1() << Getindicator2();
-
-    //add all subfields. subfield indicator is dollar sign
-    // subfields $a are not repeatable. start a new line for each new one
-
-    bool already_had_a = false;
-
-    for ( std::multimap<char, std::string>::const_iterator it = subfields.begin(); it != subfields.end(); ++it)
-    {
-        if ( ((*it).first == 'a') && already_had_a )       //start new line if not last $a field
-            output << endl << '=' << std::setfill ('0') << std::setw (3) << Getfieldnr() << "  " << Getindicator1() << Getindicator2();
-
-        if (!((*it).second.empty() || (*it).second == "" ))
-            output << "$" << (*it).first << (*it).second;
-
-        if ((*it).first == 'a')
-            already_had_a = true;
-    }
-
-    output << endl;
-    return output.str();
-}
-
-*/

@@ -38,7 +38,7 @@ std::string const MarcRecord::print() const
         // print all fields
         for(t_fieldsetIterator it = marcfields.begin(); it!=marcfields.end(); ++it)
         {
-            if (!(*it)->isempty())
+            if (!(*it)->isempty())      // there might have creeped empty fields in, created because of the fieldmap
                 output << (*it)->print();
         }
 
@@ -63,6 +63,8 @@ bool const& MarcRecord::hasfieldmap() const
 //build up the marc record from the initial string
 void MarcRecord::buildup()
 {
+    //cout << csvline << endl;
+
     // parse csvline. Its fields are tab-separated, each field needs separate processing
     std::stringstream csvlinestream(csvline);
     std::string segment;
@@ -89,6 +91,10 @@ void MarcRecord::buildup()
     {
         int csvcol = std::distance(csvfields.begin(), csvit);       // calculate the column number
 
+        // if this column does not contain data, move on
+        if ((*csvit).empty())
+            continue;
+
         for(std::multimap<int, t_marcfield >::iterator mapit = fieldmap.lower_bound(csvcol); mapit != fieldmap.upper_bound(csvcol); ++mapit)        // iterate over all associated MARC fields
         {
             int marcnr = (*mapit).second.first;
@@ -107,8 +113,6 @@ void MarcRecord::buildup()
                 if (thisfield != 0)       // a field with this number already exists in this record. update.
                 {
                     thisfield->update(marcsubfield, (*csvit));          // update with new data
-                    //marcfields.erase(thisfield);                  // erase in map
-                    //marcfields.insert(thisfield);                // and re-add
                 }
                 else                     // a field with this number does not exist yet in this record. create and update.
                 {
@@ -127,13 +131,10 @@ void MarcRecord::buildup()
         }
     }
 
-    // skip records with status X (crossref) and status C (copies)
-    MarcField* f583 = getField(583);
-    if (f583)
-    {
-        if (f583->Getsubfield('a') == "C" || f583->Getsubfield('a') == "X")
-            return;
-    }
+    // check validity of record
+    // ( skip records with status X (crossref) and status C (copies) )
+    if (!isvalid())
+        return;
 
     // Now, do all the postprocessing that's required to finetune this record
     try {
@@ -165,12 +166,12 @@ void MarcRecord::buildup()
     } catch(exception& e) {
         errorlist += e.what();          // add any error to the errorlist of this record
     }
-
     // throw out the error list
     if (errorlist != "")
     {
         throw MarcRecordException(errorlist);
     }
+    //cout << "End buildup" << endl;
 
 }
 
@@ -209,32 +210,37 @@ void MarcRecord::CheckTitle()
         myfield->update('a', "[untitled]");
         throw MarcRecordException("WARNING Field 245: No title present. Putting [untitled].");
     }
-    /*else {
-        if ((*fieldit)->Getfieldnr() != 245)
-            cout << "Found field 245 at field " << (*fieldit)->Getfieldnr() << endl;
-    }*/
-    // this was debug info
 }
 
 
 void MarcRecord::ProcessNonRepeatableFields()
 {
     // finally, process fields that have been marked as unique -> decouple them into separate fields
+    // The list of fields to which this applies has been defined in MarcRecord.h
     for (int i=0; i<NrOfUniqueFields; ++i)
     {
         int curfield = UniqueFields[i];
         char cursubfield = UniqueSubfields[i];
         MarcField* badfield = getField(curfield);
-        vector< pair < char, string > > extractedFields = badfield->extractDoubleSubfields(cursubfield);
+        if (badfield == 0)       // Do not process non-existing fields
+            continue;
 
+        vector< pair < char, string > > extractedFields = badfield->extractDoubleSubfields(cursubfield);
         for(unsigned int j = 0; j<extractedFields.size(); ++j )
         {
+            if (extractedFields[j].second == "")        // if no data: return
+                continue;
             MarcField* newfield = FieldFactory::getFactory()->getMarcField(curfield);
-            newfield->update(cursubfield, extractedFields[j].second );
-            marcfields.insert(newfield);
+                // NOTE: Parsing and reformatting already happened when data was added to the original field.
+                // Now just force-add, bypassing the reformatting routine in the derived classes: use base class
+                // This requires us to override the virtualization. Explicitly use the function from MarcField class:
+            newfield->MarcField::update(cursubfield, extractedFields[j].second );
+            marcfields.insert(newfield); // first insert, then update?
+            //if (curfield != 650) cout << "inserted new field " << newfield->Getfieldnr() << cursubfield << " with data " << newfield->Getsubfield(cursubfield) << endl;
         }
     }
 }
+
 
 void MarcRecord::ProcessParts()
 {
@@ -269,6 +275,10 @@ void MarcRecord::ProcessParts()
             marcfields.insert(newfield);
         }
     }
+    else
+    {
+        throw MarcRecordException("ERROR Field 001: no placenr present in field : " + this->print());
+    }
 }
 
 
@@ -276,8 +286,15 @@ void MarcRecord::AddKohaData()
 {
     //then, copy the new record number from field 001 into field 952 (KOHA specific)
     std::string recordnr = getField(1)->Getsubfield('a');
-    getField(952)->update('o', recordnr);        // shelf number
-    getField(952)->update('p', recordnr);        // barcode
+    if (getField(952))
+    {
+        getField(952)->update('o', recordnr);        // shelf number
+        getField(952)->update('p', recordnr);        // barcode
+    } else
+    {
+        throw MarcRecordException("ERROR field 952: no status or itemtype");
+    }
+
 }
 
 
@@ -307,7 +324,6 @@ void MarcRecord::loadfieldmap(std::string const& filename)
             }
             else // process pair (a,b)
             {
-
                 fieldmap.insert( t_fieldmapelement(a, t_marcfield(b,c)));
             }
         }
@@ -358,10 +374,18 @@ bool MarcRecord::isvalid() const
 
 MarcField* MarcRecord::getField(int nr) const
 {
+    for(t_fieldsetIterator it = marcfields.begin(); it!=marcfields.end(); ++it)
+    {
+        if ((*it)->Getfieldnr() == nr)
+            return (*it);
+    }
+    return 0;
+
+    /*
     MarcField* dummy = new MarcField(nr);
     t_fieldsetIterator fieldit = marcfields.find(dummy);
     delete dummy;
-    if (fieldit == marcfields.end())
+    if (fieldit == marcfields::end)
     {
         return 0;
     }
@@ -369,6 +393,7 @@ MarcField* MarcRecord::getField(int nr) const
     {
         return *fieldit;
     }
+    */
 }
 
 
