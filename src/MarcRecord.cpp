@@ -231,6 +231,8 @@ void MarcRecord::ProcessNonRepeatableFields()
             if (extractedFields[j].second == "")        // if no data: return
                 continue;
             MarcField* newfield = FieldFactory::getFactory()->getMarcField(curfield);
+            newfield->Setindicator1(badfield->Getindicator1());
+            newfield->Setindicator2(badfield->Getindicator2());
                 // NOTE: Parsing and reformatting already happened when data was added to the original field.
                 // Now just force-add, bypassing the reformatting routine in the derived classes: use base class
                 // This requires us to override the virtualization. Explicitly use the function from MarcField class:
