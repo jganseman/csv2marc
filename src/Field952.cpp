@@ -18,25 +18,27 @@ void Field952::update(char marcsubfield, std::string data)
     if (data.empty() || data == "")
         return;
 
-    Helper::MakeUppercase(data);
     std::size_t found;
 
     if (marcsubfield == '1')        // LOST status
     {
+        Helper::MakeUppercase(data);
         found = data.find("LOST");
         if (found != std::string::npos)             // item is lost
             MarcField::update(marcsubfield, "1");
     }
     else if (marcsubfield == '7')        // NOT FOR LOAN status
     {
+        Helper::MakeUppercase(data);
         found = data.find("*");
         if (found != std::string::npos)             // item is not for loan
             MarcField::update(marcsubfield, "1");
     }
     else if (marcsubfield == 'y')        // internal status
     {
-        std::string code = "MU";        // default: music
+        Helper::MakeUppercase(data);
 
+        std::string code = "MU";        // default: music
 
         found = data.find("VOORWERP");              // 3D objects
         if (found != std::string::npos) code="RE";
@@ -97,7 +99,7 @@ void Field952::update(char marcsubfield, std::string data)
     }
     else        // default: just copy the data in the subfield
     {
-        MarcField::update(marcsubfield, data);
+        MarcField::update(marcsubfield, data);      // make sure not-uppercase can be inserted
     }
 
 }

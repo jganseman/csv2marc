@@ -70,15 +70,17 @@ void Field384::update(char marcsubfield, std::string data)
         std::string tonality;
         bool flat = false;
         bool sharp = false;
-        bool modal = false;
+        //bool modal = false;
         bool major = true;          // default major
         bool minor = false;
 
         //first letter is supposed to be the key
+        /*
         if (!( ((*it)[0] == 'a') || ((*it)[0] == 'b') || ((*it)[0] == 'c') || ((*it)[0] == 'd') || ((*it)[0] == 'e') || ((*it)[0] == 'f') || ((*it)[0] == 'g') ))
         {
             throw MarcRecordException("ERROR Field 384: Unknown Tonality : " + (*it));
         }
+        */
         if ((*it)[1] == 'i')     //ais, bis, cis, dis ...
             sharp=true;
         else if (((*it)[1] == 'e') || ((*it)[1] == 's'))      // as, bes, ces, des, es...
@@ -92,10 +94,28 @@ void Field384::update(char marcsubfield, std::string data)
         if (found != std::string::npos)
             minor=true;
 
+        /*
         found = (*it).find("mod");
         if (found != std::string::npos)
             modal=true;
+        */
 
+        // put "hypo-" strings first, to avoid early match on their substrings
+        std::string modality = "";
+        if ((*it).find("atonaal") != std::string::npos) modality="Atonal";
+        else if ((*it).find("hypodorisch") != std::string::npos) modality="Hypodorian";
+        else if ((*it).find("dorisch") != std::string::npos) modality="Dorian";
+        else if ((*it).find("hypophrygisch") != std::string::npos) modality="Hypophrygian";
+        else if ((*it).find("phrygisch") != std::string::npos) modality="Phrygian";
+        else if ((*it).find("hypomixolydisch") != std::string::npos) modality="Hypomixolydian";
+        else if ((*it).find("mixolydisch") != std::string::npos) modality="Mixolydian";
+        else if ((*it).find("hypolydisch") != std::string::npos) modality="Hypolidian";
+        else if ((*it).find("lydisch") != std::string::npos) modality="Lydian";
+        else if ((*it).find("hypoaeolisch") != std::string::npos) modality="Hypoaeolian";
+        else if ((*it).find("aeolisch") != std::string::npos) modality="Aeolian";
+        else if ((*it).find("hypoionisch") != std::string::npos) modality="Hypoionian";
+        else if ((*it).find("ionisch") != std::string::npos) modality="Ionian";
+        else if ((*it).find("peregrin") != std::string::npos) modality="tonus peregrinus";
 
         // this builds the string according to regular text
 
@@ -105,7 +125,9 @@ void Field384::update(char marcsubfield, std::string data)
         if (sharp) tonality += "sharp ";
         if (major) tonality += "major";
         if (minor) tonality += "minor";
-        if (modal) tonality += "modal";
+        //if (modal) tonality += "modal";
+        if (!(modality.empty()))        // replace entire string by modality; without any key indicator
+            tonality=modality;
 
 
         // this builds the string according to the UNIMARC standard, which is more detailed
@@ -115,10 +137,26 @@ void Field384::update(char marcsubfield, std::string data)
         if (flat) tonality += "b";
         if (sharp) tonality += "x";
         if (minor) tonality += "m";
-        if (modal) tonality = "zz";         // define in more detail later: throw warning after update of this field
+        //if (modal) tonality = "zz";         // define in more detail later: throw warning after update of this field
+
+        if (modality == "atonal") tonality = "zz";
+        else if (modality == "dorian") tonality = "01";
+        else if (modality == "hypodorian") tonality = "02";
+        else if (modality == "phrygian") tonality = "03";
+        else if (modality == "hypophrygian") tonality = "04";
+        else if (modality == "lydian") tonality = "05";
+        else if (modality == "hypolydian") tonality = "06";
+        else if (modality == "mixolydian") tonality = "07";
+        else if (modality == "hypomixolydian") tonality = "08";
+        else if (modality == "aeolian") tonality = "09";
+        else if (modality == "hypoaeolian") tonality = "10";
+        else if (modality == "ionian") tonality = "11";
+        else if (modality == "hypoionian") tonality = "12";
+        else if (modality == "tonus peregrinus") tonality = "13";
+        */
 
         MarcField::update(marcsubfield, tonality);
-
+        /*
         if (modal) throw MarcRecordException("WARNING Field 384: Modal Key. To define later in more detail : " + (*it));
         */
     }
