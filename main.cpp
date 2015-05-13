@@ -182,16 +182,19 @@ void ProcessConstituents(std::set<std::string>& callnumbers, std::multimap<std::
             else    // mother record found. Add field 774 to mother record
             {
                 MarcRecord* mother = (*(allRecords.find(mothercallnr))).second;
-                            // prepare string for 773
+                    // prepare string for 773
+                    // note: organization code specifier not necessary in Koha
+                    /*
                 std::string hostcode = "(";
                 hostcode += ORGCODE;
                 hostcode += ")";
+                    */
 
                 // add field 774: Host entry
                 MarcField* newfield = FieldFactory::getFactory()->getMarcField(774);
                 newfield->Setindicator1('0');
                 newfield->Setindicator2(DEFAULT_INDIC);
-                newfield->update('w', hostcode+(*it) );
+                newfield->update('w', /*hostcode+*/(*it) );
                 mother->addField(newfield);
             }
         }

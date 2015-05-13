@@ -263,9 +263,12 @@ void MarcRecord::ProcessParts()
             (dynamic_cast<FieldLDR*>(getField(0)))->Setfixedstring(7, 'a');
 
             // prepare string for 773
+            // note: hostcode not necessary for Koha
+            /*
             std::string hostcode = "(";
             hostcode += ORGCODE;
             hostcode += ")";
+            */
             std::string location = f001->Getsubfield('a');
             location = location.substr(0, found);
 
@@ -273,7 +276,7 @@ void MarcRecord::ProcessParts()
             MarcField* newfield = FieldFactory::getFactory()->getMarcField(773);
             newfield->Setindicator1('0');
             newfield->Setindicator2(DEFAULT_INDIC);
-            newfield->update('w', hostcode+location );
+            newfield->update('w', /*hostcode+*/location );
             marcfields.insert(newfield);
         }
     }
