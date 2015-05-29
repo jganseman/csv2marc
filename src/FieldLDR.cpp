@@ -118,6 +118,11 @@ if (marcsubfield == 'm')
     {
         ok=true; fixedstring[6] = 'm';
     }
+    found = data.find("MICROVORM");             // projectables (dvd etc)
+    if (found != std::string::npos)
+    {
+        ok=true; fixedstring[6] = 'm';
+    }    
     found = data.find("AFBEELDING");            // image
     if (found != std::string::npos)
     {
@@ -127,11 +132,6 @@ if (marcsubfield == 'm')
     if (found != std::string::npos)
     {
         ok=true; fixedstring[6] = 'k';
-    }
-    found = data.find("MICROVORM");             // projectables (dvd etc)
-    if (found != std::string::npos)
-    {
-        ok=true; fixedstring[6] = 'g';
     }
     found = data.find("DVD");
     if (found != std::string::npos)
