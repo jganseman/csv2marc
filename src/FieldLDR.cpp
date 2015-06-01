@@ -46,11 +46,14 @@ void FieldLDR::update(char marcsubfield, std::string data)
     // usually this is called to set a date.
     /* fixed[5] : if it has a correction date, set to c (corrected)
     */
+    // removed because we will consider all records as new
+    /*
     if (atol(data.c_str()))
     {
         fixedstring[5] = 'c';
         return;     // nothing more to do with this input
     }
+    */
 
 
     /*
@@ -118,11 +121,11 @@ if (marcsubfield == 'm')
     {
         ok=true; fixedstring[6] = 'm';
     }
-    found = data.find("MICROVORM");             // projectables (dvd etc)
+    found = data.find("MICROVORM");
     if (found != std::string::npos)
     {
         ok=true; fixedstring[6] = 'm';
-    }    
+    }
     found = data.find("AFBEELDING");            // image
     if (found != std::string::npos)
     {
@@ -133,7 +136,7 @@ if (marcsubfield == 'm')
     {
         ok=true; fixedstring[6] = 'k';
     }
-    found = data.find("DVD");
+    found = data.find("DVD");                   // projectables (dvd etc)
     if (found != std::string::npos)
     {
         ok=true; fixedstring[6] = 'g';
@@ -215,7 +218,8 @@ if (marcsubfield == 'm')
 
     // for now only: if an ISSN is set, make it serial - see above
 
-    //TODO: if ONDERDEEL in inventory nr, set fixed[7] = a and input in 773$y the parent record
+    //if ONDERDEEL in inventory nr, set fixed[7] = a and input in 773$y the parent record
+    //  --> This is now done in MarcRecord.cpp and main.cpp
 
     /* fixed[19] : Same as above: when set, set to a. When subunit, set to b
     a - Set (only if [7] = m)

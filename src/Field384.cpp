@@ -92,7 +92,10 @@ void Field384::update(char marcsubfield, std::string data)
 
         found = (*it).find("kl-t");
         if (found != std::string::npos)
-            minor=true;
+        {
+            major=false; minor=true;
+        }
+
 
         /*
         found = (*it).find("mod");

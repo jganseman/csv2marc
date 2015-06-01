@@ -255,12 +255,12 @@ void MarcRecord::ProcessParts()
         std::string recordnr = f001->Getsubfield('a');
         Helper::MakeUppercase(recordnr);
         std::size_t found = recordnr.find("ONDERDEEL");
-        if (found == recordnr.npos)
-            return;
-        else
+        if (found != recordnr.npos)
         {
             // set bibliographic level to: monograph part
             (dynamic_cast<FieldLDR*>(getField(0)))->Setfixedstring(7, 'a');
+            // for "onderdeel" (physical part), we use http://wiki.koha-community.org/wiki/Serial_Analytics
+            // ... seems only partially developed in Koha for the moment.
 
             // prepare string for 773
             // note: hostcode not necessary for Koha
@@ -278,6 +278,11 @@ void MarcRecord::ProcessParts()
             newfield->Setindicator2(DEFAULT_INDIC);
             newfield->update('w', /*hostcode+*/location );
             marcfields.insert(newfield);
+        }
+        else        // TODO process DEEL according to use http://wiki.koha-community.org/wiki/Sets_with_Volumes
+        {           // Note that LEADER[19] plays a role here, as does field 830
+                    // note that in B-Bc; "deel" is recognized by having brackets "()" in the place nr (inventory nr is pretty inconsistent)
+            return;
         }
     }
     else
