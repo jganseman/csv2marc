@@ -34,7 +34,7 @@ void Field382::update(char marcsubfield, std::string data)
 
         // LEGACY subroutine: this might contain t=tonality or l=language style strings. Give warning when so
         if (instrumentation.empty() || instrumentation == "")
-            throw MarcRecordException("WARNING Field 382: possibly semicolon too much");
+            if (verbose) throw MarcRecordException("WARNING Field 382: possibly semicolon too much");
                 // only throw ERR when multiple present, since those are separated by spaces and not by semicolons
         if (instrumentation[0] == 't') continue;
         if (instrumentation[0] == 'l') continue;
@@ -47,7 +47,7 @@ void Field382::update(char marcsubfield, std::string data)
         // get string until first ':'
         std::size_t found = instrumentation.find_first_of(":");
         if (found==std::string::npos && instrumentation != "N")     // some pieces are for N unspecified instr
-            throw MarcRecordException("ERROR Field 382: no quantity of instruments: " + instrumentation);
+            if (verbose) throw MarcRecordException("ERROR Field 382: no quantity of instruments: " + instrumentation);
 
         number = instrumentation.substr(0, found);
         // remove all spaces
@@ -56,12 +56,12 @@ void Field382::update(char marcsubfield, std::string data)
         // first character must be a number or N
         found = number.find_first_of("123456789N");
         if (found==std::string::npos)
-            throw MarcRecordException("ERROR Field 382: invalid quantity of instruments: " + instrumentation);
+            if (verbose) throw MarcRecordException("ERROR Field 382: invalid quantity of instruments: " + instrumentation);
         //if last character is N and string is longer than 1, then second-to-last must be '+'
         if (number.length() > 1 && number[number.length()-1] == 'N')
         {
             if (number[number.length()-2] != '+')
-                throw MarcRecordException("ERROR Field 382: malformed quantity of instruments: " + instrumentation);
+                if (verbose) throw MarcRecordException("ERROR Field 382: malformed quantity of instruments: " + instrumentation);
         }
 
         // NOTE : here we know the number is correctly formed.
@@ -80,7 +80,7 @@ void Field382::update(char marcsubfield, std::string data)
         // remove beginning and trailing whitespaces
         Helper::Trim(general);
         if (general.empty() || general == "")
-            throw MarcRecordException("ERROR Field 382: no general instrumentation description: " + instrumentation);
+            if (verbose) throw MarcRecordException("ERROR Field 382: no general instrumentation description: " + instrumentation);
 
         // segment by space
         std::vector<std::string> gensegments = Helper::Segment(general, ' ');
@@ -103,7 +103,7 @@ void Field382::update(char marcsubfield, std::string data)
                     // NOTE: absence of number indicates unknown, not error.
                 //found = gensegments[cursegment].find_last_of("1234567890N");
                 //if (found == std::string::npos)
-                //    throw MarcRecordException("ERROR Field 382: no quantity after " + gensegments[cursegment]);
+                //    if (verbose) throw MarcRecordException("ERROR Field 382: no quantity after " + gensegments[cursegment]);
 
                 //Move to the next segment.
                 cursegment++;
@@ -115,7 +115,7 @@ void Field382::update(char marcsubfield, std::string data)
         }
 
         if (cursegment != gensegments.size())
-            throw MarcRecordException("ERROR Field 382: wrong category or ordering: " + general);
+            if (verbose) throw MarcRecordException("ERROR Field 382: wrong category or ordering: " + general);
         */
 
 
@@ -133,11 +133,11 @@ void Field382::update(char marcsubfield, std::string data)
             }
         }
 
-        if (recognized < gensegments.size())
-            throw MarcRecordException("ERROR Field 382: wrong category in: " + general);
-        else if (recognized > gensegments.size())
-            throw MarcRecordException("ERROR Field 382: excess category in: " + general);
-
+        if (recognized < gensegments.size()) {
+            if (verbose) throw MarcRecordException("ERROR Field 382: wrong category in: " + general);
+        } else if (recognized > gensegments.size()) {
+            if (verbose) throw MarcRecordException("ERROR Field 382: excess category in: " + general);
+        }
 
 
 
@@ -148,7 +148,7 @@ void Field382::update(char marcsubfield, std::string data)
             found2 = instrumentation.find_first_of(">");
             details = instrumentation.substr(found+1, found2-(found+1));          // 2nd param in length!
             if (details.empty() || details == "")
-                throw MarcRecordException("ERROR Field 382: no detailed instrumentation description: " + instrumentation);
+                if (verbose) throw MarcRecordException("ERROR Field 382: no detailed instrumentation description: " + instrumentation);
             // remove beginning and trailing whitespaces
             Helper::Trim(details);
         }

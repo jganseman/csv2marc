@@ -6,6 +6,7 @@ MarcField::MarcField(int nr, char defchar)
     indicator1=defchar;
     indicator2=defchar;
 //    parent=0;
+    verbose=true;
 }
 
 MarcField::~MarcField()

@@ -10,6 +10,7 @@ Field041::~Field041()
     //dtor
 }
 
+// This field contains the languages. Parse and translate to ISO language codes
 void Field041::update(char marcsubfield, std::string data)
 {
     // warning: this routine might also need to process legacy instrumentation strings.
@@ -17,7 +18,9 @@ void Field041::update(char marcsubfield, std::string data)
     if (data.empty() || data == "")
         return;
 
-    // This field contains the languages. Parse and translate to ISO language codes
+    // set indicators
+    Setindicator1('0');             // if one of the languages is a translation, it should be '1'and subfield $h should be used to denote the source language
+    Setindicator2(DEFAULT_INDIC);
 
     // first make all lowercase for ease of parsing
     Helper::MakeLowercase(data);
@@ -179,16 +182,12 @@ void Field041::update(char marcsubfield, std::string data)
             if ((*it)[0] == 'l')
             {
                 MarcField::update(a, "und");
-                throw MarcRecordException("WARNING Field 041 : Unrecognized language : " + (*it));
+                if (verbose) throw MarcRecordException("WARNING Field 041 : Unrecognized language : " + (*it));
             }
         }
             //MarcField::update(a, "und");
             //throw MarcRecordException("Unrecognized language for Field041: "+data);
         langcount++;
     }
-
-    // set indicators
-    Setindicator1('0');             // if one of the languages is a translation, it should be '1'and subfield $h should be used to denote the source language
-    Setindicator2(DEFAULT_INDIC);
 
 }

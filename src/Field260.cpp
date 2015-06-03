@@ -20,6 +20,17 @@ void Field260::update(char marcsubfield, std::string data)
 
     if (marcsubfield == 'L')        // legacy data, requiring additional parsing
     {
+        updateLegacy(marcsubfield, data);
+    }
+    else        // anything else is just inputted. Can still add some spell checks later if needed
+    {
+        MarcField::update(marcsubfield, data);
+    }
+}
+
+
+void Field260::updateLegacy(char marcsubfield, std::string data)
+{
         // we assume this is a string according to ISBD principles:
         // place : editor , date ( place printer : name printer , date printer )
 
@@ -56,7 +67,7 @@ void Field260::update(char marcsubfield, std::string data)
             // first do a check on the amount of commas still present.
             std::vector<std::string> commacount = Helper::Segment(rest, ',');
             if (commacount.size() > 2)
-                throw MarcRecordException("WARNING field 260 : too many commas : "+data);
+                if (verbose) throw MarcRecordException("WARNING field 260 : too many commas : "+data);
 
         found = rest.find(",");
         std::string editor = rest.substr(0, found);
@@ -76,17 +87,17 @@ void Field260::update(char marcsubfield, std::string data)
             // now do a check on semicolons. useful to find excess data
             commacount = Helper::Segment(rest, ';');
             if (commacount.size() > 1)
-                throw MarcRecordException("WARNING field 260 : too many semicolons : "+data);
+                if (verbose) throw MarcRecordException("WARNING field 260 : too many semicolons : "+data);
 
         found = rest.find("(");
         std::string date = rest.substr(0, found);
         Helper::Trim(date);
             // if date contains more than numbers, x, cop., dep., s.a. : warn
-            /*
+
             size_t found2 = date.find_first_not_of("cop.dep[]0123456789xsa- ");
             if (found2 != string::npos)
-                throw MarcRecordException("WARNING field 260 : unknown character in date: " + data);
-            */
+                if (verbose) throw MarcRecordException("WARNING field 260 : unknown character in date: " + data);
+
         stringtillnow += "$c";
         stringtillnow += date;
         if (found == string::npos)
@@ -149,14 +160,6 @@ void Field260::update(char marcsubfield, std::string data)
         {
             // write already what we have anyway
             MarcField::update('a', stringtillnow);
-            throw MarcRecordException("ERROR field 260 : found data after closing brackets : " + data);
+            if (verbose) throw MarcRecordException("ERROR field 260 : found data after closing brackets : " + data);
         }
-
-    }
-    else        // anything else is just inputted. Can still add some spell checks later if needed
-    {
-        MarcField::update(marcsubfield, data);
-    }
 }
-
-

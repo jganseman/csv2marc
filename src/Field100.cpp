@@ -80,7 +80,6 @@ void Field100::update(char marcsubfield, std::string data)
     std::string relator;    // goes in subfield e
     // in subfields $0 en $4 goes a link to the authority control ID
 
-
     // the relator (function of this author) is anything in between <>
     datasegments.clear();
     datasegments = Helper::Segment(fullstring, '<');
@@ -96,7 +95,7 @@ void Field100::update(char marcsubfield, std::string data)
                 Helper::Trim(tempstring);
             } catch(exception& e)
             {
-                throw MarcRecordException("ERROR Updating Field 100: empty author function.");
+                if (verbose) throw MarcRecordException("ERROR Updating Field 100: empty author function.");
             }
 
             // note: sometimes added in wrong way, with 2 terms in one set of brackets. thus -> segment further
@@ -116,7 +115,7 @@ void Field100::update(char marcsubfield, std::string data)
                 // check that the list conforms to the given list of names
                 if (!isValidRelator(tempstring))
                 {
-                    throw MarcRecordException("ERROR Updating 100: Unknown author function: "+tempstring);
+                    if (verbose) throw MarcRecordException("ERROR Updating 100: Unknown author function: "+tempstring);
                 }
             }
         }

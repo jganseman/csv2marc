@@ -53,6 +53,7 @@ class MarcField
 
     protected:              // make accessible to subclasses, to facilitate overriding functions
         std::multimap<char, std::string> subfields;
+        bool verbose;
 
     private:
         int fieldnr;

@@ -225,7 +225,7 @@ void Field008::update(char marcsubfield, std::string data)
             strcpy(&fixedstring[35], "tur");
         else {
             //strcpy(&fixedstring[35], "und");
-            //throw MarcRecordException("Unrecognized language for Field041: "+data);
+            if (verbose) throw MarcRecordException("Unrecognized language for Field008: "+data);
         }
         fixedstring[38] = '|';
     }

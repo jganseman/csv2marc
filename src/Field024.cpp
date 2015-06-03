@@ -50,7 +50,7 @@ void Field024::update(char marcsubfield, std::string data)
 
             //assert number starts with 9790 or M
              if (! (cleaneddata[0] == 'M' || cleaneddata.substr(0,4) == "9790"))
-                throw MarcRecordException("WARNING Field 024: string is not a valid ISMN : " + cleaneddata);
+                if (verbose) throw MarcRecordException("WARNING Field 024: string is not a valid ISMN : " + cleaneddata);
          }
     }
 

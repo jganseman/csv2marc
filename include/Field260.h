@@ -15,6 +15,7 @@ class Field260 : public MarcField
         Field260(int nr);
         virtual ~Field260();
         virtual void update(char marcsubfield, std::string data);
+        virtual void updateLegacy(char marcsubfield, std::string data);
     protected:
     private:
 };

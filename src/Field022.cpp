@@ -47,7 +47,7 @@ void Field022::update(char marcsubfield, std::string data)
              if (! (cleaneddata.length() == 9))        // throw error when too many characters are present
              {
                  MarcField::update('y', cleaneddata);
-                 throw MarcRecordException("WARNING Field 022: invalid ISSN, put in subfield $y: " + cleaneddata);
+                 if (verbose) throw MarcRecordException("WARNING Field 022: invalid ISSN, put in subfield $y: " + cleaneddata);
              } else
              {
                  MarcField::update(marcsubfield, cleaneddata);

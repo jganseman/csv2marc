@@ -19,10 +19,9 @@ void Field245::update(char marcsubfield, std::string data)
         Helper::Trim(data);
     } catch (exception e)
     {
-        // this will throw an error if data is empty
-            //throw MarcRecordException("Empty title");
-        // just suppress the error for now
-            return;
+        // this will throw an error if data is empty and return
+        if (verbose) throw MarcRecordException("Empty title");
+        return;
     }
 
     if (data.empty() || data == "")
@@ -35,7 +34,6 @@ void Field245::update(char marcsubfield, std::string data)
 
         Setindicator1('1');      // by default, add title entry into the catalog
         Setindicator2('0');
-
 
         // put data already in
         MarcField::update(marcsubfield, data);

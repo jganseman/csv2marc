@@ -105,7 +105,7 @@ void Field700::update(char marcsubfield, std::string data)
                     Helper::Trim(tempstring);
                 } catch(exception& e)
                 {
-                    throw MarcRecordException("ERROR Field 700: empty author function.");
+                    if (verbose) throw MarcRecordException("ERROR Field 700: empty author function.");
                 }
 
                 // note: sometimes added in wrong way, with 2 terms in one set of brackets. thus -> segment further
@@ -124,7 +124,7 @@ void Field700::update(char marcsubfield, std::string data)
                         // check that the list conforms to the given list of names
                         if (!isValidRelator(tempstring))
                         {
-                            throw MarcRecordException("ERROR Field 700: Unknown author function: "+tempstring);
+                            if (verbose) throw MarcRecordException("ERROR Field 700: Unknown author function: "+tempstring);
                         }
                         // to preserve the link with the author $a subfield, everything is internally stored in the
                         // $a subfield as one entire string that is already printed
@@ -152,7 +152,7 @@ void Field700::update(char marcsubfield, std::string data)
                     dates = dates + "$d" + tempstring;
                 } catch (exception& e)
                 {
-                    throw MarcRecordException("ERROR Field 700: error in author dates.");
+                    if (verbose) throw MarcRecordException("ERROR Field 700: error in author dates.");
                 }
             }
             fullstring = datasegments[0];       // discard all (date) info from this string
@@ -165,7 +165,7 @@ void Field700::update(char marcsubfield, std::string data)
             Helper::Trim(fullstring);
         } catch (exception e)
         {
-            throw MarcRecordException("ERROR Field 700: empty value among authors.");
+            if (verbose) throw MarcRecordException("ERROR Field 700: empty value among authors.");
         }
 
         MarcField::update('a', fullstring+dates+relator);

@@ -34,7 +34,7 @@ void Field005::update(char marcsubfield, std::string data)
 
     // assert string is a date
     if (!atol(data.c_str()))
-        throw MarcRecordException("ERROR Field 005: string is not a valid date : " + data);
+        if (verbose) throw MarcRecordException("ERROR Field 005: string is not a valid date : " + data);
 
     // this is a field for the latest transaction. If given multiple dates, only use the last one
     std::string currentdata(fixedstring);

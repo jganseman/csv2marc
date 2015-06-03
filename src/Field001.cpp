@@ -29,6 +29,7 @@ std::map<std::string, int> Field001::IDcount(init2());
 Field001::Field001(int nr) : MarcField(nr)
 {
     //ctor
+    verbose=false;
 }
 
 Field001::~Field001()
@@ -39,31 +40,26 @@ Field001::~Field001()
 
 void Field001::update(char marcsubfield, std::string data)
 {
-    /* no placenumber errors too much on crossref records, that indeed have none */
+    /* don't throw errors, else too much errs on crossref records, that indeed have none */
     if (data.empty() || data == "")
         return; //throw MarcRecordException("ERROR Field 001: record has no place number.");
 
-    // first, put the place number in anyway
-    //MarcField::update(marcsubfield, data);
-
-    IDcount[data] += 1;     // add one to the counter. creates count initialized on 0 when data not yet in map
+    IDcount[data] += 1;     // add one to the counter. Initialized on 0 when this nr is not yet in map
 
     // only afterwards, throw an error
     if (usedIDs.find(data) == usedIDs.end())        // if not found in set of already used nrs
     {
-                usedIDs.insert(data);
-                MarcField::update(marcsubfield, data);
+        usedIDs.insert(data);
+        MarcField::update(marcsubfield, data);
     }
     else
     {
-        //throw MarcRecordException("ERROR Field 001: placenumber already in use : " + data);
-
         //placenumber has been used. Append count number
         char buffer[6];
         data = data + "-" + itoa(IDcount[data], buffer, 10);
 
         MarcField::update(marcsubfield, data);      // first insert, then throw error
-        //throw MarcRecordException("WARNING Field 001: placenumber used, creating new one : " + data);
+        if (verbose) throw MarcRecordException("WARNING Field 001: placenumber used, creating new one : " + data);
     }
 
 }

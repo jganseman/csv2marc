@@ -43,7 +43,7 @@ void Field650::update(char marcsubfield, std::string data)
                 MarcField::update(marcsubfield, (*it));
         } catch (exception& e)
         {
-            throw MarcRecordException("ERROR Field 650 : empty keyword or excess semicolon.");
+            if (verbose) throw MarcRecordException("ERROR Field 650 : empty keyword or excess semicolon.");
         }
     }
 }
