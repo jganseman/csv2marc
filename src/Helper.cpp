@@ -61,6 +61,23 @@ void Helper::Remove(std::string& data, std::string toBeRemoved)
         data.replace(data.find(toBeRemoved), toBeRemoved.length(), "");
 }
 
+// remove all characters from string
+void Helper::RemoveAllOf(std::string& data, std::string toBeRemoved)
+{
+    if (data.empty() || toBeRemoved.empty())
+        return;
+    for(unsigned int i=0; i<toBeRemoved.size(); i++)
+    {
+        char toFind = toBeRemoved[i];
+        size_t found = data.find(toFind);
+        while (found != std::string::npos)
+        {
+            data.replace(found, 1, "");
+            found = data.find(toFind);
+        }
+    }
+}
+
 void Helper::ReplaceAll(std::string& data, std::string toFind, std::string toSubstitute)
 {
     if (data.empty() || toFind.empty())

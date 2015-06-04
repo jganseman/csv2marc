@@ -1,5 +1,183 @@
 #include "Field382.h"
 
+// STATIC: list of valid instruments, to check against
+std::set<std::string> Field382::init()
+{
+    unsigned int nrterms=143;
+    std::string validterms[]={
+        "C",         // For type V : vocal
+        "S",
+        "Mz",
+        "A",
+        "Ct",
+        "T",
+        "Bar",
+        "B",
+        "Cf",
+        "Qp",
+        "Sp",
+        "Stp",
+        "Hs",
+        "Ms",
+        "Ls",
+        "Zs",
+        "Zsl-vrouw",
+        "Zsl-man",
+        "Spreekstem",      // subtotal 19
+
+        "koor",             // For type koor. NOTE: optionally followed by SATB-spreek-nr
+        "gemengd",
+        "mannen",
+        "vrouwen",
+        "kinder",
+        "meisjes",
+        "knapen",
+        "unisono",          //subtotal 8
+
+        "vi-pic",           // for type str
+        "vi",
+        "av",
+        "tv",
+        "vc-pic",
+        "vc",
+        "cb",
+        "va",
+        "g",
+        "g-s",
+        "g-a",
+        "bar",
+        "g-b",
+        "g-t",
+        "g-cb",
+        "vedel",            // subtotal 16
+
+        "fl-pic",           // for type hout
+        "fl",
+        "ho",
+        "eh",
+        "kl-pic",
+        "kl",
+        "kl-b",
+        "kl-cb",
+        "fa",
+        "fa-cb",
+        "sax",
+        "sax-a",
+        "blfl",
+        "blfl-t",
+        "fla",
+        "oa",
+        "oc",
+        "bh",
+        "kh",
+        "zink",         // subtotaal 20
+
+        "hn",            // for type kop
+        "hn-a",
+        "hn-t",
+        "tpt-pic",
+        "tpt",
+        "trbn",
+        "trbn-b",
+        "tb",
+        "tb-t",
+        "tb-b",
+        "tb-cb",
+        "tb-hn",
+        "bu-pic",
+        "bu",
+        "cor",
+        "ophi",
+        "euph",
+        "saxh",
+        "klar",     // subtotaal 19
+
+        "timp",          // for type perc
+        "trom",
+        "drum",
+        "div",
+        "mar",
+        "vib",
+        "xyl",
+        "cim",
+        "glock",
+        "tria",         // subtotaal 10
+
+        "kv",           // for type toets
+        "pf",
+        "klc",
+        "klvd",
+        "org",
+        "org-e",
+        "harm",
+        "cel",
+        "spinet",
+        "virginal",     //subtotal 10
+
+        "ha",           // for type tok
+        "gi",
+        "gi-e",
+        "gi-e-b",
+        "man",
+        "bj",
+        "luit",
+        "luit-b",
+        "cister",
+        "lier",
+        "mandora",
+        "zither",       // subtotal: 12
+
+        "egi",       // for type elek
+        "egi-b",
+        "eorg",
+        "om",
+        "synth",
+        "tape",
+        "hifi",         // subtotal : 7
+
+        "bc",           // for type beg: 1
+
+        "acc",           // for type varia
+        "bandoneon",
+        "bei",
+        "doedelzak",
+        "draailier",
+        "etno",
+        "koto",         // subtotal: 7
+
+        "kamer",         // for type orkest . NOTE: followed by telnr specification
+        "symfonie",
+        "strijk",
+        "blaas",
+        "harmonie",
+        "slagw",
+        "renais",
+        "barok",
+        "jazz",
+        "volks",
+        "salon",
+        "trombone",
+        "accordeon",
+        "tokkel"        //subtotal: 14
+
+        };
+    // for ease of checking: remove all '-' characters in this list
+    for (unsigned int i=0; i<nrterms; ++i)
+    {
+        Helper::ReplaceAll(validterms[i], "-", "");
+    }
+
+    std::set<std::string> tmp(validterms, validterms+nrterms);
+
+    return tmp;
+ }
+
+// initialize that list as static member of class
+std::set<std::string> Field382::validterms(init());
+
+
+
+
 Field382::Field382(int nr) : MarcField(nr)
 {
     //ctor
@@ -151,13 +329,27 @@ void Field382::update(char marcsubfield, std::string data)
                 if (verbose) throw MarcRecordException("ERROR Field 382: no detailed instrumentation description: " + instrumentation);
             // remove beginning and trailing whitespaces
             Helper::Trim(details);
+
+            // check validity of all instruments that occur in here.
+            std::vector<std::string> instruments = Helper::Segment(details, ' ');
+            for (std::vector<std::string>::iterator kt = instruments.begin(); kt!=instruments.end(); ++kt)
+            {
+                std::string curinstrument = (*kt);
+                // remove all numbers, points and brackets
+                Helper::RemoveAllOf(curinstrument, "1234567890.()-");
+                // now, the - should go out of the symphonies, but remain in the others...
+                if (curinstrument.empty() || curinstrument == "")
+                    if (verbose) throw MarcRecordException("ERROR Field 382: empty instrument in: " + instrumentation);
+                if (!isValidTerm(curinstrument))
+                    if (verbose) throw MarcRecordException("ERROR Field 382: invalid instrument: " + curinstrument);
+            }
+
+
         }
         else
         {
             details = "";
         }
-
-
 
         // compose correctly formed instrumentation string and input in MARC
         // one for every ;-separated instrumentation
@@ -180,3 +372,26 @@ void Field382::update(char marcsubfield, std::string data)
     }
 
 }
+
+
+
+bool Field382::isValidTerm(std::string& data)
+{
+    // routine that decides if the string BEGINS with a valid instrument
+    for (std::set<std::string>::iterator it = validterms.begin(); it != validterms.end(); ++it)
+    {
+        std::string temp = (*it);
+        if ( data.find(temp) != std::string::npos )
+            return true;
+    }
+    return false;
+
+    // alternatively: routine that decides if the string is EXACTLY as a valid instrument
+    //return (validterms.find(data) != validterms.end());
+}
+
+void Field382::fixTerminology(std::string& data)
+{
+    //Helper::ReplaceAll(data, "autograaf : partituur", "partituur autografisch");
+}
+

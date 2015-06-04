@@ -6,6 +6,7 @@
 
 #include <algorithm>
 #include <cstring>
+#include <set>
 
 class Field382 : public MarcField
 {
@@ -16,6 +17,11 @@ class Field382 : public MarcField
         //virtual std::string const print() const;
     protected:
     private:
+        // the following data defines the sets of instruments admitted in the B-Bc library
+        bool isValidTerm(std::string& data);
+        static std::set<std::string> validterms;
+        static std::set<std::string> init();
+        void fixTerminology(std::string& data);
 };
 
 #endif // FIELD382_H

@@ -23,6 +23,7 @@ class Helper
         static std::vector<std::string> Segment(std::string& data, char delim);
 
         static void Remove(std::string& data, std::string toBeRemoved);
+        static void RemoveAllOf(std::string& data, std::string toBeRemoved);
         static void ReplaceAll(std::string& data, std::string toFind, std::string toSubstitute);
 
     protected:

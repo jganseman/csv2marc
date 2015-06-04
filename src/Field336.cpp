@@ -1,6 +1,6 @@
 #include "Field336.h"
 
-// initialize relator terms
+// initialize material terms
 std::set<std::string> Field336::init()
 {
     int nrterms=78;
