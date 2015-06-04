@@ -94,7 +94,7 @@ void Field260::updateLegacy(char marcsubfield, std::string data)
         Helper::Trim(date);
             // if date contains more than numbers, x, cop., dep., s.a. : warn
 
-            size_t found2 = date.find_first_not_of("cop.dep[]0123456789xsa- ");
+            size_t found2 = date.find_first_not_of("cop.dep[]0123456789xsa-? ");
             if (found2 != string::npos)
                 if (verbose) throw MarcRecordException("WARNING field 260 : unknown character in date: " + data);
 

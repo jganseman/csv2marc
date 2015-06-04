@@ -97,7 +97,7 @@
 49	500	a
 53	501	a
 #material classification now in 513: type of report. actually: 300b/336/337/338?
-26  513 a
+26  336 a   #Material: put in 336 "content type" (todo: use with controlled vocab like RDA)
 52	650	a
 4	852	c   #inventory number
 #

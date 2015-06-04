@@ -43,6 +43,7 @@ MarcField* FieldFactory::getMarcField(int marcnr)//, MarcRecord* parent)
         case 254 : return new Field254(marcnr);
         case 260 : return new Field260(marcnr);
         case 264 : return new Field264(marcnr);
+        case 336 : return new Field336(marcnr);
         case 382 : return new Field382(marcnr);
         case 383 : return new Field383(marcnr);
         case 384 : return new Field384(marcnr);

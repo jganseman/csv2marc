@@ -76,8 +76,8 @@ void Field384::update(char marcsubfield, std::string data)
 
         //first letter is supposed to be the key
         // add first letters of modes as well, though this isnt foolproof
-        if (!( ((*it)[0] == 'a') || ((*it)[0] == 'b') || ((*it)[0] == 'c') || ((*it)[0] == 'd') || ((*it)[0] == 'e') || ((*it)[0] == 'f') || ((*it)[0] == 'g') )
-            || ((*it)[0] == 'h') || ((*it)[0] == 'p') || ((*it)[0] == 'm') || ((*it)[0] == 'l') || ((*it)[0] == 'i') )
+        if (!( ((*it)[0] == 'a') || ((*it)[0] == 'b') || ((*it)[0] == 'c') || ((*it)[0] == 'd') || ((*it)[0] == 'e') || ((*it)[0] == 'f') || ((*it)[0] == 'g')
+            || ((*it)[0] == 'h') || ((*it)[0] == 'p') || ((*it)[0] == 'm') || ((*it)[0] == 'l') || ((*it)[0] == 'i') ) )
         {
             if (verbose) throw MarcRecordException("ERROR Field 384: Unknown Tonality : " + (*it));
         }
