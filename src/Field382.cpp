@@ -145,27 +145,29 @@ std::set<std::string> Field382::init()
         "etno",
         "koto",         // subtotal: 7
 
-        "kamer",         // for type orkest . NOTE: followed by telnr specification
-        "symfonie",
-        "strijk",
-        "blaas",
-        "harmonie",
-        "slagw",
-        "renais",
-        "barok",
-        "jazz",
-        "volks",
-        "salon",
-        "trombone",
-        "accordeon",
-        "tokkel"        //subtotal: 14
+        "kamer-",         // for type orkest . NOTE: followed by telnr specification
+        "symfonie-",
+        "strijk-",
+        "blaas-",
+        "harmonie-",
+        "slagw-",
+        "renais-",
+        "barok-",
+        "jazz-",
+        "volks-",
+        "salon-",
+        "trombone-",
+        "accordeon-",
+        "tokkel-"        //subtotal: 14
 
         };
     // for ease of checking: remove all '-' characters in this list
+    /*
     for (unsigned int i=0; i<nrterms; ++i)
     {
         Helper::ReplaceAll(validterms[i], "-", "");
     }
+    */
 
     std::set<std::string> tmp(validterms, validterms+nrterms);
 
@@ -327,6 +329,11 @@ void Field382::update(char marcsubfield, std::string data)
             details = instrumentation.substr(found+1, found2-(found+1));          // 2nd param in length!
             if (details.empty() || details == "")
                 if (verbose) throw MarcRecordException("ERROR Field 382: no detailed instrumentation description: " + instrumentation);
+
+            //do a few search-and-replace operations for often occurring errors or double codes
+            Helper::ReplaceAll(details, "gi-e", "egi");
+            Helper::ReplaceAll(details, "gi-e-b", "egi-b");
+
             // remove beginning and trailing whitespaces
             Helper::Trim(details);
 
@@ -336,8 +343,17 @@ void Field382::update(char marcsubfield, std::string data)
             {
                 std::string curinstrument = (*kt);
                 // remove all numbers, points and brackets
-                Helper::RemoveAllOf(curinstrument, "1234567890.()-");
+                Helper::RemoveAllOf(curinstrument, "1234567890.()");
                 // now, the - should go out of the symphonies, but remain in the others...
+                //temporary solution: remove all but the first occurrence of '-'
+                size_t firstocc = curinstrument.find_first_of('-');
+                size_t lastocc = curinstrument.find_last_of('-');
+                while (firstocc != lastocc)
+                {
+                    curinstrument.erase(lastocc,1);
+                    lastocc = curinstrument.find_last_of('-');
+                }
+
                 if (curinstrument.empty() || curinstrument == "")
                     if (verbose) throw MarcRecordException("ERROR Field 382: empty instrument in: " + instrumentation);
                 if (!isValidTerm(curinstrument))
