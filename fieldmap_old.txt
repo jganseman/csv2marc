@@ -1,10 +1,8 @@
 # This file defines the field mapping between CSV columns and MARC fields.
 # Any line not beginning with 2 integers and a char is regarded as comment.
-# Lines contain: CSV file column index (0-based) followed by MARC field and subfield
+# Fields do not need to appear ordered in this file.
 #
 # Currently, tailored towards Brussels conservatory library
-# Version: 8 June 2015, after an update of Allegro-C's export routine
-#
 #
 # first just a line to force creation of a leader record
 0	000	z
@@ -57,19 +55,19 @@
 # music specific content, map this to 254 and not the general material statement
 #26	#254	#a
 14	254	a
-# Publisher
-15	260	L       #Legacy compact representation: requires additional parsing
-16	260	a       #Publisher place
-17	260	b       #Publisher name
-18  260 a       #Second publisher place
-19  260 b       #Second publisher name
-20	260	c       #Year of publication
-# Printer
-21	260	e       #Printer place
-22	260	f       #Printer name
-# Distributor
-23	264	a       #Distributor place
-24	264	b       #Distributor name
+#editor
+15	260	L       #Legacy: requires additional parsing
+16	260	a
+17	260	b
+18	260	c
+#printer
+19	260	e
+20	260	f
+21	260	g
+#distribution
+22	264	a
+23	264	b
+24	264	c
 #
 # Description fields: material, key, opus, instrumentation
 27	300	a       #collation: material extent
