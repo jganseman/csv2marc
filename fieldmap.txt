@@ -70,6 +70,7 @@
 # Distributor
 23	264	a       #Distributor place
 24	264	b       #Distributor name
+25  245 f       #Manuscript year
 #
 # Description fields: material, key, opus, instrumentation
 27	300	a       #collation: material extent

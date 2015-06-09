@@ -17,6 +17,7 @@
 #include <Field254.h>
 #include <Field260.h>
 #include <Field264.h>
+#include <Field300.h>
 #include <Field336.h>
 #include <Field382.h>
 #include <Field383.h>
