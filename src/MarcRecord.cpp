@@ -294,16 +294,61 @@ void MarcRecord::ProcessParts()
 
 void MarcRecord::AddKohaData()
 {
-    //then, copy the new record number from field 001 into field 952 (KOHA specific)
-    std::string recordnr = getField(1)->Getsubfield('a');
-    if (getField(952))
+    // all Koha-specific data goes into field 952. This mostly is data important for the holdings
+    // see http://wiki.koha-community.org/wiki/Holdings_data_fields_%289xx%29#MARC21_Holding_field.2C_3.0.x.2C_3.2.x_and_3.4.x_default_-_field_952
+    MarcField* f952 = FieldFactory::getFactory()->getMarcField(952);
+
+    f952->update('a', ORGCODE);    // home branch
+    f952->update('b', ORGCODE);    // holdings branch
+    try {
+        std::string recordnr = getField(1)->Getsubfield('a');
+        f952->update('o', recordnr);   // shelf number
+        f952->update('p', recordnr);    // barcode
+    } catch (exception& e)
     {
-        getField(952)->update('o', recordnr);        // shelf number
-        getField(952)->update('p', recordnr);        // barcode
-    } else
-    {
-        throw MarcRecordException("ERROR field 952: no status or itemtype");
+        throw MarcRecordException("ERROR field 952: no recordnr?");
     }
+
+    // process LOST status, stored in field 583 (Action Note = status)
+    MarcField* f583 = getField(583);
+    if (f583)
+    {
+        std::string status = f583->Getsubfield('a');
+        Helper::MakeUppercase(status);
+        if (status.find("LOST") != std::string::npos)
+            f952->update('1', "1");         // stored in subfield $1, LOST code = "1"
+    }
+
+    // process NOT FOR LOAN status, stored in field 506 (Availability Note)
+    MarcField* f506 = getField(506);
+    if (f506)
+    {
+        std::string nfl = f506->Getsubfield('a');
+        if (nfl.find("*") != std::string::npos)
+            f952->update('7', "1");         // stored in subfield $7, NOT FOR LOAN code = "1"
+    }
+
+    // process KOHA ITEM TYPE, stored in LEADER
+    MarcField* fLDR = getField(000);
+    char itemtype = fLDR->print()[6+6];  // add 4 characters for the "=LDR__" line
+    std::string kohacode;
+    switch (itemtype)
+    {
+        case 'r': kohacode = "RE";      // realia: kits, 3D objects
+        case 'm': kohacode = "CF";      // computer-readable file, cdrom, microfilm
+        case 'k': kohacode = "IM";      // 2d imagery and projected graphics
+        case 'g': kohacode = "FI";      // video, film, dvd
+        case 'j': kohacode = "CD";      // music recordings: cd, vinyl, tape
+        case 'a': kohacode = "BK";      // books
+        case 't': kohacode = "BK";      // book manuscript
+        case 'c': kohacode = "MU";      // scores
+        case 'd': kohacode = "MU";      // score manuscripts
+        default: kohacode = "MU";
+    }
+    f952->update('y', kohacode);
+    //TODO separate code for Vinyl?
+
+    marcfields.insert(f952);
 
 }
 
@@ -409,10 +454,10 @@ MarcField* MarcRecord::getField(int nr) const
 
 bool MarcRecord::isCRB() const
 {
-    MarcField* f590 = getField(590);
-    if (f590)
+    MarcField* f588 = getField(588);
+    if (f588)
     {
-        std::string author = f590->Getsubfield('a');
+        std::string author = f588->Getsubfield('a');
         if  ( (author == "mv") || (author == "im") || (author == "mcl") || (author == "sdp") || (author == "lm")
             || (author == "ah") || (author == "ar") || (author == "bkb") || (author == "cc") || (author == "cf")
             || (author == "df") || (author == "dl") || (author == "ed") || (author == "fb") || (author == "hl")

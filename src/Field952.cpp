@@ -18,6 +18,11 @@ void Field952::update(char marcsubfield, std::string data)
     if (data.empty() || data == "")
         return;
 
+    MarcField::update(marcsubfield, data);
+
+    // everything under here has been moved to the AddKohaData routine
+
+/*
     std::size_t found;
 
     if (marcsubfield == '1')        // LOST status
@@ -101,5 +106,5 @@ void Field952::update(char marcsubfield, std::string data)
     {
         MarcField::update(marcsubfield, data);      // make sure not-uppercase can be inserted
     }
-
+*/
 }

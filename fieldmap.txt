@@ -11,7 +11,7 @@
 # as local record number, we use the library's shelf number
 5   001 a
 # first store who the author of the original record is, for error reporting
-3	590	a
+3	588	a
 # the leader record is updated with info from material type, ISBN and ISSN fields, last modification date
 26  000 m       #hack into marcsubfield m for material parsing routine
 #50  #000 #a       #ISBN etc            NOTE: score can also have ISBN. Rely completely on material field.
@@ -70,7 +70,7 @@
 # Distributor
 23	264	a       #Distributor place
 24	264	b       #Distributor name
-25  245 f       #Manuscript year
+25  518 a       #Manuscript year: as comment in field 518 (033 only for coded dates)
 #
 # Description fields: material, key, opus, instrumentation
 27	300	a       #collation: material extent
@@ -78,6 +78,8 @@
 40	383	b       #opus
 39	384	a       #key
 37  384 L       #legacy: instrumentation field might contain tonality. Separate parsing using phony subfieldcode
+41  245 f       #Year of composition: append to title (field 045$b is only for coded dates)
+42  500 a       #Duration: in encoded form, 306. Otherwise comment in 500
 #
 # Series information
 29	490	a
@@ -88,25 +90,25 @@
 36	490	a
 #
 # Notes and any additional information
-50  510 a   #RISM number
-48	541	a
-6	506	a
-2	583	a
-
-44	505	a
-45	520	a       #summary note
-46	500	a
-47	534	n
+50  510 a       #RISM number
+48	541	a       #Source of acquisition
+6	506	a       #Availability (can be borrowed?)
+2	583	a       #Status code
+#
+44	500	a       #Indexed annotation (todo: lists of movements in 505)
+45	500	a       #Non-indexed annotation (todo: lists of movements in 505)
+46	500	a       #Responsible annotation. Little used
+47	534	n       #Impressum annotation. Contains facsimiles and original RISM nrs
 49	500	a
 53	501	a
 #material classification now in 513: type of report. actually: 300b/336/337/338?
-26  336 a   #Material: put in 336 "content type" (todo: use with controlled vocab like RDA)
+26  336 a       #Material: put in 336 "content type" (todo: use with controlled vocab like RDA)
 52	650	a
-4	852	c   #inventory number
+4	590	a       #inventory number
 #
 # 952 field, internal KOHA circulation stuff:
-2	952	1   #LOST status
-6	952	7   #NOT FOR LOAN status
-#5   #952 #o   #shelf nr        // direct copy: moved this to record.cpp postprocessing
-#5   #952 #p   #barcode
-26  952 y   #itemtype
+#2	#952    #1   #LOST status       // direct copy: moved this to record.cpp postprocessing
+#6	#952	#7   #NOT FOR LOAN status
+#5   #952 #o    #shelf nr
+#5   #952 #p    #barcode
+#26  #952 #y    #itemtype

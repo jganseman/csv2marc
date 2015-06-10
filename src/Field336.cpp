@@ -150,7 +150,7 @@ void Field336::update(char marcsubfield, std::string data)
         }
 
         // if validated, store everything after first semicolon
-        std::string cleaneddata = (*it).substr((*it).find_first_of(':'));
+        std::string cleaneddata = (*it).substr((*it).find_first_of(':')+1);
         Helper::Trim(cleaneddata);
 
         MarcField::update(marcsubfield, cleaneddata);
