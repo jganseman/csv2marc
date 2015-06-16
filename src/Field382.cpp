@@ -183,6 +183,7 @@ std::set<std::string> Field382::validterms(init());
 Field382::Field382(int nr) : MarcField(nr)
 {
     //ctor
+    //verbose=false;
 }
 
 Field382::~Field382()

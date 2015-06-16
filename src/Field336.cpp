@@ -103,6 +103,7 @@ std::set<std::string> Field336::validterms(init());
 Field336::Field336(int nr) : MarcField(nr)
 {
     //ctor
+    //verbose=false;
 }
 
 Field336::~Field336()
