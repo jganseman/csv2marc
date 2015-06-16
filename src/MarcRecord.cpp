@@ -337,16 +337,53 @@ void MarcRecord::AddKohaData()
         case 'r': kohacode = "RE";      // realia: kits, 3D objects
         case 'm': kohacode = "CF";      // computer-readable file, cdrom, microfilm
         case 'k': kohacode = "IM";      // 2d imagery and projected graphics
-        case 'g': kohacode = "FI";      // video, film, dvd
-        case 'j': kohacode = "CD";      // music recordings: cd, vinyl, tape
-        case 'a': kohacode = "BK";      // books
-        case 't': kohacode = "BK";      // book manuscript
-        case 'c': kohacode = "MU";      // scores
-        case 'd': kohacode = "MU";      // score manuscripts
-        default: kohacode = "MU";
+        case 'g': kohacode = "VI";      // video, film, dvd
+        case 'j': kohacode = "CD";      // music recordings: cd, vinyl, tape -> split up later!
+        case 'a': kohacode = "TP";      // books
+        case 't': kohacode = "TM";      // book manuscript
+        case 'c': kohacode = "MP";      // scores
+        case 'd': kohacode = "MM";      // score manuscripts
+        default: kohacode = "MP";
     }
+    // additional item types, recognized by callnumber
+    MarcField* f001 = getField(001);
+    if (f001 && !(f001->isempty()))
+    {
+        std::string recordnr = f001->Getsubfield('a');
+        Helper::MakeUppercase(recordnr);
+        if (recordnr.substr(0, 4) == "ARC-") {              // archive
+            kohacode = "AR";
+        } else if (recordnr.substr(0, 3) == "SS-") {        // periodicals
+            kohacode = "PE";
+        } else if (recordnr.substr(0, 4) == "E-TS") {        // more periodicals
+            kohacode = "PE";
+        } else if (recordnr.substr(0, 4) == "E-CD") {        // cds
+            kohacode = "CD";
+        } else if (recordnr.substr(0, 4) == "R-CD") {        // more cds
+            kohacode = "CD";
+        } else if (recordnr.substr(0, 4) == "E-LP") {        // LP, vinyl
+            kohacode = "LP";
+        } else if (recordnr.substr(0, 4) == "E-VD") {        // video
+            kohacode = "VI";
+        }
+    }
+    // additional itemtypes, recognized by content type field
+    if (itemtype == 'j')
+    {
+        MarcField* f336 = getField(336);
+        if (f336 && !(f336->isempty()))
+        {
+            std::string mattype = f001->Getsubfield('a');
+            Helper::MakeLowercase(mattype);
+            if (mattype.find("geluidsband") != mattype.npos) {
+                kohacode = "TA";
+            } else if (mattype.find("cassette") != mattype.npos) {
+                kohacode = "TA";
+            }
+        }
+    }
+    
     f952->update('y', kohacode);
-    //TODO separate code for Vinyl?
 
     marcfields.insert(f952);
 
