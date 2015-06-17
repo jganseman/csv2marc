@@ -298,8 +298,8 @@ void MarcRecord::AddKohaData()
     // see http://wiki.koha-community.org/wiki/Holdings_data_fields_%289xx%29#MARC21_Holding_field.2C_3.0.x.2C_3.2.x_and_3.4.x_default_-_field_952
     MarcField* f952 = FieldFactory::getFactory()->getMarcField(952);
 
-    f952->update('a', ORGCODE);    // home branch
-    f952->update('b', ORGCODE);    // holdings branch
+    f952->update('a', "B-Bc");    // home branch, use library code defined in KOHA (not MARC code)
+    f952->update('b', "B-Bc");    // holdings branch
     try {
         std::string recordnr = getField(1)->Getsubfield('a');
         f952->update('o', recordnr);   // shelf number
@@ -334,15 +334,15 @@ void MarcRecord::AddKohaData()
     std::string kohacode;
     switch (itemtype)
     {
-        case 'r': kohacode = "RE";      // realia: kits, 3D objects
-        case 'm': kohacode = "CF";      // computer-readable file, cdrom, microfilm
-        case 'k': kohacode = "IM";      // 2d imagery and projected graphics
-        case 'g': kohacode = "VI";      // video, film, dvd
-        case 'j': kohacode = "CD";      // music recordings: cd, vinyl, tape -> split up later!
-        case 'a': kohacode = "TP";      // books
-        case 't': kohacode = "TM";      // book manuscript
-        case 'c': kohacode = "MP";      // scores
-        case 'd': kohacode = "MM";      // score manuscripts
+        case 'r': kohacode = "RE"; break;     // realia: kits, 3D objects
+        case 'm': kohacode = "CF"; break;      // computer-readable file, cdrom, microfilm
+        case 'k': kohacode = "IM"; break;      // 2d imagery and projected graphics
+        case 'g': kohacode = "VI"; break;      // video, film, dvd
+        case 'j': kohacode = "CD"; break;      // music recordings: cd, vinyl, tape -> split up later!
+        case 'a': kohacode = "TP"; break;      // books
+        case 't': kohacode = "TM"; break;      // book manuscript
+        case 'c': kohacode = "MP"; break;      // scores
+        case 'd': kohacode = "MM"; break;      // score manuscripts
         default: kohacode = "MP";
     }
     // additional item types, recognized by callnumber
@@ -382,7 +382,7 @@ void MarcRecord::AddKohaData()
             }
         }
     }
-    
+
     f952->update('y', kohacode);
 
     marcfields.insert(f952);
