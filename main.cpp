@@ -5,11 +5,14 @@
 #include <MarcRecord.h>
 #include <Field001.h>
 
-
 using namespace std;
 
 // forward declaration of helper functions
 void ProcessConstituents(std::set<std::string>& callnumbers, std::multimap<std::string, MarcRecord*>& allRecords, std::ostringstream& KCBerrs);
+
+// definition of a few constants
+#define PRINTKCB 1
+#define PRINTCRB 0
 
 
 int main ( int argc, char *argv[] )
@@ -147,7 +150,14 @@ if ( argc != 3 ) /* 2 arguments: filename to process and resulting filename  */
     long counter = 0;
     for (std::multimap<std::string, MarcRecord*>::iterator it = allRecords.begin(); it != allRecords.end(); ++it)
     {
-        marcfile << (*it).second << endl;         // operator<< is overloaded for pointers to MarcRecord
+        if (PRINTKCB && !((*it).second)->isCRB() )
+        {
+            marcfile << (*it).second << endl;
+        }
+        else if (PRINTCRB && ((*it).second)->isCRB() )
+        {
+            marcfile << (*it).second << endl;         // operator<< is overloaded for pointers to MarcRecord
+        }
         delete (*it).second;
         counter++;
     }

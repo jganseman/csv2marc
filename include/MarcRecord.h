@@ -53,6 +53,7 @@ class MarcRecord
         void ProcessNonRepeatableFields();
         void ProcessParts();
         void AddKohaData();
+        void MakeBarcode();
 
         friend std::ostream& operator<< (std::ostream& os, const MarcRecord& m);    // print object
         friend std::ostream& operator<< (std::ostream& os, const MarcRecord* m);    // print pointer to object

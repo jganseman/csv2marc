@@ -166,6 +166,13 @@ void MarcRecord::buildup()
     } catch(exception& e) {
         errorlist += e.what();          // add any error to the errorlist of this record
     }
+
+    try {
+        MakeBarcode();
+    } catch(exception& e) {
+        errorlist += e.what();          // add any error to the errorlist of this record
+    }
+
     // throw out the error list
     if (errorlist != "")
     {
@@ -303,7 +310,7 @@ void MarcRecord::AddKohaData()
     try {
         std::string recordnr = getField(1)->Getsubfield('a');
         f952->update('o', recordnr);   // shelf number
-        f952->update('p', recordnr);    // barcode
+        //f952->update('p', recordnr);    // barcode
     } catch (exception& e)
     {
         throw MarcRecordException("ERROR field 952: no recordnr?");
@@ -337,8 +344,8 @@ void MarcRecord::AddKohaData()
         case 'r': kohacode = "RE"; break;     // realia: kits, 3D objects
         case 'm': kohacode = "CF"; break;      // computer-readable file, cdrom, microfilm
         case 'k': kohacode = "IM"; break;      // 2d imagery and projected graphics
-        case 'g': kohacode = "VI"; break;      // video, film, dvd
-        case 'j': kohacode = "CD"; break;      // music recordings: cd, vinyl, tape -> split up later!
+        case 'g': kohacode = "FI"; break;      // video, film, dvd
+        case 'j': kohacode = "CD"; break;      // music recordings: cd. Vinyl (LP) , tape (TA) added later!
         case 'a': kohacode = "TP"; break;      // books
         case 't': kohacode = "TM"; break;      // book manuscript
         case 'c': kohacode = "MP"; break;      // scores
@@ -386,6 +393,69 @@ void MarcRecord::AddKohaData()
     f952->update('y', kohacode);
 
     marcfields.insert(f952);
+
+}
+
+void MarcRecord::MakeBarcode()
+{
+    std::string barcode ;
+    try {
+        barcode = getField(1)->Getsubfield('a');
+    } catch (exception& e)
+    {
+        throw MarcRecordException("ERROR field 952: no recordnr?");
+    }
+
+    // remove all occurrences of the word 'onderdeel'. This is useless: parts are defined by (1) digits, subparts by digits without brackets
+    Helper::ReplaceAll(barcode, " onderdeel-", "p-");
+    // for safety reasons, require the space in front and hyphen after. Just in case someone forgot to encode this
+    Helper::ReplaceAll(barcode, "onderdeel", "p");
+    Helper::ReplaceAll(barcode, "onderdelen", "p");
+
+    // remove the word 'dig' and HDD specification from callnumber, instead add a field 530
+    barcode = barcode.substr(0, barcode.find("-dig"));
+
+    // do a few useful replacements
+    Helper::ReplaceAll(barcode, "bis", "b");
+    Helper::ReplaceAll(barcode, "quater", "d");
+    Helper::ReplaceAll(barcode, "ter", "c");
+    Helper::ReplaceAll(barcode, "grammofoonplaten", "g");
+    Helper::ReplaceAll(barcode, "Landschaftsdenkmale", "L");
+    Helper::ReplaceAll(barcode, "supplement", "s");
+    Helper::ReplaceAll(barcode, "Collectie", "C");
+    Helper::ReplaceAll(barcode, "Malibran", "M");
+    Helper::ReplaceAll(barcode, "copie", "c");
+    Helper::ReplaceAll(barcode, "manuscrite", "m");
+    Helper::ReplaceAll(barcode, "progr", "p");
+    Helper::ReplaceAll(barcode, "concerts", "c");
+    Helper::ReplaceAll(barcode, "parties", "p");
+    Helper::ReplaceAll(barcode, "séparés", "s");
+    Helper::ReplaceAll(barcode, "orchestre", "o");
+
+    // remove non-literal characters (maybe leave + in if you want)
+    Helper::RemoveAllOf(barcode, "-;()/+.'");
+    // remove whitespace: should not be necessary, hyphens are used
+    Helper::EraseWhitespace(barcode);
+
+    //TODO get out the dig and make a separate field for that
+    /*
+    if (barcode.find("dig") != barcode.npos)
+    {
+        //extract HD info
+        std::string hdinfo = barcode.substr(barcode.find("HD"));
+        MarcField* field530 = new MarcField(530);
+        field530->update('a', "Digital copy available : " + hdinfo);
+    }
+    */
+
+    // enter barcode into the system
+    getField(952)->update('p', barcode);
+
+        // generate a warning if the barcode is over 20 characters
+    if (barcode.size() > 21)
+    {
+        throw MarcRecordException("WARNING field 952: barcode +20 characters: " + barcode);
+    }
 
 }
 
