@@ -406,34 +406,48 @@ void MarcRecord::MakeBarcode()
         throw MarcRecordException("ERROR field 952: no recordnr?");
     }
 
+    // first make everything lowercase
+    Helper::MakeLowercase(barcode);
+
     // remove all occurrences of the word 'onderdeel'. This is useless: parts are defined by (1) digits, subparts by digits without brackets
     Helper::ReplaceAll(barcode, " onderdeel-", "p-");
     // for safety reasons, require the space in front and hyphen after. Just in case someone forgot to encode this
     Helper::ReplaceAll(barcode, "onderdeel", "p");
     Helper::ReplaceAll(barcode, "onderdelen", "p");
+    Helper::ReplaceAll(barcode, "deel", "v");
+    Helper::ReplaceAll(barcode, "delen", "v");
 
     // remove the word 'dig' and HDD specification from callnumber, instead add a field 530
     barcode = barcode.substr(0, barcode.find("-dig"));
 
     // do a few useful replacements
     Helper::ReplaceAll(barcode, "bis", "b");
-    Helper::ReplaceAll(barcode, "quater", "d");
-    Helper::ReplaceAll(barcode, "ter", "c");
-    Helper::ReplaceAll(barcode, "grammofoonplaten", "g");
-    Helper::ReplaceAll(barcode, "Landschaftsdenkmale", "L");
-    Helper::ReplaceAll(barcode, "supplement", "s");
-    Helper::ReplaceAll(barcode, "Collectie", "C");
-    Helper::ReplaceAll(barcode, "Malibran", "M");
+    Helper::ReplaceAll(barcode, "quater", "q");
+    Helper::ReplaceAll(barcode, "ter", "t");
+
+        // fixed in original db on 14sept2015
+    //Helper::ReplaceAll(barcode, "grammofoonplaten", "g");
+    //Helper::ReplaceAll(barcode, "Landschaftsdenkmale", "L");
+    //Helper::ReplaceAll(barcode, "Collectie", "C");
+    //Helper::ReplaceAll(barcode, "Malibran", "M");
+
     Helper::ReplaceAll(barcode, "copie", "c");
     Helper::ReplaceAll(barcode, "manuscrite", "m");
     Helper::ReplaceAll(barcode, "progr", "p");
     Helper::ReplaceAll(barcode, "concerts", "c");
     Helper::ReplaceAll(barcode, "parties", "p");
-    Helper::ReplaceAll(barcode, "séparés", "s");
+    Helper::ReplaceAll(barcode, "séparées", "s");
     Helper::ReplaceAll(barcode, "orchestre", "o");
 
+    Helper::ReplaceAll(barcode, "supplement", "s");
+    Helper::ReplaceAll(barcode, "suppl", "s");
+    Helper::ReplaceAll(barcode, "sup", "s");
+    Helper::ReplaceAll(barcode, "folio", "f");
+    Helper::ReplaceAll(barcode, "FOLIO", "F");
+
+
     // remove non-literal characters (maybe leave + in if you want)
-    Helper::RemoveAllOf(barcode, "-;()/+.'");
+    Helper::RemoveAllOf(barcode, ":-;()/+.',*{}[]%~&@#§!|<>");
     // remove whitespace: should not be necessary, hyphens are used
     Helper::EraseWhitespace(barcode);
 

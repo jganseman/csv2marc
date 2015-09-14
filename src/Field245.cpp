@@ -36,7 +36,18 @@ void Field245::update(char marcsubfield, std::string data)
         Setindicator2('0');
 
         // put data already in
-        MarcField::update(marcsubfield, data);
+        // everything after the ":" is the remainder of the title. Only accept one ':' punctuation mark
+        if ( data.find(':') == data.npos )
+        {
+            MarcField::update(marcsubfield, data);
+        } else
+        {
+            MarcField::update(marcsubfield, data.substr(0, data.find(':')+1));      // include the ':', according to ISBD rules
+            std::string rest = data.substr(data.find(':')+1);
+            Helper::Trim(rest);
+            MarcField::update('b', rest);                  // the rest of the string goes in subfield b
+        }
+
 
         //indicator 2 is the nr of nonfiling characters (i.e. how much space to leave out for articles)
         // so, calculate nr of letters used by articles in NL, FR, EN

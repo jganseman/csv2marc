@@ -12,7 +12,7 @@ void ProcessConstituents(std::set<std::string>& callnumbers, std::multimap<std::
 
 // definition of a few constants
 #define PRINTKCB 1
-#define PRINTCRB 0
+#define PRINTCRB 1
 
 
 int main ( int argc, char *argv[] )
