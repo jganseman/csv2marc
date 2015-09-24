@@ -9,6 +9,7 @@ using namespace std;
 
 // forward declaration of helper functions
 void ProcessConstituents(std::set<std::string>& callnumbers, std::multimap<std::string, MarcRecord*>& allRecords, std::ostringstream& KCBerrs);
+void ProcessDigitalScans(std::set<std::string>& callnumbers, std::multimap<std::string, MarcRecord*>& allRecords, std::ostringstream& KCBerrs);
 
 // definition of a few constants
 #define PRINTKCB 1
@@ -131,6 +132,9 @@ if ( argc != 3 ) /* 2 arguments: filename to process and resulting filename  */
     // and if necessary, adds the necessary fields 773 (in parts) and 774 (in mothers)
     ProcessConstituents(callnumbers, allRecords, KCBerrs);
 
+    // TODO this crashes
+    //ProcessDigitalScans(callnumbers, allRecords, KCBerrs);
+
 
     cout << " === CRB ERROR LIST === " << endl;
     cout << CRBerrs.str() << endl;
@@ -212,3 +216,63 @@ void ProcessConstituents(std::set<std::string>& callnumbers, std::multimap<std::
     return;
 }
 
+
+void ProcessDigitalScans(std::set<std::string>& callnumbers, std::multimap<std::string, MarcRecord*>& allRecords, std::ostringstream& KCBerrs)
+{
+    // what we try to do here is: find records ending on -dig, then merge them to their mother record by adding a 534 field
+    // if such mother record does not exist, change the record into a mother record, keeping the scan info in a 534 fieldµ
+
+    for (std::set<std::string>::iterator it = callnumbers.begin(); it != callnumbers.end(); ++it)
+    {
+        // if callnumber contains dig
+        std::string curstring = (*it);
+        std::size_t found = curstring.find("-dig");
+        if (found == std::string::npos) continue;       // move onto next callnumber if not a digital record
+
+        //generate the callnumber without the dig
+        std::string mothercallnr = curstring.substr(0,found);
+        Helper::Trim(mothercallnr);
+        // find in set of callnumbers
+        std::set<std::string>::iterator present = callnumbers.find(mothercallnr);
+        if (present == callnumbers.end())       // Mother record NOT FOUND! throw warning
+        {
+            KCBerrs << "Warning: no mother record found for scan " << (*it) << endl;
+            // now retrieve the current record, and adapt that one
+            MarcRecord* orphanscan = (*(allRecords.find(*it))).second;
+
+            // change this record into a printed score record
+            //TODO GO FURTHER HERE
+
+        }
+        else    // mother record found. Add field 774 to mother record
+        {
+            MarcRecord* scanmother = (*(allRecords.find(mothercallnr))).second;
+            MarcRecord* scanchild = (*(allRecords.find(*it))).second;
+
+            // add information from the child to the mother. Use the parsing routine of field 533
+            // first get the HD info
+            std::size_t foundhd = (*it).find("HD");
+            if (foundhd == std::string::npos)
+                KCBerrs << "Warning: no HD specification in callnumber " << (*it) << endl;
+
+            std::string hd = (*it).substr(foundhd, 4);
+            hd[2] = '-';        // force hyphen
+            // extract the extent info from field 300 $a ($c will only have recorded centimeters and such)
+            std::string scanextent = scanchild->getField(300)->Getsubfield('a');
+            if (scanextent == "" || scanextent.empty())
+                KCBerrs << "Warning: no mother record found for scan " << (*it) << endl;
+
+            std::string newstring = "DIG " + hd + " : " + scanextent;
+            // put this string in the mother record
+            MarcField* newfield = FieldFactory::getFactory()->getMarcField(533);
+            newfield->update('a', newstring);
+            scanmother->addField(newfield);
+
+            // now delete the child record
+            allRecords.erase(allRecords.find(*it));
+            delete scanchild;
+        }
+
+    }
+
+}

@@ -50,6 +50,7 @@ class MarcRecord
     private:
         void AddFixedValues();
         void CheckTitle();
+        void CheckNotForLoan();
         void ProcessNonRepeatableFields();
         void ProcessParts();
         void AddKohaData();

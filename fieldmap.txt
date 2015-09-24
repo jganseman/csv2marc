@@ -3,7 +3,7 @@
 # Lines contain: CSV file column index (0-based) followed by MARC field and subfield
 #
 # Currently, tailored towards Brussels conservatory library
-# Version: 8 June 2015, after an update of Allegro-C's export routine
+# Version: 24 September 2015, after an update of Allegro-C's export routine
 #
 #
 # first just a line to force creation of a leader record
@@ -11,7 +11,7 @@
 # as local record number, we use the library's shelf number
 5   001 a
 # first store who the author of the original record is, for error reporting
-3	588	a
+3	583	k
 # the leader record is updated with info from material type, ISBN and ISSN fields, last modification date
 26  000 m       #hack into marcsubfield m for material parsing routine
 #50  #000 #a       #ISBN etc            NOTE: score can also have ISBN. Rely completely on material field.
@@ -70,7 +70,7 @@
 # Distributor
 23	264	a       #Distributor place
 24	264	b       #Distributor name
-25  518 a       #Manuscript year: as comment in field 518 (033 only for coded dates)
+25  518 d       #Manuscript year: as comment in field 518 (033 only for coded dates)
 #
 # Description fields: material, key, opus, instrumentation
 27	300	a       #collation: material extent
@@ -93,22 +93,21 @@
 50  510 a       #RISM number
 48	541	a       #Source of acquisition
 6	506	a       #Availability (can be borrowed?)
-2	583	a       #Status code
+2	583	l       #Status code
 #
 44	500	a       #Indexed annotation (todo: lists of movements in 505)
 45	500	a       #Non-indexed annotation (todo: lists of movements in 505)
 46	500	a       #Responsible annotation. Little used
-47	534	n       #Impressum annotation. Contains facsimiles and original RISM nrs
-49	500	a
-53	501	a
+47	534	n       #Impressum annotation. Contains facsimiles and original RISM nrs. TODO find better place?
+49	500	a       #Varia . This often contains DIG in which case it needs to be processed in 533
+49  533 a       # Processing of DIG records in Varia
+49  542 n       # Processing of Sabam records in Varia
+53	501	a       #Onderdeelbeschrijving
+54  500 a       #Annotation of part of book
 #material classification now in 513: type of report. actually: 300b/336/337/338?
 26  336 a       #Material: put in 336 "content type" (todo: use with controlled vocab like RDA)
-52	650	a
+52	650	a       #Keywords
 4	590	a       #inventory number
 #
 # 952 field, internal KOHA circulation stuff:
-#2	#952    #1   #LOST status       // direct copy: moved this to record.cpp postprocessing
-#6	#952	#7   #NOT FOR LOAN status
-#5   #952 #o    #shelf nr
-#5   #952 #p    #barcode
-#26  #952 #y    #itemtype
+# Filling in the 952 field (item-specific data) has all been moved to the postprocessing routine

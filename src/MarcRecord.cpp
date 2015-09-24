@@ -150,6 +150,12 @@ void MarcRecord::buildup()
     }
 
     try {
+        CheckNotForLoan();
+    } catch(exception& e) {
+        errorlist += e.what();          // add any error to the errorlist of this record
+    }
+
+    try {
         ProcessNonRepeatableFields();
     } catch(exception& e) {
         errorlist += e.what();          // add any error to the errorlist of this record
@@ -216,6 +222,53 @@ void MarcRecord::CheckTitle()
     {
         myfield->update('a', "[untitled]");
         throw MarcRecordException("WARNING Field 245: No title present. Putting [untitled].");
+    }
+}
+
+void MarcRecord::CheckNotForLoan()
+{
+    // if placenumber < 52000, set not for loan
+    MarcField* f001 = getField(001);
+    if (f001 && !(f001->isempty()))
+    {
+        std::string first5 = f001->Getsubfield('a').substr(0,5);
+        //cast as number
+        long nr = atol(first5.c_str());
+        if (nr > 0)     // if valid conversion
+        {
+            MarcField* f506 = getField(506);
+            if (f506 && !(f506->isempty()))
+                return;
+            else if (nr < 52000)
+            {
+                MarcField* newfield = FieldFactory::getFactory()->getMarcField(506);
+                newfield->update('a', "*");
+                marcfields.insert(newfield);
+                throw MarcRecordException("WARNING Field 506: Item < 52000, not for loan status added.");
+            }
+        }
+
+        // some statuses must be automatically set to not for loan
+        MarcField* f583 = getField(583);
+        if (f583 && !(f583->isempty()))
+        {
+            std::string status = f583->Getsubfield('l');
+            Helper::MakeUppercase(status);
+            if (status == "WQ")
+            {
+                MarcField* f506 = getField(506);
+                if (f506 && !(f506->isempty()))
+                    return;
+                else
+                {
+                    MarcField* newfield = FieldFactory::getFactory()->getMarcField(506);
+                    newfield->update('a', "*");
+                    marcfields.insert(newfield);
+                    throw MarcRecordException("WARNING Field 506: Status WQ, not for loan status added.");
+                }
+            }
+        }
+
     }
 }
 
@@ -316,11 +369,11 @@ void MarcRecord::AddKohaData()
         throw MarcRecordException("ERROR field 952: no recordnr?");
     }
 
-    // process LOST status, stored in field 583 (Action Note = status)
+    // process LOST status, stored in field 583$l (Action Note = status)
     MarcField* f583 = getField(583);
     if (f583)
     {
-        std::string status = f583->Getsubfield('a');
+        std::string status = f583->Getsubfield('l');
         Helper::MakeUppercase(status);
         if (status.find("LOST") != std::string::npos)
             f952->update('1', "1");         // stored in subfield $1, LOST code = "1"
@@ -403,7 +456,7 @@ void MarcRecord::MakeBarcode()
         barcode = getField(1)->Getsubfield('a');
     } catch (exception& e)
     {
-        throw MarcRecordException("ERROR field 952: no recordnr?");
+        throw MarcRecordException("ERROR field 952: no callnr?");
     }
 
     // first make everything lowercase
@@ -443,7 +496,6 @@ void MarcRecord::MakeBarcode()
     Helper::ReplaceAll(barcode, "suppl", "s");
     Helper::ReplaceAll(barcode, "sup", "s");
     Helper::ReplaceAll(barcode, "folio", "f");
-    Helper::ReplaceAll(barcode, "FOLIO", "F");
 
 
     // remove non-literal characters (maybe leave + in if you want)
@@ -466,7 +518,7 @@ void MarcRecord::MakeBarcode()
     getField(952)->update('p', barcode);
 
         // generate a warning if the barcode is over 20 characters
-    if (barcode.size() > 21)
+    if (barcode.size() > 20)
     {
         throw MarcRecordException("WARNING field 952: barcode +20 characters: " + barcode);
     }
@@ -526,7 +578,7 @@ bool MarcRecord::isvalid() const
     {
         if ((*it)->Getfieldnr() == 583)       // overloaded operator
         {
-            if ((*it)->Getsubfield('a') == "C" || (*it)->Getsubfield('a') == "X" || (*it)->Getsubfield('a') == "c" || (*it)->Getsubfield('a') == "x")
+            if ((*it)->Getsubfield('l') == "C" || (*it)->Getsubfield('l') == "X" || (*it)->Getsubfield('l') == "c" || (*it)->Getsubfield('l') == "x")
                 return false;
         }
 
@@ -575,10 +627,10 @@ MarcField* MarcRecord::getField(int nr) const
 
 bool MarcRecord::isCRB() const
 {
-    MarcField* f588 = getField(588);
-    if (f588)
+    MarcField* f583 = getField(583);
+    if (f583)
     {
-        std::string author = f588->Getsubfield('a');
+        std::string author = f583->Getsubfield('k');
         if  ( (author == "mv") || (author == "im") || (author == "mcl") || (author == "sdp") || (author == "lm")
             || (author == "ah") || (author == "ar") || (author == "bkb") || (author == "cc") || (author == "cf")
             || (author == "df") || (author == "dl") || (author == "ed") || (author == "fb") || (author == "hl")

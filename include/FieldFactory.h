@@ -23,8 +23,13 @@
 #include <Field383.h>
 #include <Field384.h>
 #include <Field490.h>
+#include <Field500.h>
 #include <Field505.h>
 #include <Field510.h>
+#include <Field533.h>
+#include <Field534.h>
+#include <Field542.h>
+#include <Field583.h>
 #include <Field650.h>
 #include <Field700.h>
 #include <Field952.h>
