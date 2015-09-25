@@ -3,6 +3,7 @@
 
 #include <MarcField.h>
 #include <Helper.h>
+#include <Translator.h>
 
 #include <string>
 #include <algorithm>
@@ -18,9 +19,10 @@ class Field100 : public MarcField
     protected:
     private:
         bool isValidRelator(std::string& data);
-        static std::set<std::string> relatorterms;
-        static std::set<std::string> init();
+        //static std::set<std::string> relatorterms;
+        //static std::set<std::string> init();
         void relatorFixer(std::string& data);
+        static Translator t100e;
 };
 
 #endif // FIELD100_H

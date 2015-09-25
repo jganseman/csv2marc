@@ -2,6 +2,7 @@
 
 
 // initialize relator terms
+/*
 std::set<std::string> Field100::init()
 {
     int nrterms=33;
@@ -47,6 +48,11 @@ std::set<std::string> Field100::init()
 
 // initialize that list as static member of class
 std::set<std::string> Field100::relatorterms(init());
+
+*/
+
+// initialize the translation list for relator terms
+Translator Field100::t100e("t100e.csv");     // The file must be in the same folder as the executable.
 
 
 // now begin with the normal class stuff
@@ -111,7 +117,7 @@ void Field100::update(char marcsubfield, std::string data)
                 Helper::MakeLowercase(tempstring);
                 //update
                 relatorFixer(tempstring);
-                MarcField::update('e', tempstring);
+                MarcField::update('e', t100e.translate(tempstring));
                 // check that the list conforms to the given list of names
                 if (!isValidRelator(tempstring))
                 {
@@ -152,7 +158,8 @@ void Field100::update(char marcsubfield, std::string data)
 
 bool Field100::isValidRelator(std::string& data)
 {
-    return (relatorterms.find(data) != relatorterms.end());
+    return t100e.isKey(data);
+    //return (relatorterms.find(data) != relatorterms.end());
 }
 
 

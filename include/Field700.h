@@ -3,6 +3,7 @@
 
 #include <MarcField.h>
 #include <Helper.h>
+#include <Translator.h>
 
 #include <string>
 #include <algorithm>
@@ -19,9 +20,10 @@ class Field700 : public MarcField
     protected:
     private:
         bool isValidRelator(std::string& data);
-        static std::set<std::string> relatorterms;
-        static std::set<std::string> init();
+        // static std::set<std::string> relatorterms;
+        // static std::set<std::string> init();
         void relatorFixer(std::string& data);
+        static Translator t700e;
 
         // to keep the relators and date from a single subfield together,
         // we need some additional data structures to group by subfield

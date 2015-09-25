@@ -1,3 +1,5 @@
+
+// include statements
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -5,16 +7,16 @@
 #include <MarcRecord.h>
 #include <Field001.h>
 
+// definition of a few constants
+#define PRINTKCB 1
+#define PRINTCRB 1
+
+// namespace statement
 using namespace std;
 
 // forward declaration of helper functions
 void ProcessConstituents(std::set<std::string>& callnumbers, std::multimap<std::string, MarcRecord*>& allRecords, std::ostringstream& KCBerrs, std::ostringstream& CRBerrs);
 void ProcessDigitalScans(std::set<std::string>& callnumbers, std::multimap<std::string, MarcRecord*>& allRecords, std::ostringstream& KCBerrs, std::ostringstream& CRBerrs);
-
-// definition of a few constants
-#define PRINTKCB 1
-#define PRINTCRB 1
-
 
 int main ( int argc, char *argv[] )
 {

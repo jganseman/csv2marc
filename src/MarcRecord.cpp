@@ -66,12 +66,16 @@ void MarcRecord::buildup()
     //cout << csvline << endl;
 
     // parse csvline. Its fields are tab-separated, each field needs separate processing
+
+    csvfields = Helper::Segment(csvline, '\t');
+    /*
     std::stringstream csvlinestream(csvline);
     std::string segment;
     while(std::getline(csvlinestream, segment, '\t'))
     {
         csvfields.push_back(segment);
     }
+    */
 
     // if the line is empty, do not even build a record
     try{

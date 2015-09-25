@@ -1,6 +1,6 @@
 #include "Field700.h"
 
-
+/*
 // initialize relator terms
 std::set<std::string> Field700::init()
 {
@@ -47,8 +47,10 @@ std::set<std::string> Field700::init()
 
 // initialize that list as static member of class
 std::set<std::string> Field700::relatorterms(init());
+*/
 
-
+// initialize the translation list for relator terms
+Translator Field700::t700e("t100e.csv");     // The file must be in the same folder as the executable.
 
 
 Field700::Field700(int nr) : MarcField(nr)
@@ -128,7 +130,7 @@ void Field700::update(char marcsubfield, std::string data)
                         }
                         // to preserve the link with the author $a subfield, everything is internally stored in the
                         // $a subfield as one entire string that is already printed
-                        relator = relator + "$e" + tempstring;
+                        relator = relator + "$e" + t700e.translate(tempstring);
                 }
             }
             fullstring = datasegments[0];       // discard all <relator> info from this string
@@ -208,7 +210,8 @@ std::string const Field700::print() const
 
 bool Field700::isValidRelator(std::string& data)
 {
-    return (relatorterms.find(data) != relatorterms.end());
+    return t700e.isKey(data);
+    //return (relatorterms.find(data) != relatorterms.end());
 }
 
 void Field700::relatorFixer(std::string& data)
