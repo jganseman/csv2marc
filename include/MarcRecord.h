@@ -45,6 +45,7 @@ class MarcRecord
         //void setValidity(bool value) { valid=value; }
         MarcField* getField(int nr) const;
         void addField(MarcField* val){ marcfields.insert(val); }
+        void deleteField(MarcField* val){ marcfields.erase(val); }
         bool isCRB() const;
     protected:
     private:
