@@ -19,8 +19,6 @@ class Field100 : public MarcField
     protected:
     private:
         bool isValidRelator(std::string& data);
-        //static std::set<std::string> relatorterms;
-        //static std::set<std::string> init();
         void relatorFixer(std::string& data);
         static Translator t100e;
 };

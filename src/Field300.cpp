@@ -2,6 +2,7 @@
 
 Field300::Field300(int nr): MarcField(nr)
 {
+    verbose=false;
     //ctor
 }
 

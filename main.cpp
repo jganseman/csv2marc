@@ -195,8 +195,8 @@ void ProcessConstituents(std::set<std::string>& callnumbers, std::multimap<std::
             std::set<std::string>::iterator present = callnumbers.find(mothercallnr);
             if (present == callnumbers.end())       // Mother record NOT FOUND! throw warning
             {
-                if ( (*(allRecords.find((*it)))).second->isCRB() ) CRBerrs << "Warning: no mother record found for " << (*it) << endl;
-                else KCBerrs << "Warning: no mother record found for " << (*it) << endl;
+                //if ( (*(allRecords.find((*it)))).second->isCRB() ) CRBerrs << "Warning: no mother record found for " << (*it) << endl;
+                //else KCBerrs << "Warning: no mother record found for " << (*it) << endl;
             }
             else    // mother record found. Add field 774 to mother record
             {

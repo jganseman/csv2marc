@@ -271,7 +271,7 @@ void Field382::update(char marcsubfield, std::string data)
         int optioncount = 14;
 
 // code below is a routine that enforces the order of occurence as in the array above
-        /*
+
         unsigned int cursegment = 0;
         for (int i=0; i<optioncount; ++i)
         {
@@ -296,12 +296,12 @@ void Field382::update(char marcsubfield, std::string data)
         }
 
         if (cursegment != gensegments.size())
-            if (verbose) throw MarcRecordException("ERROR Field 382: wrong category or ordering: " + general);
-        */
+            if (verbose) throw MarcRecordException("WARNING Field 382: wrong category order: " + general);
+
 
 
 // this version does not enforce order
-        //int nrofsegments = gensegments.size();
+/*
         unsigned int recognized = 0;
         for (std::vector<std::string>::iterator jt = gensegments.begin(); jt!=gensegments.end(); ++jt)
         {
@@ -319,8 +319,8 @@ void Field382::update(char marcsubfield, std::string data)
         } else if (recognized > gensegments.size()) {
             if (verbose) throw MarcRecordException("ERROR Field 382: excess category in: " + general);
         }
-
-
+*/
+// end of second version
 
         found = instrumentation.find_first_of("<");
 

@@ -1,55 +1,6 @@
 #include "Field100.h"
 
 
-// initialize relator terms
-/*
-std::set<std::string> Field100::init()
-{
-    int nrterms=33;
-    std::string validterms[]={
-        "act.",
-        "a.",
-        "beg.",
-        "bew.",
-        "cadensschr.",
-        "choreogr.",
-        "comm.",
-        "c.",
-        "kop.",
-        "dir.",
-        "ed.",
-        "prod.",
-        "sign.",
-        "red.",
-        "ill.",
-        "impr.",
-        "inl.",
-        "perf.",
-        "docent",
-        "tekstd.",
-        "medium",
-        "thema",
-        "tech.",
-        "optek.",
-        "prod.",
-        "pseudo.",
-        "reconstr.",
-        "reg.",
-        "samenst.",
-        "scen.",
-        "vert.",
-        "volt.",
-        "arr."
-         };
-    std::set<std::string> tmp(validterms, validterms+nrterms);
-
-    return tmp;
- }
-
-// initialize that list as static member of class
-std::set<std::string> Field100::relatorterms(init());
-
-*/
 
 // initialize the translation list for relator terms
 Translator Field100::t100e("t100e.csv");     // The file must be in the same folder as the executable.

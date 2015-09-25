@@ -248,7 +248,7 @@ void MarcRecord::CheckNotForLoan()
                 MarcField* newfield = FieldFactory::getFactory()->getMarcField(506);
                 newfield->update('a', "*");
                 marcfields.insert(newfield);
-                throw MarcRecordException("WARNING Field 506: Item < 52000, not for loan status added.");
+                throw MarcRecordException("AUTOFIX Field 506: Item < 52000, not for loan status added.");
             }
         }
 
@@ -268,7 +268,7 @@ void MarcRecord::CheckNotForLoan()
                     MarcField* newfield = FieldFactory::getFactory()->getMarcField(506);
                     newfield->update('a', "*");
                     marcfields.insert(newfield);
-                    throw MarcRecordException("WARNING Field 506: Status WQ, not for loan status added.");
+                    throw MarcRecordException("AUTOFIX Field 506: Status WQ, not for loan status added.");
                 }
             }
         }
