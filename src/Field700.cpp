@@ -3,6 +3,7 @@
 
 // initialize the translation list for relator terms
 Translator Field700::t700e("t100e.csv");     // The file must be in the same folder as the executable.
+Translator Field700::t700a("t100a.csv");
 
 
 Field700::Field700(int nr) : MarcField(nr)
@@ -122,7 +123,7 @@ void Field700::update(char marcsubfield, std::string data)
             if (verbose) throw MarcRecordException("ERROR Field 700: empty value among authors.");
         }
 
-        MarcField::update('a', fullstring+dates+relator);
+        MarcField::update('a', t700a.translate(fullstring)+dates+relator);
     }
 
 }

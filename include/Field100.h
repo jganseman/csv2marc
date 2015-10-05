@@ -21,6 +21,7 @@ class Field100 : public MarcField
         bool isValidRelator(std::string& data);
         void relatorFixer(std::string& data);
         static Translator t100e;
+        static Translator t100a;
 };
 
 #endif // FIELD100_H

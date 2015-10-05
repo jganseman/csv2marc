@@ -21,8 +21,13 @@ Translator::Translator(std::string filename)
         if (line.empty() || line == "")
             continue;
 
+        // in Excel, CSV is standard encoded with ";" . IGNORE line if it already contains tab, else, convert all ";" to tab
+        if (line.find('\t') != line.npos)
+            continue;
+        Helper::ReplaceAll(line, ";", "\t");
+
         vector<std::string> segments = Helper::Segment(line, '\t');
-        if ( (segments.size() == 0)  ||  (segments.size() > 2) )     // must be max 2 tab-separated strings
+        if (segments.size() == 0)     // line must exist
             continue;
 
         Helper::Trim(segments[0]);
@@ -31,16 +36,20 @@ Translator::Translator(std::string filename)
         if (segments.size() > 1)
         {
             Helper::Trim(segments[1]);
-            values.insert(segments[1]);
+            if (segments[1] != "")
+                values.insert(segments[1]);
         }
 
         if (segments.size() == 1)
             mapping.insert(std::pair<std::string,std::string>(segments[0], ""));
         else
-            mapping.insert(std::pair<std::string,std::string>(segments[0], segments[1]));
+        {
+             if (segments[1] != "")
+                mapping.insert(std::pair<std::string,std::string>(segments[0], segments[1]));
+        }
 
+        // anything beyond the 2nd column is treated as comment
     }
-
 }
 
 Translator::~Translator()

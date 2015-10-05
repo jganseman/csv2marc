@@ -248,7 +248,7 @@ void MarcRecord::CheckNotForLoan()
                 MarcField* newfield = FieldFactory::getFactory()->getMarcField(506);
                 newfield->update('a', "*");
                 marcfields.insert(newfield);
-                throw MarcRecordException("AUTOFIX Field 506: Item < 52000, not for loan status added.");
+                //throw MarcRecordException("AUTOFIX Field 506: Item < 52000, not for loan status added.");
             }
         }
 
@@ -268,7 +268,7 @@ void MarcRecord::CheckNotForLoan()
                     MarcField* newfield = FieldFactory::getFactory()->getMarcField(506);
                     newfield->update('a', "*");
                     marcfields.insert(newfield);
-                    throw MarcRecordException("AUTOFIX Field 506: Status WQ, not for loan status added.");
+                    //throw MarcRecordException("AUTOFIX Field 506: Status WQ, not for loan status added.");
                 }
             }
         }
@@ -364,6 +364,7 @@ void MarcRecord::AddKohaData()
 
     f952->update('a', "B-Bc");    // home branch, use library code defined in KOHA (not MARC code)
     f952->update('b', "B-Bc");    // holdings branch
+
     try {
         std::string recordnr = getField(1)->Getsubfield('a');
         f952->update('o', recordnr);   // shelf number
@@ -389,7 +390,12 @@ void MarcRecord::AddKohaData()
     {
         std::string nfl = f506->Getsubfield('a');
         if (nfl.find("*") != std::string::npos)
+        {
             f952->update('7', "1");         // stored in subfield $7, NOT FOR LOAN code = "1"
+            //change text in 506  to "Not for loan"
+            f506->Deletesubfield('a');
+            f506->update('a', "Not for loan");
+        }
     }
 
     // process KOHA ITEM TYPE, stored in LEADER
@@ -501,22 +507,10 @@ void MarcRecord::MakeBarcode()
     Helper::ReplaceAll(barcode, "sup", "s");
     Helper::ReplaceAll(barcode, "folio", "f");
 
-
     // remove non-literal characters (maybe leave + in if you want)
     Helper::RemoveAllOf(barcode, ":-;()/+.',*{}[]%~&@#§!|<>");
     // remove whitespace: should not be necessary, hyphens are used
     Helper::EraseWhitespace(barcode);
-
-    //TODO get out the dig and make a separate field for that
-    /*
-    if (barcode.find("dig") != barcode.npos)
-    {
-        //extract HD info
-        std::string hdinfo = barcode.substr(barcode.find("HD"));
-        MarcField* field530 = new MarcField(530);
-        field530->update('a', "Digital copy available : " + hdinfo);
-    }
-    */
 
     // enter barcode into the system
     getField(952)->update('p', barcode);

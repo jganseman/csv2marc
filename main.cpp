@@ -195,8 +195,8 @@ void ProcessConstituents(std::set<std::string>& callnumbers, std::multimap<std::
             std::set<std::string>::iterator present = callnumbers.find(mothercallnr);
             if (present == callnumbers.end())       // Mother record NOT FOUND! throw warning
             {
-                //if ( (*(allRecords.find((*it)))).second->isCRB() ) CRBerrs << "Warning: no mother record found for " << (*it) << endl;
-                //else KCBerrs << "Warning: no mother record found for " << (*it) << endl;
+                if ( (*(allRecords.find((*it)))).second->isCRB() ) CRBerrs << "Warning: no mother record found for " << (*it) << endl;
+                else KCBerrs << "Warning: no mother record found for " << (*it) << endl;
             }
             else    // mother record found. Add field 774 to mother record
             {
@@ -299,6 +299,14 @@ void ProcessDigitalScans(std::set<std::string>& callnumbers, std::multimap<std::
             MarcField* field1 = FieldFactory::getFactory()->getMarcField(1);
             field1->update('a', mothercallnr);
             scanchild->addField(field1);
+            //update the Koha itemcallnumber in field 952 too
+            if (scanchild->getField(952))
+            {
+                MarcField* field952 = scanchild->getField(952);
+                std::string content = field952->Getsubfield('o');
+                field952->Deletesubfield('o');
+                field952->update('o', content.substr(0, content.find("-dig")));
+            }
 
         }
         else    // mother record found! Add field 533 to mother record and delete child record

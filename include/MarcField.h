@@ -47,6 +47,7 @@ class MarcField
         virtual bool isempty() const;
 
         std::string Getsubfield(char mychar) const;     // gets first occurring subfield only
+        void Deletesubfield(char mychar);
 
         // helper function to split multiple subfields into separate fields in parent
         vector < pair <char, string> > extractDoubleSubfields(char mychar);

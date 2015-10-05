@@ -2,7 +2,8 @@
 
 Field583::Field583(int nr) : MarcField(nr)
 {
-    //ctor
+    // put in ctor, to have it only once included
+    MarcField::update('a', "catalography;");
 }
 
 Field583::~Field583()
@@ -34,8 +35,5 @@ void Field583::update(char marcsubfield, std::string data)
         Helper::Trim(data);
         MarcField::update(marcsubfield, data);
     }
-
-    MarcField::update('a', "catalography;");
-
 
 }

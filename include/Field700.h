@@ -22,6 +22,7 @@ class Field700 : public MarcField
         bool isValidRelator(std::string& data);
         void relatorFixer(std::string& data);
         static Translator t700e;
+        static Translator t700a;
 
         // to keep the relators and date from a single subfield together,
         // we need some additional data structures to group by subfield

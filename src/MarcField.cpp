@@ -89,7 +89,10 @@ std::string MarcField::Getsubfield(char mychar) const
 
 }
 
-
+void MarcField::Deletesubfield(char mychar)
+{
+    subfields.erase(mychar);
+}
 
 
 vector < pair <char, string> > MarcField::extractDoubleSubfields(char mychar)

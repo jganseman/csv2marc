@@ -4,7 +4,7 @@
 
 // initialize the translation list for relator terms
 Translator Field100::t100e("t100e.csv");     // The file must be in the same folder as the executable.
-
+Translator Field100::t100a("t100a.csv");
 
 // now begin with the normal class stuff
 
@@ -100,7 +100,7 @@ void Field100::update(char marcsubfield, std::string data)
     // now add the author itself.
     // trim any beginning or ending spaces
     Helper::Trim(fullstring);
-    MarcField::update('a', fullstring);
+    MarcField::update('a', t100a.translate(fullstring));
 
 }
 
