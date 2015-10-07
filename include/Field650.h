@@ -4,6 +4,7 @@
 #include <MarcField.h>
 #include <MarcRecordException.h>
 #include <Helper.h>
+#include <Translator.h>
 
 #include <string>
 #include <algorithm>
@@ -17,6 +18,7 @@ class Field650 : public MarcField
         virtual void update(char marcsubfield, std::string data);
     protected:
     private:
+        static Translator t650a;
 };
 
 #endif // FIELD650_H

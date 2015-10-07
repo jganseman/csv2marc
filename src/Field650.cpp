@@ -1,5 +1,9 @@
 #include "Field650.h"
 
+// initialize the translation list for keywords
+Translator Field650::t650a("t650a.csv");     // The file must be in the same folder as the executable.
+
+
 Field650::Field650(int nr) : MarcField(nr)
 {
     //ctor
@@ -22,6 +26,8 @@ void Field650::update(char marcsubfield, std::string data)
     Setindicator2('4');             // no thesaurus is used
 
     //First, segment by ';'
+    Helper::ReplaceAll(data, "--", ";");
+    Helper::ReplaceAll(data, " - ", ";");
     std::vector<std::string> datasegments = Helper::Segment(data, ';');
 
     //TODO: this is not repeatable. Several 650 fields necessary...
@@ -40,7 +46,12 @@ void Field650::update(char marcsubfield, std::string data)
         try{
             Helper::Trim((*it));
             if (!((*it).empty() || (*it) == ""))
-                MarcField::update(marcsubfield, (*it));
+            {
+                //capitalize first letter
+                (*it)[0] = toupper((*it)[0]);
+                MarcField::update(marcsubfield, t650a.translate((*it)));
+            }
+
         } catch (exception& e)
         {
             if (verbose) throw MarcRecordException("ERROR Field 650 : empty keyword or excess semicolon.");

@@ -33,19 +33,25 @@ Translator::Translator(std::string filename)
         Helper::Trim(segments[0]);
         keys.insert(segments[0]);
 
-        if (segments.size() > 1)
+        if (segments.size() > 1)        // translation available
         {
             Helper::Trim(segments[1]);
-            if (segments[1] != "")
+            if ((segments[1] != "") && (segments[1] != segments[0]))
                 values.insert(segments[1]);
         }
 
-        if (segments.size() == 1)
+        if (segments.size() == 1)           // no translation available. Put in empty string.
             mapping.insert(std::pair<std::string,std::string>(segments[0], ""));
         else
         {
-             if (segments[1] != "")
-                mapping.insert(std::pair<std::string,std::string>(segments[0], segments[1]));
+             if (segments[1] != "")          // translation available
+             {
+                 if (segments[1] != segments[0])        // translation is not same as original: replace
+                    mapping.insert(std::pair<std::string,std::string>(segments[0], segments[1]));
+                else                           // translation is same as original: put empty string
+                    mapping.insert(std::pair<std::string,std::string>(segments[0], ""));
+             }
+
         }
 
         // anything beyond the 2nd column is treated as comment
