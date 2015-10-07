@@ -11,7 +11,7 @@ dir.;conductor
 ed.;editor
 prod.;producer
 sign.;signature
-red.;redactor
+red.;editor
 ill.;illustrator
 impr.;printer
 inl.;preface
@@ -19,13 +19,13 @@ perf.;performer
 docent;teacher
 tekstd.;lyricist
 medium;
-thema;
+thema;theme
 tech.;technician
-optek.;recorder
+optek.;scribe
 prod.;producer
 pseudo.;pseudonym
 reconstr.;reconstruction
-reg.;director
+reg.;stagedirector
 samenst.;compiler
 scen.;scriptwriter
 vert.;translator
