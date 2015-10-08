@@ -123,7 +123,9 @@ void Field700::update(char marcsubfield, std::string data)
             if (verbose) throw MarcRecordException("ERROR Field 700: empty value among authors.");
         }
 
-        MarcField::update('a', t700a.translate(fullstring)+dates+relator);
+        //TODO MarcField::update('a', t700a.translate(fullstring)+dates+relator);
+        MarcField::update('a', fullstring+dates+relator);
+
     }
 
 }

@@ -100,7 +100,8 @@ void Field100::update(char marcsubfield, std::string data)
     // now add the author itself.
     // trim any beginning or ending spaces
     Helper::Trim(fullstring);
-    MarcField::update('a', t100a.translate(fullstring));
+    //TODO MarcField::update('a', t100a.translate(fullstring));
+    MarcField::update('a', fullstring);
 
 }
 

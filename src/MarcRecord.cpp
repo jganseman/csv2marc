@@ -206,7 +206,7 @@ void MarcRecord::AddFixedValues()
     newfield = FieldFactory::getFactory()->getMarcField(40);    // creator of this record. Also has "Language of record" field. Set by default on Dutch
     newfield->update('a', ORGCODE);
     newfield->update('b', "dut");
-    //newfield->update('c', ORGCODE);
+    newfield->update('c', ORGCODE);
     marcfields.insert(newfield);
 }
 
