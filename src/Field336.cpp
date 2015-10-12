@@ -3,7 +3,7 @@
 // initialize material terms
 std::set<std::string> Field336::init()
 {
-    int nrterms=79;
+    int nrterms=80;
     std::string validterms[]={
         "chord progressions",               // for types c and d: printed and handwritten music
         "klavierreductie",
@@ -36,7 +36,8 @@ std::set<std::string> Field336::init()
         "tijdschrift",
         "catalogus",
         "contract",
-        "diploma",                          // total 17
+        "diploma",
+        "liedtekst"                         // total 18
 
         "aquarel",                         // for type k : images
         "gravure",
@@ -246,8 +247,8 @@ void Field336::fixTerminology(std::string& data)
 {
     Helper::ReplaceAll(data, "autograaf : partituur", "partituur autografisch");
     Helper::ReplaceAll(data, "autograaf : partijen", "partijen autografisch");
-    //Helper::ReplaceAll(data, "pianopartituur", "partituur");
-    //Helper::ReplaceAll(data, "vioolpartituur", "partituur");
+    Helper::ReplaceAll(data, "pianopartituur", "partituur");
+    Helper::ReplaceAll(data, "vioolpartituur", "partituur");
     Helper::ReplaceAll(data, "Partituur", "partituur");
     Helper::ReplaceAll(data, "Lead sheet", "lead sheet");
     Helper::ReplaceAll(data, "Tijdschrift", "tijdschrift");

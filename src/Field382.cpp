@@ -3,7 +3,7 @@
 // STATIC: list of valid instruments, to check against
 std::set<std::string> Field382::init()
 {
-    unsigned int nrterms=143;
+    unsigned int nrterms=156;
     std::string validterms[]={
         "C",         // For type V : vocal
         "S",
@@ -49,7 +49,8 @@ std::set<std::string> Field382::init()
         "g-b",
         "g-t",
         "g-cb",
-        "vedel",            // subtotal 16
+        "vedel",
+        "str",           // subtotal 17
 
         "fl-pic",           // for type hout
         "fl",
@@ -92,6 +93,9 @@ std::set<std::string> Field382::init()
         "saxh",
         "klar",     // subtotaal 19
 
+        "bla",      // for type bla
+                    //subtotal 1
+
         "timp",          // for type perc
         "trom",
         "drum",
@@ -101,7 +105,9 @@ std::set<std::string> Field382::init()
         "xyl",
         "cim",
         "glock",
-        "tria",         // subtotaal 10
+        "tria",
+        "tamtam",
+        "djembe",       // subtotaal 12
 
         "kv",           // for type toets
         "pf",
@@ -125,7 +131,10 @@ std::set<std::string> Field382::init()
         "cister",
         "lier",
         "mandora",
-        "zither",       // subtotal: 12
+        "zither",
+        "ukelele",
+        "tok",
+        "balalaika", // subtotal: 15
 
         "egi",       // for type elek
         "egi-b",
@@ -133,7 +142,11 @@ std::set<std::string> Field382::init()
         "om",
         "synth",
         "tape",
-        "hifi",         // subtotal : 7
+        "hifi",
+        "microfoon",
+        "versterker",
+        "luidspreker",
+        "sequencer",    // subtotal : 11
 
         "bc",           // for type beg: 1
 
@@ -143,8 +156,11 @@ std::set<std::string> Field382::init()
         "doedelzak",
         "draailier",
         "etno",
-        "koto",         // subtotal: 7
+        "koto",
+        "acteur",       // subtotal: 8
 
+        "instr",        // for type instr
+                        // subtotal: 1
         "kamer-",         // for type orkest . NOTE: followed by telnr specification
         "symfonie-",
         "strijk-",
@@ -222,8 +238,8 @@ void Field382::update(char marcsubfield, std::string data)
             // Handling of LEGACY tonalities and languages now done using subfield L in fields 041 and 384
 
         // up next: fixing some often occurring spelling mistakes
-        if (instrumentation.find("toest") != std::string::npos)
-            instrumentation.replace(instrumentation.find("toest"), 5, "toets");
+        Helper::ReplaceAll(instrumentation, "toest", "toets");
+        Helper::ReplaceAll(instrumentation, "spreekstem", "Spreekstem");
 
         // get string until first ':'
         std::size_t found = instrumentation.find_first_of(":");
