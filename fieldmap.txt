@@ -98,7 +98,7 @@
 44	500	a       #Indexed annotation (todo: lists of movements in 505)
 45	500	a       #Non-indexed annotation (todo: lists of movements in 505)
 46	500	a       #Responsible annotation. Little used
-47	534	n       #Impressum annotation. Contains facsimiles and original RISM nrs. TODO find better place?
+47	534	n       #Impressum annotation. Contains facsimile info.
 49	500	a       #Varia . This often contains DIG in which case it needs to be processed in 533
 49  533 a       # Processing of DIG records in Varia
 49  542 n       # Processing of Sabam records in Varia

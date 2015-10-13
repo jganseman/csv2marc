@@ -42,8 +42,22 @@ void Field650::update(char marcsubfield, std::string data)
 
     for (std::vector<std::string>::iterator it = datasegments.begin(); it != datasegments.end(); ++it)
     {
-        // trim whitespace
         try{
+            // lift out anything between brackets
+            Helper::RemoveAllOf((*it), "[]");        // by definition everything here is user added
+            if ((*it).find("(") != std::string::npos)
+            {
+                unsigned int beginbrackets = (*it).find("(");
+                unsigned int endbrackets = (*it).rfind(")");
+                unsigned int betweenlength = endbrackets-beginbrackets-1;
+                std::string betweenbrackets = (*it).substr(beginbrackets+1, betweenlength);
+                Helper::Trim(betweenbrackets);
+                (betweenbrackets)[0] = toupper(betweenbrackets[0]);
+                MarcField::update(marcsubfield, t650a.translate(betweenbrackets));
+                (*it) = (*it).substr(0, beginbrackets);
+            }
+
+            // trim whitespace
             Helper::Trim((*it));
             if (!((*it).empty() || (*it) == ""))
             {
