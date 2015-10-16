@@ -400,7 +400,7 @@ void MarcRecord::AddKohaData()
 
     // process KOHA ITEM TYPE, stored in LEADER
     MarcField* fLDR = getField(000);
-    char itemtype = fLDR->print()[6+6];  // add 4 characters for the "=LDR__" line
+    char itemtype = fLDR->print()[6+6];  // add 6 characters for the "=LDR__" line
     std::string kohacode;
     switch (itemtype)
     {

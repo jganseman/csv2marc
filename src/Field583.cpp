@@ -3,7 +3,7 @@
 Field583::Field583(int nr) : MarcField(nr)
 {
     // put in ctor, to have it only once included
-    MarcField::update('a', "catalography;");
+    MarcField::update('a', "Catalography:");
 }
 
 Field583::~Field583()

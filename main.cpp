@@ -302,10 +302,14 @@ void ProcessDigitalScans(std::set<std::string>& callnumbers, std::multimap<std::
             //update the Koha itemcallnumber in field 952 too
             if (scanchild->getField(952))
             {
+                // change its callnumber
                 MarcField* field952 = scanchild->getField(952);
                 std::string content = field952->Getsubfield('o');
                 field952->Deletesubfield('o');
                 field952->update('o', content.substr(0, content.find("-dig")));
+                // update the Koha item type again
+                field952->Deletesubfield('y');
+                field952->update('y', "MP");
             }
 
         }
