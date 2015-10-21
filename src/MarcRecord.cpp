@@ -499,7 +499,7 @@ void MarcRecord::MakeBarcode()
     Helper::ReplaceAll(barcode, "progr", "p");
     Helper::ReplaceAll(barcode, "concerts", "c");
     Helper::ReplaceAll(barcode, "parties", "p");
-    Helper::ReplaceAll(barcode, "séparées", "s");
+    Helper::ReplaceAll(barcode, "sÃ©parÃ©es", "s");
     Helper::ReplaceAll(barcode, "orchestre", "o");
 
     Helper::ReplaceAll(barcode, "supplement", "s");
@@ -508,7 +508,7 @@ void MarcRecord::MakeBarcode()
     Helper::ReplaceAll(barcode, "folio", "f");
 
     // remove non-literal characters (maybe leave + in if you want)
-    Helper::RemoveAllOf(barcode, ":-;()/+.',*{}[]%~&@#§!|<>");
+    Helper::RemoveAllOf(barcode, ":-;()/+.',*{}[]%~&@#Â§!|<>");
     // remove whitespace: should not be necessary, hyphens are used
     Helper::EraseWhitespace(barcode);
 

@@ -24,7 +24,7 @@ std::set<std::string> Field336::init()
         "catalogus tentoonstelling",
         "catalogus veiling",
         "pamflet",
-        "poëzie",
+        "poÃ«zie",
         "fotoboek",
         "jaarboek",
         "libretto",
@@ -37,7 +37,7 @@ std::set<std::string> Field336::init()
         "catalogus",
         "contract",
         "diploma",
-        "liedtekst"                         // total 18
+        "liedtekst",                         // total 18
 
         "aquarel",                         // for type k : images
         "gravure",
@@ -53,7 +53,7 @@ std::set<std::string> Field336::init()
         "tekening",
         "plan",                          // total 13
 
-        "bas-reliëf",                         // for type r : items
+        "bas-reliÃ«f",                         // for type r : items
         "beeld",
         "medaille",
         "vaas",
@@ -258,7 +258,7 @@ void Field336::fixTerminology(std::string& data)
     Helper::ReplaceAll(data, "partijen liedboekprincipe", "partijen-liedboekprincipe");
     Helper::ReplaceAll(data, "catalogus-tentoonstelling", "catalogus tentoonstelling");
     Helper::ReplaceAll(data, "catalogus-veiling", "catalogus veiling");
-    Helper::ReplaceAll(data, "gedichten", "poëzie");
+    Helper::ReplaceAll(data, "gedichten", "poÃ«zie");
     Helper::ReplaceAll(data, "brieven", "brief");
     Helper::ReplaceAll(data, "sol fa", "sol-fa");
     Helper::ReplaceAll(data, "partituren", "partituur");

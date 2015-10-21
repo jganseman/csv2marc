@@ -97,7 +97,7 @@ void Field041::update(char marcsubfield, std::string data)
             MarcField::update(a, "cat");
         else if ((*it).find("tsjechisch") != std::string::npos)
             MarcField::update(a, "cze");
-        else if ((*it).find("français") != std::string::npos)
+        else if ((*it).find("franÃ§ais") != std::string::npos)
             MarcField::update(a, "fra");
         else if ((*it).find("chinees") != std::string::npos)
             MarcField::update(a, "chi");

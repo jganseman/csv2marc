@@ -38,7 +38,7 @@ void Field383::update(char marcsubfield, std::string data)
     Helper::ReplaceAll(data, "Oeuvre", "Opus");
     Helper::ReplaceAll(data, "OEuvre", "Opus");
     Helper::ReplaceAll(data, "Opera", "Opus");
-    Helper::ReplaceAll(data, "Opéra", "Opus");
+    Helper::ReplaceAll(data, "OpÃ©ra", "Opus");
     Helper::ReplaceAll(data, "Krebs-WV", "KrebsWV");
 
     // then segment
@@ -133,9 +133,9 @@ void Field383::update(char marcsubfield, std::string data)
             if (verbose) throw MarcRecordException("WARNING field 383: not an opus? : " + (*it));
         if (catalogname.find("Nr") != string::npos)
             if (verbose) throw MarcRecordException("WARNING field 383: not an opus? : " + (*it));
-        if (catalogname.find("n°") != string::npos)
+        if (catalogname.find("nÂ°") != string::npos)
             if (verbose) throw MarcRecordException("WARNING field 383: not an opus? : " + (*it));
-        if (catalogname.find("N°") != string::npos)
+        if (catalogname.find("NÂ°") != string::npos)
             if (verbose) throw MarcRecordException("WARNING field 383: not an opus? : " + (*it));
 
         //update catalogname, only if no catalog field already present

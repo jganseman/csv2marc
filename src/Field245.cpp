@@ -27,7 +27,7 @@ void Field245::update(char marcsubfield, std::string data)
     if (data.empty() || data == "")
         return;
 
-    Helper::Remove(data, "¬");
+    Helper::Remove(data, "Â¬");
 
     if (marcsubfield == 'a')        // this is the main title
     {

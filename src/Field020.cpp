@@ -45,7 +45,7 @@ void Field020::update(char marcsubfield, std::string data)
              {
                  // throw MarcRecordException("Error Updating Field 020: string is not a valid ISBN : " + cleaneddata);
                  MarcField::update('z', cleaneddata);   // invalid ISBNs go in subfield 020$z
-                 if (verbose) throw MarcRecordException("WARNING Field 020: invalid ISBN, put in subfield §z: " + cleaneddata);
+                 if (verbose) throw MarcRecordException("WARNING Field 020: invalid ISBN, put in subfield $z: " + cleaneddata);
              }
              else // length is OK
              {

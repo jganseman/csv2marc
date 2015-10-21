@@ -131,7 +131,8 @@ if ( argc != 3 ) /* 2 arguments: filename to process and resulting filename  */
     }
 
 
-    // TODO this crashes
+    // Merge scans with their books
+
     ProcessDigitalScans(callnumbers, allRecords, KCBerrs, CRBerrs);
 
 
