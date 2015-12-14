@@ -71,7 +71,7 @@ void Field384::update(char marcsubfield, std::string data)
         bool flat = false;
         bool sharp = false;
         //bool modal = false;
-        bool major = true;          // default major
+        bool major = false;          // default major
         bool minor = false;
 
         //first letter is supposed to be the key
@@ -134,6 +134,19 @@ void Field384::update(char marcsubfield, std::string data)
             tonality=modality;
 
 
+        // give warning if key is invalid:
+        if ((!major) && (!minor) && (modality.empty()) )
+        {
+            major=true;
+            MarcField::update(marcsubfield, tonality);
+            throw MarcRecordException("WARNING Field 384: Cannot determine major/minor/modal: " + (*it));
+        }
+        else
+        {
+            MarcField::update(marcsubfield, tonality);
+        }
+
+
         // this builds the string according to the UNIMARC standard, which is more detailed
         // see http://www.ifla.org/files/assets/uca/unimarc_updates/BIBLIOGRAPHIC/u-b_128_update.pdf
         /*
@@ -159,7 +172,6 @@ void Field384::update(char marcsubfield, std::string data)
         else if (modality == "tonus peregrinus") tonality = "13";
         */
 
-        MarcField::update(marcsubfield, tonality);
         /*
         if (modal) throw MarcRecordException("WARNING Field 384: Modal Key. To define later in more detail : " + (*it));
         */

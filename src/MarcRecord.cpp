@@ -205,7 +205,8 @@ void MarcRecord::AddFixedValues()
 
     newfield = FieldFactory::getFactory()->getMarcField(40);    // creator of this record. Also has "Language of record" field. Set by default on Dutch
     newfield->update('a', ORGCODE);
-    newfield->update('b', "dut");
+    (this->isCRB()) ? newfield->update('b', "fra") : newfield->update('b', "dut");
+    // newfield->update('b', "dut");
     newfield->update('c', ORGCODE);
     marcfields.insert(newfield);
 }
@@ -632,8 +633,8 @@ bool MarcRecord::isCRB() const
         if  ( (author == "mv") || (author == "im") || (author == "mcl") || (author == "sdp") || (author == "lm")
             || (author == "ah") || (author == "ar") || (author == "bkb") || (author == "cc") || (author == "cf")
             || (author == "df") || (author == "dl") || (author == "ed") || (author == "fb") || (author == "hl")
-            || (author == "id") || (author == "ls") || (author == "mdd") || (author == "mt")
-            || (author == "rs") || (author == "th") || (author == "vdf") )
+            || (author == "id") || (author == "ls") || (author == "mdd") || (author == "mt") || (author == "md")
+            || (author == "rs") || (author == "th") || (author == "vdf") || (author == "mm"))
         {
             return true;
         } else

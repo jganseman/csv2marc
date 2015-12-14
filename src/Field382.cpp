@@ -3,7 +3,7 @@
 // STATIC: list of valid instruments, to check against
 std::set<std::string> Field382::init()
 {
-    unsigned int nrterms=156;
+    unsigned int nrterms=186;
     std::string validterms[]={
         "C",         // For type V : vocal
         "S",
@@ -71,7 +71,10 @@ std::set<std::string> Field382::init()
         "oc",
         "bh",
         "kh",
-        "zink",         // subtotaal 20
+        "zink",
+        "shakuhachi",
+        "fijfer",
+        "schalmei",         // subtotaal 23
 
         "hn",            // for type kop
         "hn-a",
@@ -91,7 +94,9 @@ std::set<std::string> Field382::init()
         "ophi",
         "euph",
         "saxh",
-        "klar",     // subtotaal 19
+        "klar",
+        "kop",
+        "cimbasso",     // subtotaal 21
 
         "bla",      // for type bla
                     //subtotal 1
@@ -107,7 +112,12 @@ std::set<std::string> Field382::init()
         "glock",
         "tria",
         "tamtam",
-        "djembe",       // subtotaal 12
+        "djembe",
+        "bodhran",
+        "dundun",
+        "tsuzumi",
+        "zweep",
+        "buisklok",     // subtotaal 17
 
         "kv",           // for type toets
         "pf",
@@ -118,7 +128,8 @@ std::set<std::string> Field382::init()
         "harm",
         "cel",
         "spinet",
-        "virginal",     //subtotal 10
+        "virginal",
+        "midikeyboard", //subtotal 11
 
         "ha",           // for type tok
         "gi",
@@ -134,7 +145,10 @@ std::set<std::string> Field382::init()
         "zither",
         "ukelele",
         "tok",
-        "balalaika", // subtotal: 15
+        "balalaika",
+        "koto",
+        "biwa",
+        "cimbalon",     // subtotal: 18
 
         "egi",       // for type elek
         "egi-b",
@@ -146,7 +160,12 @@ std::set<std::string> Field382::init()
         "microfoon",
         "versterker",
         "luidspreker",
-        "sequencer",    // subtotal : 11
+        "sequencer",
+        "elek",
+        "radio",
+        "comp",
+        "sampler",
+        "video",        // subtotal : 16
 
         "bc",           // for type beg: 1
 
@@ -156,8 +175,18 @@ std::set<std::string> Field382::init()
         "doedelzak",
         "draailier",
         "etno",
-        "koto",
-        "acteur",       // subtotal: 8
+        "acteur",
+        "danser",
+        "publiek",
+        "soundengineer",
+        "speeldoos",
+        "glasharmonica",
+        "alpenhoorn",
+        "bajan",
+        "telefoon",
+        "licht",
+        "melodica",
+        "mondharmonica",    // subtotal: 18
 
         "instr",        // for type instr
                         // subtotal: 1
@@ -174,7 +203,8 @@ std::set<std::string> Field382::init()
         "salon-",
         "trombone-",
         "accordeon-",
-        "tokkel-"        //subtotal: 14
+        "tokkel-",
+        "ensemble-"      //subtotal: 15
 
         };
     // for ease of checking: remove all '-' characters in this list
@@ -414,12 +444,13 @@ bool Field382::isValidTerm(std::string& data)
     for (std::set<std::string>::iterator it = validterms.begin(); it != validterms.end(); ++it)
     {
         std::string temp = (*it);
-        if ( data.find(temp) != std::string::npos )
+        if ( data.find(temp) == 0 )
             return true;
     }
     return false;
 
     // alternatively: routine that decides if the string is EXACTLY as a valid instrument
+    // NOTE: not usable for telephone nr notation of orchestras
     //return (validterms.find(data) != validterms.end());
 }
 
