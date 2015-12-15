@@ -3,7 +3,7 @@
 // STATIC: list of valid instruments, to check against
 std::set<std::string> Field382::init()
 {
-    unsigned int nrterms=186;
+    unsigned int nrterms=195;
     std::string validterms[]={
         "C",         // For type V : vocal
         "S",
@@ -32,7 +32,8 @@ std::set<std::string> Field382::init()
         "kinder",
         "meisjes",
         "knapen",
-        "unisono",          //subtotal 8
+        "unisono",
+        "spreek",           //subtotal 9
 
         "vi-pic",           // for type str
         "vi",
@@ -50,7 +51,11 @@ std::set<std::string> Field382::init()
         "g-t",
         "g-cb",
         "vedel",
-        "str",           // subtotal 17
+        "str",
+        "evi",
+        "eav",
+        "evc",
+        "ebc",          // subtotal 21
 
         "fl-pic",           // for type hout
         "fl",
@@ -74,7 +79,9 @@ std::set<std::string> Field382::init()
         "zink",
         "shakuhachi",
         "fijfer",
-        "schalmei",         // subtotaal 23
+        "schalmei",
+        "sho",
+        "panfluit",     // subtotaal 25
 
         "hn",            // for type kop
         "hn-a",
@@ -117,24 +124,26 @@ std::set<std::string> Field382::init()
         "dundun",
         "tsuzumi",
         "zweep",
-        "buisklok",     // subtotaal 17
+        "buisklok",
+        "trommel",     // subtotaal 18
 
         "kv",           // for type toets
         "pf",
         "klc",
         "klvd",
         "org",
-        "org-e",
         "harm",
         "cel",
         "spinet",
         "virginal",
-        "midikeyboard", //subtotal 11
+        "midikeyboard",
+        "eorg",
+        "epf",          //subtotal 12
 
         "ha",           // for type tok
         "gi",
-        "gi-e",
-        "gi-e-b",
+        "egi",
+        "egi-b",
         "man",
         "bj",
         "luit",
@@ -148,12 +157,10 @@ std::set<std::string> Field382::init()
         "balalaika",
         "koto",
         "biwa",
-        "cimbalon",     // subtotal: 18
+        "cimbalon",
+        "orpharion", // subtotal: 19
 
-        "egi",       // for type elek
-        "egi-b",
-        "eorg",
-        "om",
+        "om",       // for type elek
         "synth",
         "tape",
         "hifi",
@@ -165,7 +172,7 @@ std::set<std::string> Field382::init()
         "radio",
         "comp",
         "sampler",
-        "video",        // subtotal : 16
+        "video",        // subtotal : 13
 
         "bc",           // for type beg: 1
 
@@ -186,7 +193,9 @@ std::set<std::string> Field382::init()
         "telefoon",
         "licht",
         "melodica",
-        "mondharmonica",    // subtotal: 18
+        "mondharmonica",
+        "dirigent",
+        "platenspeler",     // subtotal: 20
 
         "instr",        // for type instr
                         // subtotal: 1
