@@ -125,7 +125,7 @@ std::set<std::string> Field382::init()
         "tsuzumi",
         "zweep",
         "buisklok",
-        "trommel",     // subtotaal 18
+        "tomtom",     // subtotaal 18
 
         "kv",           // for type toets
         "pf",
