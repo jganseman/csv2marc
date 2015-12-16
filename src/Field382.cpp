@@ -55,7 +55,7 @@ std::set<std::string> Field382::init()
         "evi",
         "eav",
         "evc",
-        "ebc",          // subtotal 21
+        "ecb",          // subtotal 21
 
         "fl-pic",           // for type hout
         "fl",
