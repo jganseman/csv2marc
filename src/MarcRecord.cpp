@@ -634,7 +634,8 @@ bool MarcRecord::isCRB() const
             || (author == "ah") || (author == "ar") || (author == "bkb") || (author == "cc") || (author == "cf")
             || (author == "df") || (author == "dl") || (author == "ed") || (author == "fb") || (author == "hl")
             || (author == "id") || (author == "ls") || (author == "mdd") || (author == "mt") || (author == "md")
-            || (author == "rs") || (author == "th") || (author == "vdf") || (author == "mm"))
+            || (author == "rs") || (author == "th") || (author == "vdf") || (author == "mm") || (author == "hch")
+            || (author == "yi"))
         {
             return true;
         } else
