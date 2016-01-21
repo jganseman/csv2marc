@@ -68,4 +68,12 @@ void Field490::update(char marcsubfield, std::string data)
     }
     */
 
+    // throw a warning if the field contains characters that might indicate an author is present.
+
+    if (data.find_first_of("<") != data.npos)
+    {
+        throw MarcRecordException("WARNING field 490: contains author? : " + data);
+    }
+
+
 }
