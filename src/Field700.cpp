@@ -23,6 +23,19 @@ void Field700::update(char marcsubfield, std::string data)
     if (data.empty() || data == "")
         return;
 
+    // deal with editors that have been recorded in series statements. Hack in as a different subfield, but test on content!
+    if (marcsubfield == 'L')
+    {
+        if (data.find_first_of("<") != data.npos)       // if this data contains an editorial statement
+        {
+            // add a bogus author to deal with field 700 only processing from the 2nd author onwards
+            data = "DUMMY ; "+data;
+            marcsubfield='a';       // process this data as an author
+        }
+        else
+            return;         // otherwise end this function
+    }
+
     Setindicator1('1');      // always suppose it's a family name
     Setindicator2(DEFAULT_INDIC);
 

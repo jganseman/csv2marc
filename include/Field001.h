@@ -24,6 +24,7 @@ class Field001 : public MarcField
         static std::map<std::string, int> IDcount;
         static std::map<std::string, int> init2();
 
+        void fixTerminology(std::string& data);
 };
 
 #endif // FIELD001_H

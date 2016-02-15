@@ -16,6 +16,11 @@ void Field490::update(char marcsubfield, std::string data)
     if (data.empty() || data == "")
         return;
 
+    // if this field contains an editor, it is handled by the legacy subroutine in Field700
+    // this may e.g. come from a superseded Allegro field #72 which was later changed into #73x
+    if (data.find_first_of("<") != data.npos)
+        return;
+
     // NOTE from MARC website:
     // Field 490 does not serve as a series added entry.
     // When field 490 is used and a series added entry is desired, both the series statement (field 490)
@@ -69,11 +74,13 @@ void Field490::update(char marcsubfield, std::string data)
     */
 
     // throw a warning if the field contains characters that might indicate an author is present.
-
+    /*
     if (data.find_first_of("<") != data.npos)
     {
         throw MarcRecordException("WARNING field 490: contains author? : " + data);
     }
+    */
+    // --> A legacy subroutine was added to Field700.cpp to parse authors in this list
 
 
 }

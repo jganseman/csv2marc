@@ -45,7 +45,7 @@ std::set<std::string> Field336::init()
         "gravure",
         "houtsnede",
         "ets",
-        "aanplakbiljet",
+        "affiche",          // note: changed from "aanplakbiljet" as it was in FOBID but not used.
         "foto",
         "lithografie",
         "prent",
@@ -269,4 +269,6 @@ void Field336::fixTerminology(std::string& data)
     Helper::ReplaceAll(data, "partij ", "partijen ");
     Helper::ReplaceAll(data, "tekstblad", "liedtekst");
     Helper::ReplaceAll(data, "plannen", "plan");
+
+    // Helper::ReplaceAll(data, "lettre", "brief");
 }

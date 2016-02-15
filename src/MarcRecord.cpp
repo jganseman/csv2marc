@@ -314,6 +314,7 @@ void MarcRecord::ProcessParts()
     // when the place number contains ONDERDEEL,
         // - change bibliography level (leader) to "a" (part of monograph)
         // - add a field 773$w linking to the mother record.
+        // - Note: the link to the mother record is generated, it is not checked whether it exists.
     MarcField* f001 = getField(001);
     if (f001 && !(f001->isempty()))
     {

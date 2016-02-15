@@ -44,6 +44,8 @@ void Field001::update(char marcsubfield, std::string data)
     if (data.empty() || data == "")
         return; //throw MarcRecordException("ERROR Field 001: record has no place number.");
 
+    fixTerminology(data);
+
     IDcount[data] += 1;     // add one to the counter. Initialized on 0 when this nr is not yet in map
 
     // only afterwards, throw an error
@@ -54,12 +56,18 @@ void Field001::update(char marcsubfield, std::string data)
     }
     else
     {
-        //placenumber has been used. Append count number
+        //callnumber has been used. Append count number
         char buffer[6];
         data = data + "-" + itoa(IDcount[data], buffer, 10);
 
         MarcField::update(marcsubfield, data);      // first insert, then throw error
-        if (verbose) throw MarcRecordException("WARNING Field 001: placenumber used, creating new one : " + data);
+        if (verbose) throw MarcRecordException("WARNING Field 001: callnumber used, creating new one : " + data);
+    }
+
+    // check for semicolon, this might indicate a double callnumber. Except for scans (which contain HD)
+    if ((data.find_first_of(";") != data.npos) && (data.find_first_of("HD") == data.npos))
+    {
+        throw MarcRecordException("WARNING field 001: more than one callnumber? " + data);
     }
 
 }
@@ -80,4 +88,37 @@ void Field001::printIDcounts()
 
     }
     cout << "TOTALS: " << total << " records from " << count << " callnumbers." << endl;
+}
+
+// This routine does some search and replace of often occurring errors in the callnumbers
+void Field001::fixTerminology(std::string& data)
+{
+    // most SLZ records start with "SLZ ;", replace by "SLZ-".
+    // For safety, do the same for SLZ and FOLIO
+    Helper::ReplaceAll(data, "SLZ ; ", "SLZ-");
+    Helper::ReplaceAll(data, "FOLIO ; ", "FOLIO-");
+    Helper::ReplaceAll(data, "UNICA ; ", "UNICA-");
+
+    // rearrange Folio / SLZ: put it in front of the number, to enable linking with item parts
+    if (data.find("; FOLIO") != data.npos) {
+        data = "FOLIO-" + data.substr(0, data.find("; FOLIO"));
+    } else if ((data.find("FOLIO") != data.npos) && (data.find("FOLIO") != 0)) {     // skip FOLIO that is already in front
+        data = "FOLIO-" + data.substr(0, data.find("FOLIO"));
+    } else if (data.find("; SLZ") != data.npos) {
+        data = "SLZ-" + data.substr(0, data.find("; SLZ"));
+    } else if ((data.find("SLZ") != data.npos) && (data.find("SLZ") != 0)) {        // skip SLZ that is already in front
+        data = "SLZ-" + data.substr(0, data.find("SLZ"));
+    } else if (data.find("; UNICA") != data.npos) {
+        data = "UNICA-" + data.substr(0, data.find("; UNICA"));
+    } else if ((data.find("UNICA") != data.npos) && (data.find("UNICA") != 0)) {        // skip SLZ that is already in front
+        data = "UNICA-" + data.substr(0, data.find("UNICA"));
+    }
+
+    //FCP callnumbers are doubles. FCP is not necessary in the callnumber since it does not point to a specific location. Throw it out.
+    if (data.find("FCP") != data.npos)
+    {
+         data = data.substr(0, data.find(";"));
+    }
+
+    Helper::Trim(data);
 }

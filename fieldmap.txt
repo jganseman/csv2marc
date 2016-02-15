@@ -88,6 +88,7 @@
 #34	#490	#x      #All ISSN info now recorded in field 022
 35	490	a
 36	490	a
+36  700 L       #Legacy: this may sometimes contain an editor stdname. Add those to field 700 using subfieldcode L
 #
 # Notes and any additional information
 50  510 a       #RISM number
@@ -108,6 +109,8 @@
 26  336 a       #Material: put in 336 "content type" (todo: use with controlled vocab like RDA)
 52	650	a       #Keywords
 4	590	a       #inventory number
+# Unused fields in Allegro-C: keep anyway, but because of dodgy contents just as general comment
+30  500 a       # series responsibility statement
 #
 # 952 field, internal KOHA circulation stuff:
 # Filling in the 952 field (item-specific data) has all been moved to the postprocessing routine
