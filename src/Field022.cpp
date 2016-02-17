@@ -1,5 +1,21 @@
 #include "Field022.h"
 
+// known list of ISSNs that are printed wrongly in the books themselves
+std::set<std::string> Field022::init()
+{
+    int nrterms=1;
+    std::string knownInvalidISSNs[]={
+        "0932-611"
+        };
+    std::set<std::string> tmp(knownInvalidISSNs, knownInvalidISSNs+nrterms);
+
+    return tmp;
+ }
+
+// initialize that list as static member of class
+std::set<std::string> Field022::knownInvalidISSNs(init());
+
+
 Field022::Field022(int nr) : MarcField(nr)
 {
     //ctor
@@ -47,7 +63,11 @@ void Field022::update(char marcsubfield, std::string data)
              if (! (cleaneddata.length() == 9))        // throw error when too many characters are present
              {
                  MarcField::update('y', cleaneddata);
-                 if (verbose) throw MarcRecordException("WARNING Field 022: invalid ISSN, put in subfield $y: " + cleaneddata);
+                 if (knownInvalidISSNs.find(cleaneddata) == knownInvalidISSNs.end())    // only warn if not in list of known numbers
+                 {
+                    if (verbose) throw MarcRecordException("WARNING Field 022: invalid ISSN, put in subfield $y: " + cleaneddata);
+                 }
+
              } else
              {
                  MarcField::update(marcsubfield, cleaneddata);

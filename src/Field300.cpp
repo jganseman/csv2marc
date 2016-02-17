@@ -17,13 +17,25 @@ void Field300::update(char marcsubfield, std::string data)
     if (data.empty() || data == "")
         return;
 
+    // make a separate field 300 for the total number of things in this callnumber
+    // this is recorded as a single number in 77b, so test for a number
+    std::string datacopy2 = data;
+    Helper::EraseWhitespace(datacopy2);
+    long converted = atol(datacopy2.c_str());
+    if (converted)
+    {
+       // put this number in, and add "units" (not using items as that's used in the interface for available copies)
+       (converted > 1) ? MarcField::update('a', datacopy2 + " units") : MarcField::update('a', datacopy2 + " unit");
+        return;
+    }
+
     // goal: to lift out the dimension information from other extent information
     // and put the dimension information in subfield $c
 
     //first make  a copy of the data to work on
     std::string datacopy = data;
     std::string dimensioninfo = "";
-
+    Helper::Trim(datacopy);
     Helper::MakeLowercase(datacopy);
     Helper::ReplaceAll(datacopy, "+", ";");     // to deal with separately recorded parties extent info
 

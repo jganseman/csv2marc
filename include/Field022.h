@@ -8,6 +8,7 @@
 #include <string>
 #include <algorithm>
 #include <vector>
+#include <set>
 
 
 class Field022 : public MarcField
@@ -19,7 +20,9 @@ class Field022 : public MarcField
         virtual void update(char marcsubfield, std::string data);
     protected:
     private:
-        std::string issn;
+
+        static std::set<std::string> knownInvalidISSNs;
+        static std::set<std::string> init();
 };
 
 #endif // FIELD022_H

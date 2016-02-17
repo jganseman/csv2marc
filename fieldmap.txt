@@ -3,8 +3,8 @@
 # Lines contain: CSV file column index (0-based) followed by MARC field and subfield
 #
 # Currently, tailored towards Brussels conservatory library
-# Version: 24 September 2015, after an update of Allegro-C's export routine
-#
+# Version 2: 24 September 2015, after an update of Allegro-C's export routine
+# Version 3: 15 February 2016, after review of fields 72, 73a and 73z
 #
 # first just a line to force creation of a leader record
 0	000	z
@@ -74,6 +74,7 @@
 #
 # Description fields: material, key, opus, instrumentation
 27	300	a       #collation: material extent
+28  300 a       #number of items
 37  382 a       #instrumentation
 40	383	b       #opus
 39	384	a       #key
@@ -111,6 +112,7 @@
 4	590	a       #inventory number
 # Unused fields in Allegro-C: keep anyway, but because of dodgy contents just as general comment
 30  500 a       # series responsibility statement
+33  500 a       # subseries responsibility statement
 #
 # 952 field, internal KOHA circulation stuff:
 # Filling in the 952 field (item-specific data) has all been moved to the postprocessing routine
