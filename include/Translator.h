@@ -17,7 +17,7 @@ using namespace std;
 class Translator
 {
     public:
-        Translator(std::string filename);
+        Translator(std::string filename = "");
         virtual ~Translator();
         std::string translate(std::string& input);
         bool isKey(std::string& input);

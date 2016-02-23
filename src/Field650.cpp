@@ -2,7 +2,7 @@
 
 // initialize the translation list for keywords
 Translator Field650::t650a("t650a.csv");     // The file must be in the same folder as the executable.
-
+//Translator Field650::t650a;                 // Empty mapping, in case no translation should be done
 
 Field650::Field650(int nr) : MarcField(nr)
 {

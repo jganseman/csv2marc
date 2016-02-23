@@ -2,10 +2,15 @@
 
 Translator::Translator(std::string filename)
 {
-    //ctor
+    //Parsing a translation file happens in the constructor of the Translator object.
 
     // A translation file is a csv file where the first column is translated into the second column.
     // The file is best placed in the same folder as the executable.
+    // Tab-delimited CSVs work best
+
+    // if no filename is given, load an empty translation table
+    if (filename == "") return;
+
 
     //open filename
     ifstream csvfile(filename.c_str());
@@ -21,30 +26,37 @@ Translator::Translator(std::string filename)
         if (line.empty() || line == "")
             continue;
 
-        // in Excel, CSV is standard encoded with ";" . IGNORE line if it already contains tab, else, convert all ";" to tab
-        if (line.find('\t') != line.npos)
-            continue;
-        Helper::ReplaceAll(line, ";", "\t");
+        // in Excel, CSV is standard encoded with ";" . If the line does not contain tabs, to be sure, convert the first ";" to tab
+        if (line.find('\t') == line.npos)
+        {
+            if (line.find_first_of(';') != line.npos)
+                line[line.find_first_of(';')] = '\t';
+        }
 
         vector<std::string> segments = Helper::Segment(line, '\t');
-        if (segments.size() == 0)     // line must exist
+
+        // Assert that the line exists. If empty, move on!
+        if (segments.size() == 0)
             continue;
 
+        // The line exists! Even if there is no translation available, put it in as key
         Helper::Trim(segments[0]);
         keys.insert(segments[0]);
 
-        if (segments.size() > 1)        // translation available
+        // There is a translation available! Load the translation as value, if not equal to original
+        if (segments.size() > 1)
         {
             Helper::Trim(segments[1]);
             if ((segments[1] != "") && (segments[1] != segments[0]))
                 values.insert(segments[1]);
         }
 
-        if (segments.size() == 1)           // no translation available. Put in empty string.
+        // Now store the key-value pair in the mapping:
+        if (segments.size() == 1)           // if no translation available, map to empty string
             mapping.insert(std::pair<std::string,std::string>(segments[0], ""));
         else
         {
-             if (segments[1] != "")          // translation available
+             if (segments[1] != "")          // if translation available, map to translation if not equal to original
              {
                  if (segments[1] != segments[0])        // translation is not same as original: replace
                     mapping.insert(std::pair<std::string,std::string>(segments[0], segments[1]));
