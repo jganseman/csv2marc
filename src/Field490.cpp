@@ -1,5 +1,10 @@
 #include "Field490.h"
 
+
+// initialize the translation list for series titles
+Translator Field490::t490a("t490a.csv");     // The file must be in the same folder as the executable.
+
+
 Field490::Field490(int nr) : MarcField(nr)
 {
     //ctor
@@ -62,6 +67,22 @@ void Field490::update(char marcsubfield, std::string data)
     // trim trailing and beginning spaces
     Helper::Trim(datasegments[0]);
 
+    //Incorporating translation (remapping of erroneous data): this might introduce new volume numbers, so do before calling update()!
+    data = t490a.translate(datasegments[0]);
+    // do the loop above again
+    datasegments = Helper::Segment(data, ';');
+    if (datasegments.size() > 1) // item has NEW volume indicator
+    {
+        volume = "$v";
+        for (std::vector<std::string>::iterator it = datasegments.begin()+1; it != datasegments.end(); ++it)
+        {
+            Helper::Trim((*it));
+            volume += (*it);
+        }
+    }
+
+
+
     MarcField::update(marcsubfield, datasegments[0]+volume);
 
 
@@ -81,6 +102,5 @@ void Field490::update(char marcsubfield, std::string data)
     }
     */
     // --> A legacy subroutine was added to Field700.cpp to parse authors in this list
-
 
 }

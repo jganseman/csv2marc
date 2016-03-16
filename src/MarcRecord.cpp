@@ -527,7 +527,6 @@ void MarcRecord::MakeBarcode()
 
 
 
-
 //this loads a mapping from csv fields to MARC fields from an external file
 void MarcRecord::loadfieldmap(std::string const& filename)
 {

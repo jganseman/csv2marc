@@ -75,6 +75,10 @@ Translator::~Translator()
     //dtor
 }
 
+
+/** If the original string is mapped to the word "DELETE", empty string is returned.
+    Which results in the subfield being dropped (see MarcField.cpp)
+*/
 std::string Translator::translate(std::string& input)
 {
     if (mapping.empty())
@@ -84,6 +88,8 @@ std::string Translator::translate(std::string& input)
 
     if (result.empty() || result == "")
         return input;
+    else if (result == "DELETE")
+        return "";
     else
         return result;
 }

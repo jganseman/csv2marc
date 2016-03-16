@@ -3,6 +3,7 @@
 
 #include <MarcField.h>
 #include <Helper.h>
+#include <Translator.h>
 
 
 class Field490 : public MarcField
@@ -13,6 +14,7 @@ class Field490 : public MarcField
         virtual void update(char marcsubfield, std::string data);
     protected:
     private:
+        static Translator t490a;
 };
 
 #endif // FIELD490_H

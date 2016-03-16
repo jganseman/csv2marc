@@ -48,11 +48,11 @@ std::string const MarcField::print() const
 
 void MarcField::update(char marcsubfield, std::string data)
 {
-    if (data.empty() || data == "")
-        return;
-
     //trim front and trailing whitespace
     Helper::Trim(data);
+
+    if (data.empty() || data == "")
+        return;
 
     // by default create a new subfield with the same code
     subfields.insert(std::make_pair(marcsubfield, data));
