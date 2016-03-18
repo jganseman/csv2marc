@@ -65,7 +65,7 @@ Translator::Translator(std::string filename)
              }
 
         }
-
+        //cout << "Translator added " << segments[0] << endl;
         // anything beyond the 2nd column is treated as comment
     }
 }
