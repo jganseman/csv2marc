@@ -17,6 +17,8 @@ void Field300::update(char marcsubfield, std::string data)
     if (data.empty() || data == "")
         return;
 
+    //NOTE: this has been removed. Total number of items will now be recorded in 591
+    /*
     // make a separate field 300 for the total number of things in this callnumber
     // this is recorded as a single number in 77b, so test for a number
     std::string datacopy2 = data;
@@ -29,6 +31,7 @@ void Field300::update(char marcsubfield, std::string data)
        (converted > 1) ? MarcField::update('a', datacopy2 + " units") : MarcField::update('a', datacopy2 + " unit");
         return;
     }
+    */
 
     // goal: to lift out the dimension information from other extent information
     // and put the dimension information in subfield $c

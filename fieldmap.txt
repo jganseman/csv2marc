@@ -74,7 +74,7 @@
 #
 # Description fields: material, key, opus, instrumentation
 27	300	a       #collation: material extent
-28  300 a       #number of items
+28  591 a       #total number of items
 37  382 a       #instrumentation
 40	383	b       #opus
 39	384	a       #key
