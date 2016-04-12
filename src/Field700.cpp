@@ -117,7 +117,15 @@ void Field700::update(char marcsubfield, std::string data)
                     //trim any whitespaces out
                     Helper::EraseWhitespace(tempstring);
                     //MarcField::update('d', tempstring);
-                    dates = dates + "$d" + tempstring;
+                    // only put in date if it contains numbers. Else, it's probably a title and should be in $c
+                        if (tempstring.find_first_of("0123456789") == tempstring.npos)
+                        {
+                           dates = dates + "$c" +  tempstring;     // WARNING: called "dates" but could contain a title (with $c)
+                        }
+                        else
+                        {
+                           dates = dates + "$d" + tempstring;
+                        }
                 } catch (exception& e)
                 {
                     if (verbose) throw MarcRecordException("ERROR Field 700: error in author dates.");

@@ -43,7 +43,16 @@ std::string const MarcField::print() const
     }
 
     output << endl;
-    return output.str();
+    std::string thisfield = output.str();
+
+    //Sometimes there may be no subfields at all (e.g. deleted authors or data). In that case,do not print this field.
+    //Be more strict for fields 100, 700 and 650 : if no $a, delete field
+    if ((fieldnr >= 10 ) && (thisfield.find('$') == thisfield.npos))
+        return "";
+    else if ( ((fieldnr==100) || (fieldnr==700) || (fieldnr==650)) && (thisfield.find("$a") == thisfield.npos) )
+        return "";
+    else
+        return thisfield;
 }
 
 void MarcField::update(char marcsubfield, std::string data)

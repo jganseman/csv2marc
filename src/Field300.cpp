@@ -22,7 +22,8 @@ void Field300::update(char marcsubfield, std::string data)
     std::string datacopy2 = data;
     Helper::EraseWhitespace(datacopy2);
     long converted = atol(datacopy2.c_str());
-    if (converted)
+    // DOUBLE CHECK : it's only a unit field if there is no other character in the string
+    if ((converted) && (datacopy2.find_first_not_of("0123456789") == datacopy2.npos))
     {
        // put this number in, and add "units" (not using items as that's used in the interface for available copies)
        (converted > 1) ? MarcField::update('a', datacopy2 + " units") : MarcField::update('a', datacopy2 + " unit");

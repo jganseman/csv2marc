@@ -91,7 +91,15 @@ void Field100::update(char marcsubfield, std::string data)
             std::string tempstring = (*it2).substr(0,(*it2).find_first_of(')'));
             //trim any whitespaces out
             Helper::EraseWhitespace(tempstring);
-            MarcField::update('d', tempstring);
+            // only preserve dates in $d if it contains a number. Else, it is probably a title, which should go in $c
+            if (tempstring.find_first_of("0123456789") == tempstring.npos)
+            {
+                MarcField::update('c', tempstring);
+            }
+            else
+            {
+                MarcField::update('d', tempstring);
+            }
             break;      // only do this once; can't have multiple dates...
         }
         fullstring = datasegments[0];       // discard all <> info from this string
