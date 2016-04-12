@@ -52,6 +52,7 @@ class MarcRecord
         void AddFixedValues();
         void CheckTitle();
         void CheckNotForLoan();
+        void MakeKeywordsUnique();
         void ProcessNonRepeatableFields();
         void ProcessParts();
         void AddKohaData();

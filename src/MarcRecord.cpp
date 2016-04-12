@@ -153,8 +153,17 @@ void MarcRecord::buildup()
         errorlist += e.what();          // add any error to the errorlist of this record
     }
 
+    // Remove check for not-for-loan < 52000 status. Most of it already manually corrected.
+    /*
     try {
         CheckNotForLoan();
+    } catch(exception& e) {
+        errorlist += e.what();          // add any error to the errorlist of this record
+    }
+    */
+
+    try {
+        MakeKeywordsUnique();
     } catch(exception& e) {
         errorlist += e.what();          // add any error to the errorlist of this record
     }
@@ -242,14 +251,14 @@ void MarcRecord::CheckNotForLoan()
         if (nr > 0)     // if valid conversion
         {
             MarcField* f506 = getField(506);
-            if (f506 && !(f506->isempty()))
+            if (f506 && !(f506->isempty()))         // if the restricted-access field is set: always OK
                 return;
-            else if (nr < 52000)
+            else if (nr < 52000)                    // if it is not set and the nr is below 52000: set it anyway.
             {
                 MarcField* newfield = FieldFactory::getFactory()->getMarcField(506);
                 newfield->update('a', "*");
                 marcfields.insert(newfield);
-                //throw MarcRecordException("AUTOFIX Field 506: Item < 52000, not for loan status added.");
+                throw MarcRecordException("AUTOFIX Field 506: Item < 52000, not for loan status added.");
             }
         }
 
@@ -275,6 +284,29 @@ void MarcRecord::CheckNotForLoan()
         }
 
     }
+}
+
+
+void MarcRecord::MakeKeywordsUnique()
+{
+
+    std::set<std::string> myKeywords;
+    std::set<t_fieldsetIterator*> toRemove;
+    // iterate over all fields 650. Remove fields that have already appeared.
+    for(t_fieldsetIterator it = marcfields.begin(); it!=marcfields.end(); ++it)
+    {
+        if ((*it)->Getfieldnr() == 650)       // overloaded operator
+        {
+            // If the keyword in this subfield is already in myKeywords, record this position for removal
+            std::string word = (*it)->Getsubfield('a');
+            if (myKeywords.find(word) == myKeywords.end())
+                myKeywords.insert(word);
+            else
+                marcfields.erase(it);
+                // NOTE: this actually erases an iterator while looping over the collection. Could be tricky, depending on compiler...
+        }
+    }
+
 }
 
 
