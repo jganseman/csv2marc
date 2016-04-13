@@ -47,6 +47,17 @@ void Field008::update(char marcsubfield, std::string data)
 
     // this field does not use marcsubfields. It might be possible to use the subfield indicator as an enum to discriminate inputs?
 
+    //for authority data, use subfield 'z':
+    if (marcsubfield == 'z')
+    {
+        if (data.length() == 40)
+        {
+            strcpy(&fixedstring[0], data.c_str());
+            return;
+        }
+    }
+
+
     // mostly we're going to put dates here as subfield. Only 6 chars of date -> delete 19/20 in beginning
     if (data.length() == 8 && atoi(data.c_str()))
     {

@@ -639,21 +639,21 @@ MarcField* MarcRecord::getField(int nr) const
             return (*it);
     }
     return 0;
-
-    /*
-    MarcField* dummy = new MarcField(nr);
-    t_fieldsetIterator fieldit = marcfields.find(dummy);
-    delete dummy;
-    if (fieldit == marcfields::end)
-    {
-        return 0;
-    }
-    else
-    {
-        return *fieldit;
-    }
-    */
 }
+
+
+std::set<MarcField*> MarcRecord::getMultipleFields(std::vector<int>& fieldnrlist) const
+{
+    std::set<MarcField*> results;
+
+    for(t_fieldsetIterator it = marcfields.begin(); it!=marcfields.end(); ++it)
+    {
+        if ( std::find(fieldnrlist.begin(), fieldnrlist.end(), (*it)->Getfieldnr()) != fieldnrlist.end())
+            results.insert(*it);
+    }
+    return results;
+}
+
 
 
 bool MarcRecord::isCRB() const

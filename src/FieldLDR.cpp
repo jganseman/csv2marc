@@ -43,6 +43,16 @@ void FieldLDR::update(char marcsubfield, std::string data)
     if (data.empty() || data == "")
         return;
 
+    //for authority data, use subfield 'z':
+    if (marcsubfield == 'z')
+    {
+        if (data.length() == 24)
+        {
+            strcpy(&fixedstring[0], data.c_str());
+            return;
+        }
+    }
+
     // usually this is called to set a date.
     /* fixed[5] : if it has a correction date, set to c (corrected)
     */

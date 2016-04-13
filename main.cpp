@@ -17,6 +17,7 @@ using namespace std;
 // forward declaration of helper functions
 void ProcessConstituents(std::set<std::string>& callnumbers, std::multimap<std::string, MarcRecord*>& allRecords, std::ostringstream& KCBerrs, std::ostringstream& CRBerrs);
 void ProcessDigitalScans(std::set<std::string>& callnumbers, std::multimap<std::string, MarcRecord*>& allRecords, std::ostringstream& KCBerrs, std::ostringstream& CRBerrs);
+void CreateAuthorities(std::multimap<std::string, MarcRecord*>& allRecords, std::map<std::string, MarcRecord*>& allAuthorities);
 
 int main ( int argc, char *argv[] )
 {
@@ -37,7 +38,7 @@ if ( argc != 3 ) /* 2 arguments: filename to process and resulting filename  */
     //open the output file and check if successful
     ofstream marcfile(argv[2]);
     if ( !marcfile.is_open() ) {
-        cout << "Could not open output csv file" << endl;
+        cout << "Could not open output mrk file" << endl;
         return -1;
     }
 
@@ -53,6 +54,9 @@ if ( argc != 3 ) /* 2 arguments: filename to process and resulting filename  */
 
     // Create large datastructure to hold all records
     std::multimap<std::string, MarcRecord*> allRecords;
+
+    // Create large datastructure to hold authorities
+    std::map<std::string, MarcRecord*> allAuthorities;
 
     long j = -1;
     while(std::getline(csvfile, line))
@@ -132,7 +136,6 @@ if ( argc != 3 ) /* 2 arguments: filename to process and resulting filename  */
 
 
     // Merge scans with their books
-
     ProcessDigitalScans(callnumbers, allRecords, KCBerrs, CRBerrs);
 
 
@@ -167,13 +170,38 @@ if ( argc != 3 ) /* 2 arguments: filename to process and resulting filename  */
         {
             marcfile << (*it).second << endl;         // operator<< is overloaded for pointers to MarcRecord
         }
-        delete (*it).second;
         counter++;
     }
-    cout << "All Done. MARC file contains " << counter << " records." << endl;
+    cout << "Done. MARC bibliographic file contains " << counter << " records." << endl;
+
+
+    cout << "Now generating 100/700 authority file." << endl;
+    CreateAuthorities(allRecords, allAuthorities);
+
+    //write authorities to file
+    std::string authfilename = argv[2];
+    authfilename.insert(authfilename.length()-4, "-auth");
+    ofstream authfile(authfilename.c_str());
+    if ( !authfile.is_open() ) {
+        cout << "Could not open output auth mrk file" << endl;
+        return -1;
+    }
+    counter = 0;
+    for (std::multimap<std::string, MarcRecord*>::iterator it = allAuthorities.begin(); it != allAuthorities.end(); ++it)
+    {
+        authfile << (*it).second << endl;
+        counter++;
+    }
+    cout << "Done. MARC authority file contains " << counter << " records." << endl;
+
+
+    cout << "Doing Final clean-up..." << endl;
+    for (std::multimap<std::string, MarcRecord*>::iterator it = allRecords.begin(); it != allRecords.end(); ++it) delete (*it).second;
+    for (std::multimap<std::string, MarcRecord*>::iterator it = allAuthorities.begin(); it != allAuthorities.end(); ++it) delete (*it).second;
+
+    cout << "All done!" << endl;
 
     return 0;
-
 }
 
 
@@ -332,6 +360,71 @@ void ProcessDigitalScans(std::set<std::string>& callnumbers, std::multimap<std::
         // in any case the callnumber with dig needs to be erased from the list of callnumbers
         callnumbers.erase(callnrdig);
 
+    }
+
+}
+
+void CreateAuthorities(std::multimap<std::string, MarcRecord*>& allRecords, std::map<std::string, MarcRecord*>& AllAuthorities)
+{
+    // could be in fields 100 and 700
+    std::vector<int> fieldnrs;
+    fieldnrs.push_back(100); fieldnrs.push_back(700);
+
+
+    for (std::multimap<std::string, MarcRecord*>::iterator it = allRecords.begin(); it != allRecords.end(); ++it)
+    {
+        MarcRecord* thisrecord = (*it).second;
+        //easiest is to iterate over all fields, as there could be several 700 records.
+        std::set<MarcField*> authorfields = thisrecord->getMultipleFields(fieldnrs);
+
+        for (std::set<MarcField*>::iterator it = authorfields.begin(); it != authorfields.end(); it++)
+        {
+            //get name of author in field a
+            std::string name = (*it)->Getsubfield('a');
+            std::string title = (*it)->Getsubfield('c');
+            std::string dates = (*it)->Getsubfield('d');
+
+            // if the name is not yet in the authority list: create a new authority record
+            if (AllAuthorities.find(name) == AllAuthorities.end())
+            {
+                MarcRecord* thisrecord = new MarcRecord();
+                // set the fixed fields : leader
+                MarcField* field000 = FieldFactory::getFactory()->getMarcField(0);
+                field000->update('z', "00000nz##a2200000o##4500");
+                thisrecord->addField(field000);
+                // set the fixed fields : owning agency
+                MarcField* field003 = FieldFactory::getFactory()->getMarcField(3);
+                field003->update('a', ORGCODE);       // does not matter in which subfield this is put, it's a control field
+                thisrecord->addField(field003);
+                // set the fixed fields : field 8
+                MarcField* field008 = FieldFactory::getFactory()->getMarcField(8);
+                field008->update('z', "000000|ge|dz||aaan|||||||||||||||c|||||d");       // does not matter in which subfield this is put, it's a control field
+                thisrecord->addField(field008);
+
+                // set the fixed fields : encoding agency and language
+                MarcField* field040 = FieldFactory::getFactory()->getMarcField(40);
+                field040->update('a', ORGCODE);       // does not matter in which subfield this is put, it's a control field
+                field040->update('b', "dut");
+                field040->update('c', ORGCODE);
+                thisrecord->addField(field040);
+
+
+                /*
+                    003 - CONTROL NUMBER IDENTIFIER
+                      @ OPIACS
+                    005 - DATE AND TIME OF LATEST TRANSACTION
+                      @ 20110301130115.0
+                    008 - FIXED-LENGTH DATA ELEMENTS
+                      @ 110301000000|ge|dz||aaan|||||||||||||||c|||||d
+                    040 ## - CATALOGING SOURCE
+                      a Original cataloging OPIACS
+                      b Language of catalogi eng
+                      c Transcribing agency OPIACS
+                    100 ## - HEADING--PERSONAL NAME
+                      a Personal name Zimmerman, Linda
+                 */
+            }
+        }
     }
 
 }
