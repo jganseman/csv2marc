@@ -381,6 +381,10 @@ void CreateAuthorities(std::multimap<std::string, MarcRecord*>& allRecords, std:
         {
             //get name of author in field a
             std::string name = (*it)->Getsubfield('a');
+            // cut until the first $ sign, as the 700 fields may have everything in subfield a...
+            name = name.substr(0, name.find_first_of('$'));
+            if (name == "") continue;
+            // TODO this way we are throwing out dates and titles of 700 fields. Ah well, they're probably wrong anyway.
             std::string title = (*it)->Getsubfield('c');
             std::string dates = (*it)->Getsubfield('d');
 
@@ -388,6 +392,7 @@ void CreateAuthorities(std::multimap<std::string, MarcRecord*>& allRecords, std:
             if (AllAuthorities.find(name) == AllAuthorities.end())
             {
                 MarcRecord* thisrecord = new MarcRecord();
+                thisrecord->setAuthority(true);
                 // set the fixed fields : leader
                 MarcField* field000 = FieldFactory::getFactory()->getMarcField(0);
                 field000->update('z', "00000nz##a2200000o##4500");
@@ -398,7 +403,7 @@ void CreateAuthorities(std::multimap<std::string, MarcRecord*>& allRecords, std:
                 thisrecord->addField(field003);
                 // set the fixed fields : field 8
                 MarcField* field008 = FieldFactory::getFactory()->getMarcField(8);
-                field008->update('z', "000000|ge|dz||aaan|||||||||||||||c|||||d");       // does not matter in which subfield this is put, it's a control field
+                field008->update('z', "000000|||ad|||||||||||||||||||||||||||||");       // does not matter in which subfield this is put, it's a control field
                 thisrecord->addField(field008);
 
                 // set the fixed fields : encoding agency and language
@@ -408,21 +413,21 @@ void CreateAuthorities(std::multimap<std::string, MarcRecord*>& allRecords, std:
                 field040->update('c', ORGCODE);
                 thisrecord->addField(field040);
 
+                MarcField* field100 = FieldFactory::getFactory()->getMarcField(100);
+                field100->MarcField::update('a', name);      // NOTE: EXPLICIT CAST to MarcField in order to avoid the overridden update routine!
+                field100->MarcField::update('c', title);
+                field100->MarcField::update('d', dates);
+                thisrecord->addField(field100);
 
-                /*
-                    003 - CONTROL NUMBER IDENTIFIER
-                      @ OPIACS
-                    005 - DATE AND TIME OF LATEST TRANSACTION
-                      @ 20110301130115.0
-                    008 - FIXED-LENGTH DATA ELEMENTS
-                      @ 110301000000|ge|dz||aaan|||||||||||||||c|||||d
-                    040 ## - CATALOGING SOURCE
-                      a Original cataloging OPIACS
-                      b Language of catalogi eng
-                      c Transcribing agency OPIACS
-                    100 ## - HEADING--PERSONAL NAME
-                      a Personal name Zimmerman, Linda
-                 */
+                AllAuthorities[name] = thisrecord;
+            }
+            else    //the name is found!
+            {
+                MarcRecord* thisrecord = AllAuthorities[name];
+                // if necessary, update $c and/or $d  fields
+                MarcField* field100 = thisrecord->getField(100);
+                if (field100->Getsubfield('c') == "") field100->MarcField::update('c', title); // NOTE: EXPLICIT CAST to MarcField in order to avoid the overridden update routine!
+                if (field100->Getsubfield('d') == "") field100->MarcField::update('d', dates);
             }
         }
     }

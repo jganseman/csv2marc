@@ -600,6 +600,11 @@ void MarcRecord::loadfieldmap(std::string const& filename)
 
 bool MarcRecord::isvalid() const
 {
+    // if the record is an authority record, always consider it valid
+    //TODO of course some decent constraints should be coded ... but for now, it's minimalistic
+    if (isAuthority) return true;
+
+    // else, it is bibliographic. Then check for status, title etc.
     bool hastitle = false;
     bool hasplacenr = false;
 

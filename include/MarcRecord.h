@@ -48,6 +48,7 @@ class MarcRecord
         void addField(MarcField* val){ marcfields.insert(val); }
         void deleteField(MarcField* val){ marcfields.erase(val); }
         bool isCRB() const;
+        void setAuthority(bool value) {isAuthority=value;}
     protected:
     private:
         void AddFixedValues();
@@ -70,6 +71,7 @@ class MarcRecord
 
         t_fieldset marcfields;         // One records contains several fields
         //bool valid;
+        bool isAuthority = false;
 };
 
 
