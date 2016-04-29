@@ -100,12 +100,14 @@ void Field383::update(char marcsubfield, std::string data)
         // replace all '-' by ' ', then the first is the catalogue; the rest is its number
 
         Helper::ReplaceAll((*it), "-", " ");
+        Helper::Trim((*it));
         std::vector<std::string> themanrs = Helper::Segment((*it), ' ');
         if (themanrs.size() <= 1)
             if (verbose) throw MarcRecordException("ERROR field 383: unspecified catalogname (no dash/space?): " + (*it));
 
         std::string catalogname = themanrs[0];
-        std::string catalognr = (*it).substr((*it).find_first_of(" "));
+        std::string catalognr = themanrs[1];
+        //std::string catalognr = (*it).substr((*it).find_first_of(" "));
 
         if ( strncmp(themanrs[1].c_str(), "Anh", 3) == 0)      // if string starts with Anh, it's an Anhang catalogue
         {

@@ -627,7 +627,8 @@ bool MarcRecord::isvalid() const
         // if the record has no place nr, it is invalid
         if ((*it)->Getfieldnr() == 1)
         {
-            if ((*it)->Getsubfield('a') != "")
+                //TODO Added line here to omit the bv-07 collection. TODO remove later!
+            if ( ((*it)->Getsubfield('a') != "") && ((*it)->Getsubfield('a').find("BV-07") == std::string::npos) )
                 hasplacenr=true;
         }
     }
