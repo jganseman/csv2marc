@@ -40,6 +40,7 @@ void Field700::update(char marcsubfield, std::string data)
     Setindicator2(DEFAULT_INDIC);
 
     //First, segment by ';'
+    Helper::ReplaceAll(data, ":", ";");     // sometimes wrong separation mark used. Replace it.
     std::vector<std::string> alldatasegments = Helper::Segment(data, ';');
 
     // iterate over all segments starting from the second (first one is in Field100)

@@ -28,6 +28,7 @@ void Field100::update(char marcsubfield, std::string data)
     Setindicator2(DEFAULT_INDIC);
 
     //First, segment by ';'
+    Helper::ReplaceAll(data, ":", ";");     // sometimes wrong separation mark used. Replace it.
     std::vector<std::string> datasegments = Helper::Segment(data, ';');
 
     // only use the first author for field 100. Put the rest in field 700.
