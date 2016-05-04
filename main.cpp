@@ -385,8 +385,8 @@ void CreateAuthorities(std::multimap<std::string, MarcRecord*>& allRecords, std:
             name = name.substr(0, name.find_first_of('$'));
             if (name == "") continue;
             // TODO this way we are throwing out dates and titles of 700 fields. Ah well, they're probably wrong anyway.
-            std::string title = (*it)->Getsubfield('c');
-            std::string dates = (*it)->Getsubfield('d');
+            // std::string title = (*it)->Getsubfield('c');
+            // std::string dates = (*it)->Getsubfield('d');
 
             // if the name is not yet in the authority list: create a new authority record
             if (AllAuthorities.find(name) == AllAuthorities.end())
@@ -415,8 +415,8 @@ void CreateAuthorities(std::multimap<std::string, MarcRecord*>& allRecords, std:
 
                 MarcField* field100 = FieldFactory::getFactory()->getMarcField(100);
                 field100->MarcField::update('a', name);      // NOTE: EXPLICIT CAST to MarcField in order to avoid the overridden update routine!
-                field100->MarcField::update('c', title);
-                field100->MarcField::update('d', dates);
+                //field100->MarcField::update('c', title);
+                //field100->MarcField::update('d', dates);
                 thisrecord->addField(field100);
 
                 AllAuthorities[name] = thisrecord;
@@ -425,9 +425,9 @@ void CreateAuthorities(std::multimap<std::string, MarcRecord*>& allRecords, std:
             {
                 MarcRecord* thisrecord = AllAuthorities[name];
                 // if necessary, update $c and/or $d  fields
-                MarcField* field100 = thisrecord->getField(100);
-                if (field100->Getsubfield('c') == "") field100->MarcField::update('c', title); // NOTE: EXPLICIT CAST to MarcField in order to avoid the overridden update routine!
-                if (field100->Getsubfield('d') == "") field100->MarcField::update('d', dates);
+                // MarcField* field100 = thisrecord->getField(100);
+                // if (field100->Getsubfield('c') == "") field100->MarcField::update('c', title); // NOTE: EXPLICIT CAST to MarcField in order to avoid the overridden update routine!
+                // if (field100->Getsubfield('d') == "") field100->MarcField::update('d', dates);
             }
         }
     }
