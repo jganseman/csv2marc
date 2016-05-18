@@ -34,6 +34,7 @@ void Field383::update(char marcsubfield, std::string data)
     // now, assume we can segment on ';' . However, somtimes it's '=' .
     // -> first, replace all equal signs by ;
     Helper::ReplaceAll(data, "=", ";");
+    Helper::RemoveAllOf(data, "[]");
     Helper::ReplaceAll(data, "oeuvre", "Opus");
     Helper::ReplaceAll(data, "Oeuvre", "Opus");
     Helper::ReplaceAll(data, "OEuvre", "Opus");
@@ -99,11 +100,32 @@ void Field383::update(char marcsubfield, std::string data)
         // problem: segmentation. No good way, but the following is probably safest:
         // replace all '-' by ' ', then the first is the catalogue; the rest is its number
 
+        // NEW: put thematic catalogue nr entirely in $c . Reserve $d for specifier of catalogue as per the MLA list (mlati, see examples on MARC21 field 383 website)
+
+
         Helper::ReplaceAll((*it), "-", " ");
+                // check catalogname for spelling
+        Helper::ReplaceAll((*it), "HOB", "Hob");
+        Helper::ReplaceAll((*it), "Kv", "KV");
+
+        // error on Nr-s
+        if ((*it).find("nr") != string::npos)
+            if (verbose) throw MarcRecordException("WARNING field 383: not an opus? : " + (*it));
+        if ((*it).find("Nr") != string::npos)
+            if (verbose) throw MarcRecordException("WARNING field 383: not an opus? : " + (*it));
+        if ((*it).find("n°") != string::npos)
+            if (verbose) throw MarcRecordException("WARNING field 383: not an opus? : " + (*it));
+        if ((*it).find("N°") != string::npos)
+            if (verbose) throw MarcRecordException("WARNING field 383: not an opus? : " + (*it));
+
         Helper::Trim((*it));
         std::vector<std::string> themanrs = Helper::Segment((*it), ' ');
         if (themanrs.size() <= 1)
             if (verbose) throw MarcRecordException("ERROR field 383: unspecified catalogname (no dash/space?): " + (*it));
+
+        MarcField::update('c', (*it));
+
+        /*
 
         std::string catalogname = themanrs[0];
         std::string catalognr = themanrs[1];
@@ -126,24 +148,10 @@ void Field383::update(char marcsubfield, std::string data)
         Helper::Trim(catalognr);
         MarcField::update('c', catalognr);
 
-        // check catalogname for spelling
-        Helper::ReplaceAll(catalogname, "HOB", "Hob");
-        Helper::ReplaceAll(catalogname, "Kv", "KV");
-
-        // error on Nr-s
-        if (catalogname.find("nr") != string::npos)
-            if (verbose) throw MarcRecordException("WARNING field 383: not an opus? : " + (*it));
-        if (catalogname.find("Nr") != string::npos)
-            if (verbose) throw MarcRecordException("WARNING field 383: not an opus? : " + (*it));
-        if (catalogname.find("n°") != string::npos)
-            if (verbose) throw MarcRecordException("WARNING field 383: not an opus? : " + (*it));
-        if (catalogname.find("N°") != string::npos)
-            if (verbose) throw MarcRecordException("WARNING field 383: not an opus? : " + (*it));
-
         //update catalogname, only if no catalog field already present
         if (Getsubfield('d') == "")
             MarcField::update('d', catalogname);
-
+        */
     }
 
     // opus number should be in $b, thematic index numbers (like KV, BWV etc) should be in $c

@@ -106,19 +106,19 @@ void Field384::update(char marcsubfield, std::string data)
 
         // put "hypo-" strings first, to avoid early match on their substrings
         std::string modality = "";
-        if ((*it).find("atonaal") != std::string::npos) modality="Atonal";
-        else if ((*it).find("hypodorisch") != std::string::npos) modality="Hypodorian";
-        else if ((*it).find("dorisch") != std::string::npos) modality="Dorian";
-        else if ((*it).find("hypophrygisch") != std::string::npos) modality="Hypophrygian";
-        else if ((*it).find("phrygisch") != std::string::npos) modality="Phrygian";
-        else if ((*it).find("hypomixolydisch") != std::string::npos) modality="Hypomixolydian";
-        else if ((*it).find("mixolydisch") != std::string::npos) modality="Mixolydian";
-        else if ((*it).find("hypolydisch") != std::string::npos) modality="Hypolidian";
-        else if ((*it).find("lydisch") != std::string::npos) modality="Lydian";
-        else if ((*it).find("hypoaeolisch") != std::string::npos) modality="Hypoaeolian";
-        else if ((*it).find("aeolisch") != std::string::npos) modality="Aeolian";
-        else if ((*it).find("hypoionisch") != std::string::npos) modality="Hypoionian";
-        else if ((*it).find("ionisch") != std::string::npos) modality="Ionian";
+        if ((*it).find("atonaal") != std::string::npos) modality="atonal";
+        else if ((*it).find("hypodorisch") != std::string::npos) modality="hypodorian";
+        else if ((*it).find("dorisch") != std::string::npos) modality="dorian";
+        else if ((*it).find("hypophrygisch") != std::string::npos) modality="hypophrygian";
+        else if ((*it).find("phrygisch") != std::string::npos) modality="phrygian";
+        else if ((*it).find("hypomixolydisch") != std::string::npos) modality="hypomixolydian";
+        else if ((*it).find("mixolydisch") != std::string::npos) modality="mixolydian";
+        else if ((*it).find("hypolydisch") != std::string::npos) modality="hypolidian";
+        else if ((*it).find("lydisch") != std::string::npos) modality="lydian";
+        else if ((*it).find("hypoaeolisch") != std::string::npos) modality="hypoaeolian";
+        else if ((*it).find("aeolisch") != std::string::npos) modality="aeolian";
+        else if ((*it).find("hypoionisch") != std::string::npos) modality="hypoionian";
+        else if ((*it).find("ionisch") != std::string::npos) modality="ionian";
         else if ((*it).find("peregrin") != std::string::npos) modality="tonus peregrinus";
 
         // this builds the string according to regular text
