@@ -4,6 +4,7 @@
 #include <MarcField.h>
 #include <MarcRecordException.h>
 #include <Helper.h>
+#include <Translator.h>
 
 #include <cstring>
 
@@ -16,6 +17,7 @@ class Field383 : public MarcField
         //virtual std::string const print() const;
     protected:
     private:
+        static Translator t383c;
 };
 
 #endif // FIELD383_H

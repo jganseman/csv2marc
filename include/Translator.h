@@ -20,6 +20,7 @@ class Translator
         Translator(std::string filename = "");
         virtual ~Translator();
         std::string translate(std::string& input);
+        std::string translatepartial(std::string& input);
         bool isKey(std::string& input);
         bool isValue(std::string& input);
     protected:

@@ -1,5 +1,9 @@
 #include "Field383.h"
 
+// initialize the translation list for relator terms
+Translator Field383::t383c("t383c.csv");     // The file must be in the same folder as the executable.
+
+
 Field383::Field383(int nr) : MarcField(nr)
 {
     //ctor
@@ -123,7 +127,7 @@ void Field383::update(char marcsubfield, std::string data)
         if (themanrs.size() <= 1)
             if (verbose) throw MarcRecordException("ERROR field 383: unspecified catalogname (no dash/space?): " + (*it));
 
-        MarcField::update('c', (*it));
+        MarcField::update('c', t383c.translatepartial(*it));
 
         /*
 

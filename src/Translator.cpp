@@ -95,6 +95,37 @@ std::string Translator::translate(std::string& input)
 }
 
 
+
+/** This version does a partial replacement in the given string.
+    Watch it: this may match the input string at any location (so not necessarily in the beginning only)
+*/
+std::string Translator::translatepartial(std::string& input)
+{
+    if (mapping.empty())
+        return input;
+
+    //cout << "Translating " << input << endl;
+
+    // find the first occurrence of any key in the input line
+    for(std::map<std::string, std::string>::iterator iter = mapping.begin(); iter != mapping.end(); ++iter)
+    {
+        if (input.find(iter->first) != input.npos)      // key found in input line!
+        {
+            //cout << "Found " << iter->first << endl;
+            if (iter->second == "DELETE")                   // if this line needs to be deleted: return empty string
+                return "";
+            if (iter->second != "")
+            {
+                Helper::ReplaceAll(input, iter->first, iter->second);        // otherwise, just replace by value
+                return input;
+            }                                              // and exit immediately
+        }
+    }
+
+    return input; // nothing found? just return the original
+}
+
+
 bool Translator::isKey(std::string& input)
 {
     if (keys.empty()) return false;
