@@ -488,8 +488,12 @@ void MarcRecord::AddKohaData()
     }
 
     f952->update('y', kohacode);
-
     marcfields.insert(f952);
+
+    // the Koha code must also be inserted in field 942c (linked to the biblioitems table)
+    MarcField* f942 = FieldFactory::getFactory()->getMarcField(942);
+    f942->update('c', kohacode);
+    marcfields.insert(f942);
 
 }
 
