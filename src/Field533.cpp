@@ -65,7 +65,7 @@ void Field533::update(char marcsubfield, std::string data)
 
     // now add a fixed string that this is an available scan
     if (color == 'b')
-        MarcField::update('a', "Scan, B/W");
+        MarcField::update('a', "Scan, grayscale");
     else if (color == 'c')
         MarcField::update('a', "Scan, color");
 

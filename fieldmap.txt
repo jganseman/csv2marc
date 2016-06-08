@@ -44,7 +44,7 @@
 # Authors and titles. Do not put key/opus/instrumentation here
 10	100	a       #first standardized author
 10  700 a       #additional standardized authors
-8	720	a       #non standardized (displayed) authors
+8	245	c       #non standardized (displayed) authors
 9	240	a       #uniform title
 7	245	a       #displayed title
 #39 #240	#r  #key

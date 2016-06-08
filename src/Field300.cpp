@@ -17,33 +17,30 @@ void Field300::update(char marcsubfield, std::string data)
     if (data.empty() || data == "")
         return;
 
-    //NOTE: this has been removed. Total number of items will now be recorded in 591
-    /*
-    // make a separate field 300 for the total number of things in this callnumber
-    // this is recorded as a single number in 77b, so test for a number
-    std::string datacopy2 = data;
-    Helper::EraseWhitespace(datacopy2);
-    long converted = atol(datacopy2.c_str());
-    // DOUBLE CHECK : it's only a unit field if there is no other character in the string
-    if ((converted) && (datacopy2.find_first_not_of("0123456789") == datacopy2.npos))
-    {
-       // put this number in, and add "units" (not using items as that's used in the interface for available copies)
-       (converted > 1) ? MarcField::update('a', datacopy2 + " units") : MarcField::update('a', datacopy2 + " unit");
-        return;
-    }
-    */
+    //NOTE: total nr of items has been removed from this location.
+    //Total number of items will now be recorded in 591
 
+    // goal: everything after a + sign will appear in subfield e
     // goal: to lift out the dimension information from other extent information
     // and put the dimension information in subfield $c
 
-    //first make  a copy of the data to work on
-    std::string datacopy = data;
     std::string dimensioninfo = "";
-    Helper::Trim(datacopy);
-    Helper::MakeLowercase(datacopy);
-    Helper::ReplaceAll(datacopy, "+", ";");     // to deal with separately recorded parties extent info
+    Helper::Trim(data);
+    Helper::MakeLowercase(data);
 
-    std::vector<std::string> datasegments = Helper::Segment(datacopy, ';');
+    // First: everything after a + should come in subfield e.
+    // Find the first plus sign, cut out everything after it, and put it in subfield e
+    std::size_t pluspos = data.find('+');
+    if ((pluspos != data.npos) && (pluspos != data.length()-1))      // also must not be last character, since we need to be able to do +1
+    {
+        std::string edata = data.substr(pluspos+1);        // everything from AFTER + to the end
+        data = data.substr(0,pluspos+1);       // replace the rest of the string
+        Helper::Trim(edata);
+        MarcField::update('e', edata);
+    }
+
+    // now move on to the main contents in subfield a. Cut out any cm info for subfield c.
+    std::vector<std::string> datasegments = Helper::Segment(data, ';');
     int counter=0;
 
     for (std::vector<std::string>::iterator it = datasegments.begin(); it != datasegments.end(); ++it)
