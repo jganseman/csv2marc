@@ -566,7 +566,7 @@ void MarcRecord::MakeBarcode()
     MarcField* f952 = getField(952);
     if (f952)
     {
-        getField(952)->update('p', barcode);
+        f952->update('p', barcode);
     }
 
         // generate a warning if the barcode is over 20 characters
