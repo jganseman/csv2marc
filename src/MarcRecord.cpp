@@ -488,7 +488,18 @@ void MarcRecord::AddKohaData()
     }
 
     f952->update('y', kohacode);
-    marcfields.insert(f952);
+
+    // Only insert an item (952) if the bibliographic record nr does not have "onderdeel" in it.
+    if (f001 && !(f001->isempty()))
+    {
+        std::string recordnr = f001->Getsubfield('a');
+        Helper::MakeUppercase(recordnr);
+        if (recordnr.find("ONDERDEEL") == recordnr.npos)
+        {
+            marcfields.insert(f952);
+        }
+    }
+
 
     // the Koha code must also be inserted in field 942c (linked to the biblioitems table)
     MarcField* f942 = FieldFactory::getFactory()->getMarcField(942);
@@ -551,7 +562,12 @@ void MarcRecord::MakeBarcode()
     Helper::EraseWhitespace(barcode);
 
     // enter barcode into the system
-    getField(952)->update('p', barcode);
+    // if it is onderdeel, it does not have an item attached, so no barcode
+    MarcField* f952 = getField(952);
+    if (f952)
+    {
+        getField(952)->update('p', barcode);
+    }
 
         // generate a warning if the barcode is over 20 characters
     if (barcode.size() > 20)
