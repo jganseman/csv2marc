@@ -3,6 +3,8 @@
 Field024::Field024(int nr) : MarcField(nr)
 {
     //ctor
+    // set indicator to ISMN
+    Setindicator1('2');
 }
 
 Field024::~Field024()
@@ -45,8 +47,6 @@ void Field024::update(char marcsubfield, std::string data)
                 cleaneddata = cleaneddata.substr(1);
 
              MarcField::update(marcsubfield, cleaneddata);
-             // set indicator to ISMN
-             Setindicator1('2');
 
             //assert number starts with 9790 or M
              if (! (cleaneddata[0] == 'M' || cleaneddata.substr(0,4) == "9790"))

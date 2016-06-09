@@ -3,6 +3,9 @@
 Field245::Field245(int nr) : MarcField(nr)
 {
     //ctor
+
+    Setindicator1('1');      // by default, add title entry into the catalog
+    Setindicator2('0');
 }
 
 Field245::~Field245()
@@ -31,9 +34,6 @@ void Field245::update(char marcsubfield, std::string data)
 
     if (marcsubfield == 'a')        // this is the main title
     {
-
-        Setindicator1('1');      // by default, add title entry into the catalog
-        Setindicator2('0');
 
         // put data already in
         // everything after the ":" is the remainder of the title. Only accept one ':' punctuation mark

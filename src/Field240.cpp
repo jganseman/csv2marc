@@ -3,6 +3,9 @@
 Field240::Field240(int nr) : MarcField(nr)
 {
     //ctor
+
+    Setindicator1('1');      // always display title on screen
+    Setindicator2('0');
 }
 
 Field240::~Field240()
@@ -18,8 +21,6 @@ void Field240::update(char marcsubfield, std::string data)
     if (marcsubfield == 'a')        // this is the main title
     {
 
-        Setindicator1('1');      // always display title on screen
-        Setindicator2('0');
 
         Helper::Remove(data, "¬");          // legacy symbol denoting articles. Remove.
         //trim front and trailing whitespace

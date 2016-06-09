@@ -9,6 +9,9 @@ Translator Field700::t700a("t100a.csv");
 Field700::Field700(int nr) : MarcField(nr)
 {
     //ctor
+
+    Setindicator1('1');      // always suppose it's a family name
+    Setindicator2(DEFAULT_INDIC);
 }
 
 Field700::~Field700()
@@ -35,9 +38,6 @@ void Field700::update(char marcsubfield, std::string data)
         else
             return;         // otherwise end this function
     }
-
-    Setindicator1('1');      // always suppose it's a family name
-    Setindicator2(DEFAULT_INDIC);
 
     //First, segment by ';'
     Helper::ReplaceAll(data, ":", ";");     // sometimes wrong separation mark used. Replace it.

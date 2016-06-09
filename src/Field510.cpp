@@ -3,7 +3,7 @@
 Field510::Field510(int nr) : MarcField(nr)
 {
     //ctor
-    Setindicator1('4');
+    Setindicator1('4');     // Indexing level unknown (RISM does not always provide location)
 }
 
 Field510::~Field510()

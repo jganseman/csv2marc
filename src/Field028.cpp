@@ -3,23 +3,9 @@
 Field028::Field028(int nr) : MarcField(nr)
 {
     //ctor
-}
-
-Field028::~Field028()
-{
-    //dtor
-}
-
-
-void Field028::update(char marcsubfield, std::string data)
-{
-    if (data.empty() || data == "")
-        return;
-
-    // NOTE from MARC website: "Publisher's numbers that are given in an unformatted form are recorded in field 500 (General Note)." //TODO
 
     // this is only here to set the correct indicators
-    Setindicator1('5');
+    Setindicator1('2');
     /*
     Type of publisher number
     0 - Issue number
@@ -42,6 +28,20 @@ void Field028::update(char marcsubfield, std::string data)
     2 - Note, no added entry
     3 - No note, added entry
     */
+}
+
+Field028::~Field028()
+{
+    //dtor
+}
+
+
+void Field028::update(char marcsubfield, std::string data)
+{
+    if (data.empty() || data == "")
+        return;
+
+    // NOTE from MARC website: "Publisher's numbers that are given in an unformatted form are recorded in field 500 (General Note)." //TODO
 
     MarcField::update(marcsubfield, data);
 

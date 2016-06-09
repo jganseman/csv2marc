@@ -7,6 +7,10 @@ Translator Field650::t650a("t650a.csv");     // The file must be in the same fol
 Field650::Field650(int nr) : MarcField(nr)
 {
     //ctor
+
+    // set indicators
+    Setindicator1('0');             // no 'level is encoded' of topics; they're all just basically tags
+    Setindicator2('4');             // no thesaurus is used
 }
 
 Field650::~Field650()
@@ -21,9 +25,6 @@ void Field650::update(char marcsubfield, std::string data)
     if (data.empty() || data == "")
         return;
 
-    // set indicators
-    Setindicator1('0');             // no 'level is encoded' of topics; they're all just basically tags
-    Setindicator2('4');             // no thesaurus is used
 
     //First, segment by ';'
     Helper::ReplaceAll(data, "--", ";");

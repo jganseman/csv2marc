@@ -3,6 +3,8 @@
 Field583::Field583(int nr) : MarcField(nr)
 {
     // put in ctor, to have it only once included
+
+    MarcField::Setindicator1('1');      // set as not private. Visibility to be controlled by external software
     MarcField::update('a', "Catalography:");
 }
 
@@ -19,8 +21,6 @@ void Field583::update(char marcsubfield, std::string data)
 
     if (data.empty() || data == "")
         return;
-
-    MarcField::Setindicator1('1');      // set as not private. Visibility to be controlled by external software
 
     if (marcsubfield == 'k') // author
     {

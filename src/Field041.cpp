@@ -3,6 +3,10 @@
 Field041::Field041(int nr) : MarcField(nr)
 {
     //ctor
+
+    // set indicators
+    Setindicator1('0');             // if one of the languages is a translation, it should be '1'and subfield $h should be used to denote the source language
+    Setindicator2(DEFAULT_INDIC);
 }
 
 Field041::~Field041()
@@ -17,10 +21,6 @@ void Field041::update(char marcsubfield, std::string data)
 
     if (data.empty() || data == "")
         return;
-
-    // set indicators
-    Setindicator1('0');             // if one of the languages is a translation, it should be '1'and subfield $h should be used to denote the source language
-    Setindicator2(DEFAULT_INDIC);
 
     // first make all lowercase for ease of parsing
     Helper::MakeLowercase(data);
