@@ -450,6 +450,7 @@ void Field382::update(char marcsubfield, std::string data)
 bool Field382::isValidTerm(std::string& data)
 {
     // routine that decides if the string BEGINS with a valid instrument
+
     for (std::set<std::string>::iterator it = validterms.begin(); it != validterms.end(); ++it)
     {
         std::string temp = (*it);
@@ -458,9 +459,13 @@ bool Field382::isValidTerm(std::string& data)
     }
     return false;
 
+
     // alternatively: routine that decides if the string is EXACTLY as a valid instrument
-    // NOTE: not usable for telephone nr notation of orchestras
+    // NOTE: not usable for telephone nr specification of orchestras or choirs, so lift that out first
     //return (validterms.find(data) != validterms.end());
+
+
+
 }
 
 void Field382::fixTerminology(std::string& data)

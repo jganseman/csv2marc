@@ -46,6 +46,12 @@ void Field245::update(char marcsubfield, std::string data)
             std::string rest = data.substr(data.find(':')+1);
             Helper::Trim(rest);
             MarcField::update('b', rest);                  // the rest of the string goes in subfield b
+
+            // institute a warning if the rest contains more than 1 ":". This happens when series title is recorded in main title
+            if (rest.find(':') != rest.rfind(':'))
+            {
+                throw MarcRecordException("WARNING field 245 : excess semicolons");
+            }
         }
 
 

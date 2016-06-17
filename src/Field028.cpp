@@ -5,7 +5,7 @@ Field028::Field028(int nr) : MarcField(nr)
     //ctor
 
     // this is only here to set the correct indicators
-    Setindicator1('2');
+    Setindicator1('5');
     /*
     Type of publisher number
     0 - Issue number
