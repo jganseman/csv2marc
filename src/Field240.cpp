@@ -6,6 +6,7 @@ Field240::Field240(int nr) : MarcField(nr)
 
     Setindicator1('1');      // always display title on screen
     Setindicator2('0');
+    verbose=false;
 }
 
 Field240::~Field240()
@@ -56,6 +57,12 @@ void Field240::update(char marcsubfield, std::string data)
             throw MarcRecordException("WARNING field 240: too many keywords in uniform title.");
         */
         // Also, list of keywords should be limited but that's for later
+
+        // institute a warning if the data contains more than 1 ":". This happens when series title is recorded in main title
+            if (data.find(':') != data.rfind(':'))
+            {
+                if (verbose) throw MarcRecordException("WARNING field 240 : excess semicolons in uniform title" + data);
+            }
     }
 
 

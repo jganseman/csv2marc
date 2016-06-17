@@ -6,6 +6,7 @@ Field245::Field245(int nr) : MarcField(nr)
 
     Setindicator1('1');      // by default, add title entry into the catalog
     Setindicator2('0');
+    verbose = false;
 }
 
 Field245::~Field245()
@@ -50,7 +51,7 @@ void Field245::update(char marcsubfield, std::string data)
             // institute a warning if the rest contains more than 1 ":". This happens when series title is recorded in main title
             if (rest.find(':') != rest.rfind(':'))
             {
-                throw MarcRecordException("WARNING field 245 : excess semicolons");
+                if (verbose) throw MarcRecordException("WARNING field 245 : excess semicolons in : " + rest);
             }
         }
 

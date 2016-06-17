@@ -3,7 +3,7 @@
 // STATIC: list of valid instruments, to check against
 std::set<std::string> Field382::init()
 {
-    unsigned int nrterms=195;
+    unsigned int nrterms=196;
     std::string validterms[]={
         "C",         // For type V : vocal
         "S",
@@ -33,7 +33,8 @@ std::set<std::string> Field382::init()
         "meisjes",
         "knapen",
         "unisono",
-        "spreek",           //subtotal 9
+        "gelijk",
+        "spreek",           //subtotal 10
 
         "vi-pic",           // for type str
         "vi",
@@ -199,21 +200,21 @@ std::set<std::string> Field382::init()
 
         "instr",        // for type instr
                         // subtotal: 1
-        "kamer-",         // for type orkest . NOTE: followed by telnr specification
-        "symfonie-",
-        "strijk-",
-        "blaas-",
-        "harmonie-",
-        "slagw-",
-        "renais-",
-        "barok-",
-        "jazz-",
-        "volks-",
-        "salon-",
-        "trombone-",
-        "accordeon-",
-        "tokkel-",
-        "ensemble-"      //subtotal: 15
+        "kamer",         // for type orkest . NOTE: followed by telnr specification
+        "symfonie",
+        "strijk",
+        "blaas",
+        "harmonie",
+        "slagw",
+        "renais",
+        "barok",
+        "jazz",
+        "volks",
+        "salon",
+        "trombone",
+        "accordeon",
+        "tokkel",
+        "ensemble"      //subtotal: 15
 
         };
     // for ease of checking: remove all '-' characters in this list
@@ -450,7 +451,7 @@ void Field382::update(char marcsubfield, std::string data)
 bool Field382::isValidTerm(std::string& data)
 {
     // routine that decides if the string BEGINS with a valid instrument
-
+    /*
     for (std::set<std::string>::iterator it = validterms.begin(); it != validterms.end(); ++it)
     {
         std::string temp = (*it);
@@ -458,13 +459,13 @@ bool Field382::isValidTerm(std::string& data)
             return true;
     }
     return false;
-
-
+    */
     // alternatively: routine that decides if the string is EXACTLY as a valid instrument
     // NOTE: not usable for telephone nr specification of orchestras or choirs, so lift that out first
-    //return (validterms.find(data) != validterms.end());
 
-
+    std::string datacopy = data;
+    datacopy = datacopy.substr(0, datacopy.find_first_of("-"));
+    return (validterms.find(datacopy) != validterms.end());
 
 }
 
