@@ -58,6 +58,7 @@ void Field300::update(char marcsubfield, std::string data)
     Helper::Trim(data);
 
     Helper::ReplaceAll(dimensioninfo, "cm.", "cm");     // do not abbreviate
+    Helper::ReplaceAll(dimensioninfo, ",", ".");     // standardize interpunction of comma values
     MarcField::update('c', dimensioninfo);
     MarcField::update('a', data);
 
