@@ -136,12 +136,14 @@ if ( argc != 3 ) /* 2 arguments: filename to process and resulting filename  */
 
 
     // Merge scans with their books
+    cout << "All records processed. Now merging scans with their corresponding books." << endl;
     ProcessDigitalScans(callnumbers, allRecords, KCBerrs, CRBerrs);
-
+    cout << "Scan-book merger finished. Now linking mother and child records." << endl;
 
     // process the callnumber list. This checks whether constituent parts actually have mother records
     // and if necessary, adds the necessary fields 773 (in parts) and 774 (in mothers)
     ProcessConstituents(callnumbers, allRecords, KCBerrs, CRBerrs);
+    cout << "Linking of mother and child records finished merger finished." << endl;
 
 
     cout << " === CRB ERROR LIST === " << endl;
@@ -253,8 +255,8 @@ void ProcessConstituents(std::set<std::string>& callnumbers, std::multimap<std::
 
 void ProcessDigitalScans(std::set<std::string>& callnumbers, std::multimap<std::string, MarcRecord*>& allRecords, std::ostringstream& KCBerrs, std::ostringstream& CRBerrs)
 {
-    // what we try to do here is: find records ending on -dig, then merge them to their mother record by adding a 534 field
-    // if such mother record does not exist, change the record into a mother record, keeping the scan info in a 534 fieldµ
+    // what we try to do here is: find records ending on -dig, then merge them to their mother record by adding a 533 field
+    // if such mother record does not exist, change the record into a mother record, keeping the scan info in a 533 field
 
     for (std::set<std::string>::iterator it = callnumbers.begin(); it != callnumbers.end(); ++it)
     {
@@ -280,7 +282,7 @@ void ProcessDigitalScans(std::set<std::string>& callnumbers, std::multimap<std::
         // also always necessary: getting the material extent info out
         std::string scanextent = "";
         if (scanchild->getField(300))
-            scanextent = scanchild->getField(300)->Getsubfield('a');
+            scanextent = scanchild->getField(300)->Getsubfield('a') + scanchild->getField(300)->Getsubfield('e');
 
         if (scanextent == "" || scanextent.empty())
         {
@@ -345,7 +347,6 @@ void ProcessDigitalScans(std::set<std::string>& callnumbers, std::multimap<std::
         else    // mother record found! Add field 533 to mother record and delete child record
         {
             MarcRecord* scanmother = (*(allRecords.find(mothercallnr))).second;
-
             // add information from the child to the mother. Use the parsing routine of field 533
             // extract the extent info from field 300 $a ($c will only have recorded centimeters and such)
 

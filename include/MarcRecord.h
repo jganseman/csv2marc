@@ -25,9 +25,9 @@ typedef t_fieldset::const_iterator t_fieldsetIterator;
 #define ORGCODE "BE-BxLRC"
 
 // define a list of unique subfields. These can only contain one nr, any multiples need another field
-static const int UniqueFields[] = {20, 22, 24, 382, 384, 500, 650};
-static const char UniqueSubfields[] = {'a', 'a', 'a', 'a', 'a', 'a', 'a'};
-static const int NrOfUniqueFields = 7;
+static const int UniqueFields[] = {20, 22, 24, 382, 384, 500, 533, 650};
+static const char UniqueSubfields[] = {'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a'};
+static const int NrOfUniqueFields = 8;
 // Added 24 and 382. Not strictly necessary, but adds to clarity.
 //TODO add 260 here? not strictly unique, but for clarity it might be better to have it repeatable
 
