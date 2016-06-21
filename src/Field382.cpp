@@ -3,9 +3,9 @@
 // STATIC: list of valid instruments, to check against
 std::set<std::string> Field382::init()
 {
-    unsigned int nrterms=196;
+    unsigned int nrterms=210;
     std::string validterms[]={
-        "C",         // For type V : vocal
+        "C",
         "S",
         "Mz",
         "A",
@@ -21,11 +21,11 @@ std::set<std::string> Field382::init()
         "Ms",
         "Ls",
         "Zs",
-        "Zsl-vrouw",
-        "Zsl-man",
-        "Spreekstem",      // subtotal 19
+        "Zs-vrouw",
+        "Zs-man",
+        "Spreekstem",      // type V : vocal . subtotal 19
 
-        "koor",             // For type koor. NOTE: optionally followed by SATB-spreek-nr
+        "koor",
         "gemengd",
         "mannen",
         "vrouwen",
@@ -34,9 +34,9 @@ std::set<std::string> Field382::init()
         "knapen",
         "unisono",
         "gelijk",
-        "spreek",           //subtotal 10
+        "spreek",           //Type koor. subtotal 10. NOTE: optionally followed by SATB-spreek-nr
 
-        "vi-pic",           // for type str
+        "vi-pic",
         "vi",
         "av",
         "tv",
@@ -56,9 +56,10 @@ std::set<std::string> Field382::init()
         "evi",
         "eav",
         "evc",
-        "ecb",          // subtotal 21
+        "ecb",
+        "violetta",         // type str. subtotal 22
 
-        "fl-pic",           // for type hout
+        "fl-pic",
         "fl",
         "ho",
         "eh",
@@ -69,7 +70,11 @@ std::set<std::string> Field382::init()
         "fa",
         "fa-cb",
         "sax",
+        "sax-m",
         "sax-a",
+        "sax-t",
+        "sax-bar",
+        "sax-b",
         "blfl",
         "blfl-t",
         "fla",
@@ -82,9 +87,10 @@ std::set<std::string> Field382::init()
         "fijfer",
         "schalmei",
         "sho",
-        "panfluit",     // subtotaal 25
+        "panfluit",
+        "ocarina",     // type hout. subtotaal 30
 
-        "hn",            // for type kop
+        "hn",
         "hn-a",
         "hn-t",
         "tpt-pic",
@@ -104,12 +110,11 @@ std::set<std::string> Field382::init()
         "saxh",
         "klar",
         "kop",
-        "cimbasso",     // subtotaal 21
+        "cimbasso",     // type kop. subtotaal 21
 
-        "bla",      // for type bla
-                    //subtotal 1
+        "bla",      // type bla. subtotal 1
 
-        "timp",          // for type perc
+        "timp",
         "trom",
         "drum",
         "div",
@@ -126,9 +131,12 @@ std::set<std::string> Field382::init()
         "tsuzumi",
         "zweep",
         "buisklok",
-        "tomtom",     // subtotaal 18
+        "tomtom",
+        "klok",
+        "xylorimba",
+        "body",         // type perc . subtotaal 21
 
-        "kv",           // for type toets
+        "kv",
         "pf",
         "klc",
         "klvd",
@@ -136,12 +144,12 @@ std::set<std::string> Field382::init()
         "harm",
         "cel",
         "spinet",
-        "virginal",
+        "virginaal",
         "midikeyboard",
         "eorg",
-        "epf",          //subtotal 12
+        "epf",          //type toets. subtotal 12
 
-        "ha",           // for type tok
+        "ha",
         "gi",
         "egi",
         "egi-b",
@@ -159,9 +167,9 @@ std::set<std::string> Field382::init()
         "koto",
         "biwa",
         "cimbalon",
-        "orpharion", // subtotal: 19
+        "orpharion",    // type tok. subtotal: 19
 
-        "om",       // for type elek
+        "om",
         "synth",
         "tape",
         "hifi",
@@ -173,11 +181,12 @@ std::set<std::string> Field382::init()
         "radio",
         "comp",
         "sampler",
-        "video",        // subtotal : 13
+        "video",
+        "CD",        // type elek. subtotal : 14
 
-        "bc",           // for type beg: 1
+        "bc",           // type beg: 1
 
-        "acc",           // for type varia
+        "acc",
         "bandoneon",
         "bei",
         "doedelzak",
@@ -196,11 +205,11 @@ std::set<std::string> Field382::init()
         "melodica",
         "mondharmonica",
         "dirigent",
-        "platenspeler",     // subtotal: 20
+        "platenspeler",     // type varia. subtotal: 20
 
-        "instr",        // for type instr
-                        // subtotal: 1
-        "kamer",         // for type orkest . NOTE: followed by telnr specification
+        "instr",        // type instr. subtotal: 1
+
+        "kamer",
         "symfonie",
         "strijk",
         "blaas",
@@ -213,8 +222,12 @@ std::set<std::string> Field382::init()
         "salon",
         "trombone",
         "accordeon",
+        "klarinet",
+        "saxofoon",
+        "cello",
+        "gamelan",
         "tokkel",
-        "ensemble"      //subtotal: 15
+        "ensemble"      // type orkest . subtotal: 19 . NOTE: may be followed by telnr specification
 
         };
     // for ease of checking: remove all '-' characters in this list
