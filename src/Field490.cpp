@@ -72,7 +72,7 @@ void Field490::update(char marcsubfield, std::string data)
     datasegments = Helper::Segment(data, ';');
     if (datasegments.size() > 1) // item has NEW volume indicator
     {
-        volume = "$v";
+        volume = " ;$v";
         for (std::vector<std::string>::iterator it = datasegments.begin()+1; it != datasegments.end(); ++it)
         {
             Helper::Trim((*it));

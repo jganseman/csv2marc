@@ -59,15 +59,16 @@ void Field533::update(char marcsubfield, std::string data)
     }
 
     std::string newdata = data.substr(data.find_first_of(":"));
+    newdata = data.substr(data.find_first_not_of(":"));     // remove initial ":" if it is present
     Helper::Trim(newdata);
     Helper::ReplaceAll(newdata, "JPG", "JPEG");
     MarcField::update('e', newdata);
 
     // now add a fixed string that this is an available scan
     if (color == 'b')
-        MarcField::update('a', "Scan, grayscale");
+        MarcField::update('a', "Scan, grayscale.");
     else if (color == 'c')
-        MarcField::update('a', "Scan, color");
+        MarcField::update('a', "Scan, color.");
 
     // another fixed field: $7 , with coded info on the type
         //std::string fixedfield = "|||||||||be|n||"

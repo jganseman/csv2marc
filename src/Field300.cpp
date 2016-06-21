@@ -57,6 +57,7 @@ void Field300::update(char marcsubfield, std::string data)
     Helper::Trim(dimensioninfo);
     Helper::Trim(data);
 
+    Helper::ReplaceAll(dimensioninfo, "cm.", "cm");     // do not abbreviate
     MarcField::update('c', dimensioninfo);
     MarcField::update('a', data);
 
