@@ -428,7 +428,7 @@ void MarcRecord::AddKohaData()
             f952->update('7', "1");         // stored in subfield $7, NOT FOR LOAN code = "1"
             //change text in 506  to "Not for loan"
             f506->Deletesubfield('a');
-            f506->update('a', "Not for loan");
+            f506->update('a', "Not for loan.");
         }
     }
 
