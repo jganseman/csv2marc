@@ -113,6 +113,8 @@
 # Unused fields in Allegro-C: keep anyway, but because of dodgy contents just as general comment
 30  500 a       # series responsibility statement
 33  500 a       # subseries responsibility statement
+# Put date of creation also in 583c
+0   583 c
 #
 # 952 field, internal KOHA circulation stuff:
 # Filling in the 952 field (item-specific data) has all been moved to the postprocessing routine
