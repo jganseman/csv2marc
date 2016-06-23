@@ -3,7 +3,7 @@
 // initialize material terms
 std::set<std::string> Field336::init()
 {
-    int nrterms=81;
+    int nrterms=83;
     std::string validterms[]={
         "chord progressions",               // for types c and d: printed and handwritten music
         "klavierreductie",
@@ -39,7 +39,9 @@ std::set<std::string> Field336::init()
         "diploma",
         "liedtekst",
         "telegram",
-        "notitie",          // total 21
+        "notitie",
+        "enveloppe",
+        "briefkaart",          // total 23
 
         "aquarel",                         // for type k : images
         "gravure",
