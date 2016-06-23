@@ -33,7 +33,7 @@ void Field534::update(char marcsubfield, std::string data)
     Helper::ReplaceAll(data, "Facs.", "");
     Helper::ReplaceAll(data, "Facs", "");
     //subfield p is obligatory and says its a facsimile
-    MarcField::update('p', "Facs. van:");
+    MarcField::update('p', "Facsimile of:");
 
     // rest of the data gets trimmed and added as a note
     Helper::Trim(data);

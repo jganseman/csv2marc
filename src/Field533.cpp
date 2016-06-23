@@ -79,7 +79,7 @@ void Field533::update(char marcsubfield, std::string data)
         Helper::ReplaceAll(newdata, "TIF ", "TIFF ");
         Helper::ReplaceAll(newdata, ",", ".");          // standardize interpunction of comma values
         current_e = "$e"+newdata;
-        if (current_e[current_e.length()-1] != ".");    // add a point to end the field if necessary
+        if (current_e[current_e.length()-1] != '.')    // add a point to end the field if necessary
             current_e += ".";
 
         // now add a fixed string that this is an available scan

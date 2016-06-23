@@ -143,7 +143,7 @@ if ( argc != 3 ) /* 2 arguments: filename to process and resulting filename  */
     // process the callnumber list. This checks whether constituent parts actually have mother records
     // and if necessary, adds the necessary fields 773 (in parts) and 774 (in mothers)
     ProcessConstituents(callnumbers, allRecords, KCBerrs, CRBerrs);
-    cout << "Linking of mother and child records finished merger finished." << endl;
+    cout << "Linking of mother and child records finished. Now printing errors." << endl;
 
 
     cout << " === CRB ERROR LIST === " << endl;

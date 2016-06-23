@@ -133,6 +133,9 @@ void Field384::update(char marcsubfield, std::string data)
         if (!(modality.empty()))        // replace entire string by modality; without any key indicator
             tonality=modality;
 
+        // if major and not modal, capitalize first letter
+        if (major && modality.empty())
+            tonality[0] = toupper(tonality[0]);
 
         // give warning if key is invalid:
         if ((!major) && (!minor) && (modality.empty()) )
