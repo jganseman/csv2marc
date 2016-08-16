@@ -3,7 +3,7 @@
 // STATIC: list of valid instruments, to check against
 std::set<std::string> Field382::init()
 {
-    unsigned int nrterms=210;
+    unsigned int nrterms=211;
     std::string validterms[]={
         "C",
         "S",
@@ -88,7 +88,8 @@ std::set<std::string> Field382::init()
         "schalmei",
         "sho",
         "panfluit",
-        "ocarina",     // type hout. subtotaal 30
+        "ocarina",
+        "hout",         // type hout. subtotaal 31
 
         "hn",
         "hn-a",
@@ -403,6 +404,9 @@ void Field382::update(char marcsubfield, std::string data)
             //do a few search-and-replace operations for often occurring errors or double codes
             Helper::ReplaceAll(details, "gi-e", "egi");
             Helper::ReplaceAll(details, "gi-e-b", "egi-b");
+            // Decision by Johan: replace strijk by kamer, blaas by harmonie
+            Helper::ReplaceAll(details, "strijk-", "kamer-");
+            Helper::ReplaceAll(details, "blaas-", "harmonie-");
 
             // remove beginning and trailing whitespaces
             Helper::Trim(details);

@@ -687,7 +687,9 @@ bool MarcRecord::isCRB() const
     MarcField* f583 = getField(583);
     if (f583)
     {
+        // Moved this routine to Field583
         std::string author = f583->Getsubfield('k');
+        /*
         if  ( (author == "mv") || (author == "im") || (author == "mcl") || (author == "sdp") || (author == "lm")
             || (author == "ah") || (author == "ar") || (author == "bkb") || (author == "cc") || (author == "cf")
             || (author == "df") || (author == "dl") || (author == "ed") || (author == "fb") || (author == "hl")
@@ -695,6 +697,8 @@ bool MarcRecord::isCRB() const
             || (author == "rs") || (author == "th") || (author == "vdf") || (author == "mm") || (author == "hch")
             || (author == "yi") || (author == "smv") || (author == "nt"))
         {
+        */
+        if ( author[0] == 'c') {
             return true;
         } else
         {
