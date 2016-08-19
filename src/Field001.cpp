@@ -120,5 +120,8 @@ void Field001::fixTerminology(std::string& data)
          data = data.substr(0, data.find(";"));
     }
 
+    // sometimes onderdeel is spelled with - before, which inhibits linking afterwards
+    Helper::ReplaceAll(data, "-onderdeel", " onderdeel");
+
     Helper::Trim(data);
 }
