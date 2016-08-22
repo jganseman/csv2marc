@@ -43,7 +43,7 @@ void Field583::update(char marcsubfield, std::string data)
         MarcField::update(marcsubfield, data);
     }
 
-    if (marcsubfield == 'l') // status
+    if ((marcsubfield == 'l') || (marcsubfield == 'c')) // status or timecode
     {
         Helper::MakeUppercase(data);
         Helper::Trim(data);

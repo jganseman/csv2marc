@@ -342,6 +342,14 @@ void ProcessDigitalScans(std::set<std::string>& callnumbers, std::multimap<std::
                 field952->Deletesubfield('y');
                 field952->update('y', "MP");
             }
+            // same for biblioitem fieldcode 942
+            if (scanchild->getField(942))
+            {
+                MarcField* field942 = scanchild->getField(942);
+                // update the Koha item type again
+                field942->Deletesubfield('c');
+                field942->update('c', "MP");
+            }
 
         }
         else    // mother record found! Add field 533 to mother record and delete child record
