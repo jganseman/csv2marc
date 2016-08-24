@@ -384,14 +384,20 @@ void CreateAuthorities(std::multimap<std::string, MarcRecord*>& allRecords, std:
     {
         MarcRecord* thisrecord = (*it).second;
         //easiest is to iterate over all fields, as there could be several 700 records.
+        // WARNING: 700 is one of those fields where everything is concatenated in 1 subfield !!!
+        //     ---> Set to make unique in MarcRecord.h , as with 650. Order of $d and $e is preserved.
         std::set<MarcField*> authorfields = thisrecord->getMultipleFields(fieldnrs);
 
         for (std::set<MarcField*>::iterator it = authorfields.begin(); it != authorfields.end(); it++)
         {
             //get name of author in field a
             std::string name = (*it)->Getsubfield('a');
+            if (name == "") continue;
+            //cout << mydata << endl;
             // cut until the first $ sign, as the 700 fields may have everything in subfield a...
+
             name = name.substr(0, name.find_first_of('$'));
+
             if (name == "") continue;
             // TODO this way we are throwing out dates and titles of 700 fields. Ah well, they're probably wrong anyway.
             // std::string title = (*it)->Getsubfield('c');
