@@ -77,9 +77,9 @@ void Field245::update(char marcsubfield, std::string data)
         }
 
     }
-    else if (marcsubfield == 'f')        // this is the date of item's manufacture (i.e. manuscript year)
+    else
     {
-        MarcField::update(marcsubfield, data);
+         MarcField::update(marcsubfield, data);
     }
 
 }
